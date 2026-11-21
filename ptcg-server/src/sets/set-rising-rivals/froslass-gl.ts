@@ -1,9 +1,10 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { RemoveSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, SWITCH_IN_OPPONENT_BENCHED_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, SWITCH_IN_OPPONENT_BENCHED_POKEMON, WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class FroslassGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -34,26 +35,21 @@ export class FroslassGL extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sleep Inducer
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = effect.opponent;
-      if (opponent.bench.some(b => b.cards.length > 0)) {
-        return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
-          sourceEffect: effect,
-          onSwitched: () => {
-            ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
-          },
-        });
-      }
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+    if (AFTER_ATTACK(effect, 0, this)) {
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
+        sourceEffect: effect,
+        onSwitched: () => {
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        },
+      });
     }
 
     // Wake-Up Slap
     if (WAS_ATTACK_USED(effect, 1, this)) {
       if (effect.opponent.active.specialConditions.length > 0) {
         effect.damage += 20;
-        const removeSpecialCondition = new RemoveSpecialConditionsEffect(effect, undefined);
-        removeSpecialCondition.target = effect.opponent.active;
-        store.reduceEffect(state, removeSpecialCondition);
+        const removal = new RemoveSpecialConditionsEffect(effect, undefined);
+        afterAttackDamage(state, effect, (attackStore, attackState) => attackStore.reduceEffect(attackState, removal));
       }
     }
 

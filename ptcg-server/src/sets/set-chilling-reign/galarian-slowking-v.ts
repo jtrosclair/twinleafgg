@@ -2,13 +2,14 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameMessage, ChooseCardsPrompt, PlayerType } from '../../game';
+import { StoreLike, State, GameMessage, ChooseCardsPrompt, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, DRAW_CARDS } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, DRAW_CARDS, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class GalarianSlowkingV extends PokemonCard {
   public tags = [CardTag.POKEMON_V, CardTag.SINGLE_STRIKE];
@@ -69,12 +70,8 @@ export class GalarianSlowkingV extends PokemonCard {
 
     // Attack 2: Word of Ruin
     // Ref: set-guardians-rising/absol.ts (Doom News - KO at end of opponent's next turn)
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      opponent.active.marker.addMarker(this.WORD_OF_RUIN_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_WORD_OF_RUIN_MARKER, this);
+    if (AFTER_ATTACK(effect, 1, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
 
     // At end of opponent's turn, KO the marked Pokemon

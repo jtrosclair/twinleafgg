@@ -1,3 +1,4 @@
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { getCardByName, padDeck, setupGame } from './test-helpers';
 import { useAttack } from './card-test-helpers';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
@@ -123,7 +124,7 @@ describe('Upstream catalog batch 09 gameplay', () => {
       player2: { active: { card: 'Mew ex MEW' }, deck: padDeck(12) },
     });
     useAttack(game.store, game.state, 0, 'Doom News');
-    expect(game.player2.active.getPokemonCard()?.knockOutAtEndOfTurnPlayerId).toBe(game.player2.id);
+    expect(game.player2.active.marker.hasMarker(MarkerConstants.ATTACK_KNOCK_OUT_AT_END_OF_TURN)).toBe(true);
     game.store.reduceEffect(game.state, new EndTurnEffect(game.player1));
     game.store.reduceEffect(game.state, new EndTurnEffect(game.player2));
     expect(game.player2.active.getPokemonCard()).toBeUndefined();

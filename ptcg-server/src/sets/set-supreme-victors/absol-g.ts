@@ -1,10 +1,10 @@
 import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StoreLike } from '../../game';
-import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
-import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { getPhysicalAttachedEnergy, KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
+import { MOVE_CARDS, WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class AbsolG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -53,13 +53,15 @@ export class AbsolG extends PokemonCard {
 
     // Doom News
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const energyCards = player.active.cards.filter(c => c.superType === SuperType.ENERGY);
-      if (energyCards.length > 0) {
-        MOVE_CARDS(store, state, player.active, player.hand, { cards: energyCards, sourceCard: this });
-      }
+      const source = effect.source;
+      const energy = getPhysicalAttachedEnergy(source);
+      MOVE_CARDS(store, state, source, effect.player.hand, { cards: energy, sourceCard: source.getPokemonCard() });
+    }
+
+    if (AFTER_ATTACK(effect, 1, this)) {
       KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
+
 
     return state;
   }

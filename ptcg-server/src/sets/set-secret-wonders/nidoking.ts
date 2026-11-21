@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { GameMessage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_POISON_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, SWITCH_IN_OPPONENT_BENCHED_POKEMON, CONFIRMATION_PROMPT, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Nidoking extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -33,35 +33,15 @@ export class Nidoking extends PokemonCard {
   public fullName: string = 'Nidoking SW';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Poison Rub
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-      if (!hasBench) {
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-        return state;
-      }
-
-      return CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          store.prompt(state, new ChoosePokemonPrompt(
-            player.id,
-            GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-            PlayerType.TOP_PLAYER,
-            [SlotType.BENCH],
-            { allowCancel: false }
-          ), chosen => {
-            if (chosen && chosen.length > 0) {
-              opponent.switchPokemon(chosen[0]);
-            }
-            ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-          });
-        } else {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-        }
+    // Poison Rub switches before damage and Poisons the Pokémon that took the hit.
+    if (WAS_ATTACK_USED(effect, 0, this) && effect.opponent.bench.some(slot => slot.getPokemonCard())) {
+      return CONFIRMATION_PROMPT(store, state, effect.player, confirmed => {
+        if (confirmed) SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, { sourceEffect: effect });
       }, GameMessage.WANT_TO_SWITCH_POKEMON);
+    }
+
+    if (AFTER_ATTACK(effect, 0, this) && effect.opponent.active === effect.originalDefender) {
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Pride Attack

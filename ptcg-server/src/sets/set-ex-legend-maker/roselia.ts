@@ -1,8 +1,8 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, PlayerType, CardTag, ChoosePokemonPrompt, GameMessage, SlotType } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, PlayerType, CardTag } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED, SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class Roselia extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -57,24 +57,11 @@ export class Roselia extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        return state;
-      }
-
-      store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.TOP_PLAYER,
-        [SlotType.BENCH],
-        { allowCancel: false }
-      ), result => {
-        const cardList = result[0];
-
-        opponent.switchPokemon(cardList);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
+        sourceEffect: effect,
+        onSwitched: () => {
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        },
       });
     }
 

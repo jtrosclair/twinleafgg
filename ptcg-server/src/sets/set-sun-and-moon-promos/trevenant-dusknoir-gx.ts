@@ -1,12 +1,13 @@
+import { getPhysicalAttachedEnergy, KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, GameError, GameMessage, PlayerType, ShowCardsPrompt, ShuffleDeckPrompt, State, StateUtils, StoreLike } from '../../game';
+import { ChooseCardsPrompt, GameError, GameMessage, PlayerType, ShowCardsPrompt, ShuffleDeckPrompt, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class TrevenantDusknoirGX extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -85,9 +86,6 @@ export class TrevenantDusknoirGX extends PokemonCard {
       }
       player.usedGX = true;
 
-      opponent.active.marker.addMarker(this.PALE_MOON_MARKER, this);
-      opponent.marker.addMarker(this.PALE_MOON_ACTIVATION_MARKER, this);
-
       // Check for the extra energy cost.
       const extraEffectCost: CardType[] = [P, P, C];
       const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
@@ -96,27 +94,19 @@ export class TrevenantDusknoirGX extends PokemonCard {
 
       if (!meetsExtraEffectCost) { return state; }
 
-      // if we have the energies, discard the energies
-      const opponentEnergy = new CheckProvidedEnergyEffect(opponent, opponent.active);
-      state = store.reduceEffect(state, opponentEnergy);
-
-      const oppCards: Card[] = [];
-      opponentEnergy.energyMap.forEach(em => {
-        oppCards.push(em.card);
-      });
-
-      const discardEnergy = new DiscardCardsEffect(effect, oppCards);
-      discardEnergy.target = opponent.active;
+      const discardEnergy = new DiscardCardsEffect(effect, getPhysicalAttachedEnergy(opponent.active));
       store.reduceEffect(state, discardEnergy);
     }
 
-    // hitman times
+    if (AFTER_ATTACK(effect, 1, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
+    }
+
+    // Resolve delayed Knock Outs from older snapshots.
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.PALE_MOON_ACTIVATION_MARKER, this)) {
-      // kill em.
       if (effect.player.active.marker.hasMarker(this.PALE_MOON_MARKER, this)) {
         effect.player.active.damage += 999;
       }
-      // wipe the evidence
       effect.player.marker.removeMarker(this.PALE_MOON_ACTIVATION_MARKER, this);
       effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
         cardList.marker.removeMarker(this.PALE_MOON_MARKER, this);

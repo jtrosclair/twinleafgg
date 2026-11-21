@@ -1,10 +1,11 @@
+import { KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { Card, ChooseCardsPrompt, GameError, GameMessage, State, StateUtils, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class HisuianZoroark extends PokemonCard {
 
@@ -53,13 +54,8 @@ export class HisuianZoroark extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      effect.player.marker.addMarker(this.KNOCKOUT_MARKER, this);
-      opponent.active.marker.addMarker(this.CLEAR_KNOCKOUT_MARKER, this);
-      console.log('first marker added');
+    if (AFTER_ATTACK(effect, 0, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
 
     if (effect instanceof EndTurnEffect && effect.player.active.marker.hasMarker(this.CLEAR_KNOCKOUT_MARKER, this)) {
@@ -68,7 +64,6 @@ export class HisuianZoroark extends PokemonCard {
       effect.player.active.damage = 999;
       effect.player.active.marker.removeMarker(this.CLEAR_KNOCKOUT_MARKER, this);
       opponent.marker.removeMarker(this.KNOCKOUT_MARKER, this);
-      console.log('clear marker added');
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

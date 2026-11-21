@@ -2,13 +2,15 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { getPhysicalAttachedEnergy, KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PlayerType, StoreLike, State, StateUtils, GameMessage, CardList, ChooseCardsPrompt } from '../../game';
+import { PlayerType, StoreLike, State, GameMessage, CardList, ChooseCardsPrompt } from '../../game';
+import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, MOVE_CARDS, SHUFFLE_DECK, DISCARD_ALL_ENERGY_FROM_POKEMON } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, MOVE_CARDS, SHUFFLE_DECK, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Jirachi extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -70,14 +72,15 @@ export class Jirachi extends PokemonCard {
     // Attack 2: Doom Desire
     // Refs: set-primal-clash/beedrill.ts (Allergic Shock - 2-phase KO marker), AGENTS-patterns.md (discard all energy)
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, player.active.getPokemonCard()!);
-
-      opponent.active.marker.addMarker(this.DOOM_DESIRE_MARKER, this);
-      opponent.marker.addMarker(this.DOOM_DESIRE_MARKER, this);
+      const discard = new DiscardCardsEffect(effect, getPhysicalAttachedEnergy(effect.source));
+      discard.target = effect.source;
+      store.reduceEffect(state, discard);
     }
+
+    if (AFTER_ATTACK(effect, 1, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
+    }
+
 
     // Doom Desire: KO at end of opponent's next turn
     if (effect instanceof EndTurnEffect) {

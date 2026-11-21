@@ -1,6 +1,9 @@
 import { Card, ChooseCardsPrompt, ChooseEnergyPrompt, ChoosePokemonPrompt, ConfirmPrompt, DamageMap, GameMessage, PlayerType, PutDamagePrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike } from '../..';
 import { CardType, SpecialCondition, SuperType, TrainerType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
+import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
+import { MarkerConstants } from '../markers/marker-constants';
+import { PokemonCardList } from '../state/pokemon-card-list';
 import { EnergyCard } from '../card/energy-card';
 import { AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, CardsToHandEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, KnockOutOpponentEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
@@ -63,13 +66,32 @@ export function KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON(
   return store.reduceEffect(state, knockOutEffect);
 }
 
-/** Mark the current Defending Pokémon to be Knocked Out when its owner's next turn ends. */
+class DelayedAttackKnockOutEffect extends EffectOfAttackEffect {
+  applyEffect(): void {
+    this.target.marker.addMarker(
+      MarkerConstants.ATTACK_KNOCK_OUT_AT_END_OF_TURN, this.markerSource, 'attack', 'pokemon'
+    );
+  }
+}
+
+/** Apply an attack effect that Knocks Out the defender when its owner ends their next turn. */
 export function KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(
-  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+  store: StoreLike, state: State, effect: AfterAttackEffect, source: PokemonCard,
 ): State {
-  const target = effect.opponent.active.getPokemonCard();
-  if (target) target.knockOutAtEndOfTurnPlayerId = effect.opponent.id;
-  return state;
+  const target = effect.originalDefender ?? effect.opponent.active;
+  if (target !== effect.opponent.active || !target.getPokemonCard()) return state;
+  const attack = effect.resolvedAttackEffect ?? new AttackEffect(effect.player, effect.opponent, effect.attack);
+  const delayed = new DelayedAttackKnockOutEffect(attack);
+  delayed.target = target;
+  delayed.markerSource = attack.source.getPokemonCard() ?? source;
+  return store.reduceEffect(state, delayed);
+}
+
+export function getPhysicalAttachedEnergy(slot: PokemonCardList): Card[] {
+  return [...new Set([
+    ...slot.cards.filter(card => card.superType === SuperType.ENERGY),
+    ...slot.energies.cards
+  ])];
 }
 
 export function PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(

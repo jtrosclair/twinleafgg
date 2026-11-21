@@ -355,6 +355,12 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
       cardList.getPokemons().forEach(card => { card.retreatCostIncreaseNextTurn = 0; });
     });
+    const delayedKnockOut = MarkerConstants.ATTACK_KNOCK_OUT_AT_END_OF_TURN;
+    const defender = effect.player.active;
+    if (defender.marker.hasMarker(delayedKnockOut)) {
+      defender.marker.removeMarker(delayedKnockOut);
+      defender.damage = Number.MAX_SAFE_INTEGER;
+    }
     for (const owner of state.players) {
       owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
         const marked = cardList.getPokemons().some(card => {

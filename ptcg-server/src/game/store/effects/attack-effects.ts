@@ -191,7 +191,8 @@ export class GustOpponentBenchEffect extends AbstractAttackEffect implements Eff
   public target: PokemonCardList;
 
   constructor(base: AttackEffect | AfterAttackEffect, target: PokemonCardList) {
-    super(base instanceof AttackEffect ? base : new AttackEffect(base.player, base.opponent, base.attack));
+    super(base instanceof AttackEffect ? base
+      : base.resolvedAttackEffect ?? new AttackEffect(base.player, base.opponent, base.attack));
     this.target = target;
   }
 }

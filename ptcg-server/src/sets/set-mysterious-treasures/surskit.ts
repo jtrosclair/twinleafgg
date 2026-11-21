@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class Surskit extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -26,9 +26,13 @@ export class Surskit extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sleep Inducer
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+    if (AFTER_ATTACK(effect, 0, this)) {
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
+        sourceEffect: effect,
+        onSwitched: () => {
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        },
+      });
     }
 
     return state;

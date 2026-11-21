@@ -2,14 +2,14 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { getPhysicalAttachedEnergy, KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { EnergyCard } from '../../game/store/card/energy-card';
 import { CardList, GameMessage, OrderCardsPrompt, PlayerType, SelectPrompt, StoreLike, State, StateUtils } from '../../game';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Absol extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -103,18 +103,13 @@ export class Absol extends PokemonCard {
     // Attack 2: Doom News
     // Ref: set-lost-origin/hisuian-zoroark.ts (Doom Curse)
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      const source = effect.source;
+      const energy = getPhysicalAttachedEnergy(source);
+      MOVE_CARDS(store, state, source, effect.player.hand, { cards: energy, sourceCard: source.getPokemonCard() });
+    }
 
-      // Put all Energy attached to this Pokemon into your hand
-      const energyCards = player.active.cards.filter(c => c instanceof EnergyCard);
-      energyCards.forEach(c => {
-        player.active.moveCardTo(c, player.hand);
-      });
-
-      // Set KO marker on defending Pokemon
-      opponent.active.marker.addMarker(this.DOOM_NEWS_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_DOOM_NEWS_MARKER, this);
+    if (AFTER_ATTACK(effect, 1, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
 
     // At end of opponent's turn, KO the defending Pokemon

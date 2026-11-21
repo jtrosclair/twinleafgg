@@ -1,6 +1,6 @@
-import { PokemonCard, Stage, CardType, StoreLike, State, PlayerType, ChoosePokemonPrompt, GameMessage, SlotType } from '../../game';
+import { PokemonCard, Stage, CardType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED, SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class Muk extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,25 +33,12 @@ export class Muk extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        return state;
-      }
-
-      store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.TOP_PLAYER,
-        [SlotType.BENCH],
-        { allowCancel: false }
-      ), result => {
-        const cardList = result[0];
-
-        opponent.switchPokemon(cardList);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
+        sourceEffect: effect,
+        onSwitched: () => {
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        },
       });
     }
 

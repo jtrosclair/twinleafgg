@@ -1,10 +1,12 @@
+import { getPhysicalAttachedEnergy, KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { CardList, ChooseCardsPrompt, GameMessage, PokemonCardList, State, StoreLike } from '../../game';
+import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_MARKER, HAS_MARKER, REMOVE_MARKER, DISCARD_ALL_ENERGY_FROM_POKEMON, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { HAS_MARKER, REMOVE_MARKER, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Jirachi extends PokemonCard {
   private readonly DOOM_DESIRE_MARKER = 'JIRACHI_DOOM_DESIRE_PENDING_KO';
@@ -63,9 +65,15 @@ export class Jirachi extends PokemonCard {
 
     // Doom Desire
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, effect.player.active.getPokemonCard()!);
-      ADD_MARKER(this.DOOM_DESIRE_MARKER, effect.opponent.active, this);
+      const discard = new DiscardCardsEffect(effect, getPhysicalAttachedEnergy(effect.source));
+      discard.target = effect.source;
+      store.reduceEffect(state, discard);
     }
+
+    if (AFTER_ATTACK(effect, 1, this)) {
+      KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(store, state, effect, this);
+    }
+
 
     // Resolve Doom Desire at the end of the defending player's next turn.
     if (effect instanceof EndTurnEffect) {

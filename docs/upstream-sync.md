@@ -3214,3 +3214,60 @@ and 209 frontend specs passed. The build passed package attestation, the
 mobile size budget at 2.46 MiB and ten packaged board checks. All 559
 supported saved states and 3,633 sampled opening actions matched the
 previous build. All seven recorded solutions reached a win.
+
+## Gameplay re-audit, batch 39
+
+Corrected 19 attacks involving switches, Special Conditions and delayed
+Knock Outs. Six attacks place their condition on the selected Benched
+Pokémon only after a successful switch. A protected Active may be switched
+out by these attacks. A protected Benched Pokémon cannot be switched in.
+An empty Bench leaves no new defender to receive the condition. This follows
+the official ruling for Froslass GL's Sleep Inducer. Wake-Up Slap calculates
+damage with the defender's conditions in place and clears them afterward.
+[Official Froslass GL ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A6%E3%82%AD%E3%83%A1%E3%83%8E%E3%82%B3&page=3&regulation=all&regulation_faq_main=)
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+[Advanced rulebook, C-04 and C-05](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Poison Rub offers the attacker a switch before damage. The Pokémon
+that actually defends takes the hit and receives Poison afterward.
+If protection blocks the incoming Pokémon from switching, Poison Rub
+resolves against the original defender. In singles, Flick Poison lets
+the attacker choose the incoming Bench target. The attack's instruction
+for the opponent refers to choosing between defending Active Pokémon.
+[Official Poison Rub print](https://www.pokemon-card.com/card-search/details.php/card/3055)
+[Official Poison Rub ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8B%E3%83%89%E3%82%AD%E3%83%B3%E3%82%B0&page=2&regulation=all&regulation_faq_main_item1=all)
+[Legend Maker Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Legend_Maker.pdf)
+
+Perish Dream, Doom Desire, Doom News, Doom Curse, Word of Ruin and
+Pale Moon-GX now apply a preventable attack effect. The delayed Knock Out
+resolves when the defender's turn ends, even if the attacker has left play.
+Switching the defender to the Bench or evolving it clears the effect.
+Transformation Tome keeps it on the replacement Pokémon. The mark survives
+a saved-state round trip with the actual attacker as its source, including
+Mew ex copying Perish Dream. Existing marker formats are still accepted.
+Jirachi's self-Sleep and the attacks' Energy return and discard effects
+follow their printed conditions. The legacy Hisuian Zoroark ASR identity
+retains the Doom Curse it exposes to saved boards.
+[Perish Dream rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B8%E3%83%A9%E3%83%BC%E3%83%81%E2%97%87&regulation_faq_main_item1=all)
+[Doom Desire ruling on switching](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B8%E3%83%A9%E3%83%BC%E3%83%81&page=8&regulation_faq_main=)
+[Legends Awakened Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_LegendsAwakened.pdf)
+[Supreme Victors Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Supreme_Victors.pdf)
+[Word of Ruin](https://asia.pokemon-card.com/ph/card-search/detail/1514/)
+[Doom Curse](https://asia.pokemon-card.com/ph/card-search/detail/2673/)
+[Pale Moon-GX](https://www.pokemon-card.com/card-search/details.php/card/37447)
+
+This batch resolves 14 of the previously tracked status call sites. The
+remaining queue contains 123 calls in 112 card definitions. Baseline
+plays reproduced four additional issues. Paralyzing Bolt applies
+Paralysis before damage and before payment. Poison Experiment applies
+Poison when payment is prevented. Ice Bind prompts for discard before
+damage. Leaf Hurricane checks remaining HP before its own damage.
+[Paldea Evolved Bellibolt ex print](https://asia.pokemon-card.com/ph/card-search/detail/6891/)
+[Platinum Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+
+All 9,675 engine tests, 2,055 checks with the existing working-tree edits
+and 209 frontend specs passed. The 2.46 MiB package passed attestation,
+the mobile size budget and ten packaged board checks. All 559 supported
+saved states and 3,633 sampled opening actions matched batch 38. All
+seven recorded puzzle solutions reached a win.
