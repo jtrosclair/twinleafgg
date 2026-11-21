@@ -280,6 +280,16 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.pendingEnergyAttachDamageCounters = null;
     });
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => { slot.attackDamageReductionNextTurn = 0; });
+    const { marker } = effect.player;
+    const previousNeedleShock = MarkerConstants.NEEDLE_SHOCK_USED_LAST_TURN;
+    const currentNeedleShock = MarkerConstants.NEEDLE_SHOCK_USED_THIS_TURN;
+    // Old snapshots kept both card-scoped markers for a single prior use.
+    const usedNeedleShock = marker.markers.some(entry =>
+      entry.name === currentNeedleShock && (!entry.source || !marker.hasMarker(previousNeedleShock, entry.source)));
+    marker.removeMarker(previousNeedleShock);
+    marker.removeMarker(currentNeedleShock);
+    if (usedNeedleShock) marker.addMarkerToState(previousNeedleShock);
+
     effect.player.marker.removeMarker(effect.player.DAMAGE_DEALT_MARKER);
     effect.player.marker.removeMarker(MarkerConstants.REVENGE_MARKER);
     if (!effect.player.usedTurnSkip) {
@@ -311,6 +321,13 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.surviveOnTenHpNextTurn = slot.surviveOnTenHpNextTurnPending;
       slot.surviveOnTenHpNextTurnPending = null;
       slot.coinFlipCancelAttackNextTurn = 0;
+      slot.marker.removeMarker(MarkerConstants.LEGACY_OCTILLERY_CORNER_STOP);
+      for (const entry of slot.marker.markers) {
+        if (entry.name === MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER
+          && entry.source?.fullName === 'Weezing DX') {
+          slot.marker.removeMarker(entry.name, entry.source);
+        }
+      }
     });
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
       cardList.damageReductionNextTurn = 0;

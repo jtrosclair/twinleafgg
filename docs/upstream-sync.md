@@ -3351,3 +3351,55 @@ mismatches for Galvantula, Galarian Ponyta and Clobbopus. These cases
 remain open for implementation and verification.
 [Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
 [Sword & Shield checklist](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/checklist/swsh1_web_cardlist_en.pdf)
+
+## Gameplay re-audit, batch 42
+
+Needle Shock uses the attacker's player history for the previous turn.
+Consecutive uses by different Beedrill or by a Pokémon copying the attack
+still deal 30 damage. The defender receives Paralysis and Poison only when
+the player did not use Needle Shock on their preceding turn. The history
+survives save and restore. Legacy card-scoped markers retain their meaning
+and expire on the correct turn. Flutter Wings can be used once per turn by
+each Beedrill that meets its printed conditions.
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+
+Smogscreen, Sand Attack and the shared one-turn restriction now make the
+original defender flip only after a legal attack is declared. That roll
+precedes Confusion. An attack effect shield blocks the restriction while
+ordinary damage can still land. Weezing DX, Koffing GE and Dustox PL apply
+Smogscreen's Poison after damage. Chaos Rising Octillery checks both flips
+through the ordinary attack sequence. Its legacy alias keeps the Corner
+Stop attack name used in existing clients. Octazooka persists while the
+affected Pokémon remains Active and multiple applications still require
+one flip. Saved Weezing and Octillery marker names remain supported and
+the editor API still returns them.
+[Advanced player's rulebook](https://asia.pokemon-card.com/my/wp-content/uploads/sites/6/2022/08/advanced-manual_EN.pdf)
+[EX Deoxys Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Deoxys.pdf)
+[Great Encounters Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_GreatEncounters.pdf)
+[Platinum Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+[Octazooka rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AA%E3%82%AF%E3%82%BF%E3%83%B3&page=2&regulation_faq_main=)
+[Chaos Rising Octillery print](https://asia.pokemon-card.com/my/card-search/detail/25208/)
+
+The Sword & Shield legacy aliases now use Galarian Ponyta 81, Galvantula
+71 and Clobbopus 111. Both deck import endpoints resolve the correct
+collector number, including the distinct Clobbopus 112 and the existing
+numbered Galvantula. The saved full names and neighboring printed
+identities are retained. This batch resolves eight calls. The remaining
+Special Condition queue has 27 calls in 27 card definitions.
+[Sword & Shield checklist](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/checklist/swsh1_web_cardlist_en.pdf)
+
+All 44 focused cases passed, including 25 that failed on the prior engine.
+All 9,926 engine tests, 367 checks with the existing working edits,
+209 frontend specs and 32 simulator API tests passed. The 2.46 MiB
+package passed attestation, the mobile size budget and ten browser board
+checks. All 559 supported saved states and 3,633 sampled opening actions
+matched batch 41. All seven recorded solutions reached a win.
+
+Three baseline checks reproduced the next issues. Energy Antics can move
+Energy out of a protected source or onto a protected destination. The
+official ruling keeps the Energy on a protected source and discards it
+when only the destination blocks the transfer. Graffiti currently adds
+the attack cost through effect protection. Its self-Sleep is independent.
+[Energy Antics source ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AB&regulation_faq_main_item1=all)
+[Energy Antics destination ruling](https://www.pokemon-card.com/rules/faq/details.php?id=8063)
+[HeartGold & SoulSilver Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/heartgoldsoulsilver.pdf)

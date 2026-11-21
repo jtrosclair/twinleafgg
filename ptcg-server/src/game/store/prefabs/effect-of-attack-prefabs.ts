@@ -6,6 +6,8 @@ import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { COIN_FLIP_PROMPT } from './prefabs';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
+import { afterAttackDamageForOriginalDefender } from './post-damage-identity';
+import { MarkerConstants } from '../markers/marker-constants';
 import { GameMessage } from '../../game-message';
 import { Attack } from '../card/pokemon-types';
 import { PokemonCard } from '../card/pokemon-card';
@@ -196,11 +198,31 @@ export function FLIP_COIN_FOR_FLY(
   });
 }
 
+class CoinFlipCancelAttackEffect extends EffectOfAttackEffect {
+  readonly type = 'COIN_FLIP_CANCEL_ATTACK_EFFECT';
+  constructor(base: AttackEffect, private readonly coinFlips: number, private readonly duration: 'next-turn' | 'while-active') {
+    super(base);
+  }
+  applyEffect(): void {
+    if (this.duration === 'while-active') {
+      this.target.marker.addMarkerToState(MarkerConstants.OCTAZOOKA_ATTACK_CANCELLATION);
+    } else {
+      this.target.coinFlipCancelAttackNextTurn = this.coinFlips;
+    }
+  }
+}
+
 export function DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(
-  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card, coinFlips = 1,
+  _store: StoreLike, state: State, effect: AttackEffect, source: Card, coinFlips = 1,
+  duration: 'next-turn' | 'while-active' = 'next-turn',
 ): State {
-  effect.opponent.active.coinFlipCancelAttackNextTurn = Math.max(1, coinFlips);
-  return _state;
+  afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+    const restriction = new CoinFlipCancelAttackEffect(effect, Math.max(1, coinFlips), duration);
+    restriction.target = target;
+    restriction.markerSource = effect.source.getPokemonCard() ?? source;
+    return store.reduceEffect(next, restriction);
+  });
+  return state;
 }
 
 export function THIS_POKEMON_SURVIVES_ON_TEN_HP_DURING_OPPONENTS_NEXT_TURN(

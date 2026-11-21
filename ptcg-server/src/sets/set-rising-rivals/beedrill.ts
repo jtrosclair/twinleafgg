@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
-import { GameError, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
+import { GameError, GameMessage, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, BLOCK_IF_HAS_SPECIAL_CONDITION, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE, BLOCK_IF_HAS_SPECIAL_CONDITION, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Beedrill extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -35,9 +36,8 @@ export class Beedrill extends PokemonCard {
   public fullName: string = 'Beedrill RR';
 
   public readonly FLUTTER_WINGS_MARKER = 'FLUTTER_WINGS_MARKER';
-
-  public readonly NEEDLE_SHOCK_MARKER = 'NEEDLE_SHOCK_MARKER';
-  public readonly CLEAR_NEEDLE_SHOCK_MARKER = 'CLEAR_NEEDLE_SHOCK_MARKER';
+  public readonly NEEDLE_SHOCK_MARKER = MarkerConstants.NEEDLE_SHOCK_USED_THIS_TURN;
+  public readonly CLEAR_NEEDLE_SHOCK_MARKER = MarkerConstants.NEEDLE_SHOCK_USED_LAST_TURN;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
@@ -59,25 +59,21 @@ export class Beedrill extends PokemonCard {
 
       BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
 
-      SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, { cardType: CardType.GRASS }, { min: 0, max: 1, allowCancel: false });
+      state = SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(
+        store, state, player, { cardType: CardType.GRASS }, { min: 0, max: 1, allowCancel: false }
+      );
+      player.marker.addMarker(this.FLUTTER_WINGS_MARKER, this, 'ability-use', 'player');
+      return state;
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      if (!effect.player.marker.hasMarker(this.NEEDLE_SHOCK_MARKER, this)) {
-        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      const { marker } = effect.player;
+      if (!marker.hasMarker(MarkerConstants.NEEDLE_SHOCK_USED_LAST_TURN)) {
+        ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect,
+          [SpecialCondition.PARALYZED, SpecialCondition.POISONED]);
       }
-      effect.player.marker.addMarker(this.NEEDLE_SHOCK_MARKER, this);
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.CLEAR_NEEDLE_SHOCK_MARKER, this)) {
-      effect.player.marker.removeMarker(this.NEEDLE_SHOCK_MARKER, this);
-      effect.player.marker.removeMarker(this.CLEAR_NEEDLE_SHOCK_MARKER, this);
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.NEEDLE_SHOCK_MARKER, this)) {
-      effect.player.marker.addMarker(this.CLEAR_NEEDLE_SHOCK_MARKER, this);
+      marker.removeMarker(MarkerConstants.NEEDLE_SHOCK_USED_THIS_TURN);
+      marker.addMarkerToState(MarkerConstants.NEEDLE_SHOCK_USED_THIS_TURN);
     }
 
     return state;

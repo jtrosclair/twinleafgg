@@ -1,7 +1,7 @@
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard, StoreLike, State } from '../../game';
-import { WAS_ATTACK_USED, ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, ADD_CONFUSION_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
 import { DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class OctilleryBatch172 extends PokemonCard {
@@ -40,8 +40,8 @@ export class OctilleryBatch172 extends PokemonCard {
       return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this, 2);
     }
 
-    if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
     return state;
   }

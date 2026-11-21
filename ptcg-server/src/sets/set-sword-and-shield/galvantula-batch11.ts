@@ -8,7 +8,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import {
   ADD_PARALYZED_TO_PLAYER_ACTIVE,
-  AFTER_ATTACK,
+  WAS_ATTACK_USED,
   COIN_FLIP_PROMPT,
 } from '../../game/store/prefabs/prefabs';
 
@@ -40,7 +40,7 @@ export class GalvantulaBatch112 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Attack 1: Volt Wave
     // Ref: set-plasma-blast/fraxure.ts (Paralyzing Gaze)
-    if (AFTER_ATTACK(effect, 0, this)) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
         if (result) {
           ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);

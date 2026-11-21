@@ -1,13 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameLog } from '../../game';
+import { StoreLike, State, StateUtils } from '../../game';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { PutCountersEffect } from '../../game/store/effects/attack-effects';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { ADD_MARKER, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, HAS_MARKER, REMOVE_MARKER, SIMULATE_COIN_FLIP, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { ADD_POISON_TO_PLAYER_ACTIVE, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class Weezing extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,7 +35,8 @@ export class Weezing extends PokemonCard {
   public name: string = 'Weezing';
   public fullName: string = 'Weezing DX';
 
-  public readonly DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = 'DEFENDING_POKEMON_CANNOT_ATTACK_MARKER';
+  // Older puzzle builders enumerate this marker.
+  public readonly DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
@@ -70,37 +70,9 @@ export class Weezing extends PokemonCard {
       THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 70);
     }
 
-    if (AFTER_ATTACK(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-      ADD_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
-    }
-
-    if (effect instanceof AttackEffect && HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      try {
-        const coinFlip = new CoinFlipEffect(player);
-        store.reduceEffect(state, coinFlip);
-      } catch {
-        return state;
-      }
-
-      const coinFlipResult = SIMULATE_COIN_FLIP(store, state, player);
-
-      if (!coinFlipResult) {
-        //effect.damage = 0;
-        effect.preventDefault = true;
-        store.log(state, GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
-      }
-    }
-
-    if (effect instanceof EndTurnEffect) {
-      if (HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-        REMOVE_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
-      }
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this);
     }
 
     return state;

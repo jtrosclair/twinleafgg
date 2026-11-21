@@ -502,3 +502,43 @@ test('PBL exact numbered inputs never substitute an unavailable print',async()=>
  const engine=await mod;engine.ensureClientCards();const manager=engine.CardManager.getInstance(),original=manager.getAllCards,all=original.call(manager),rows=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/pbl-items-printed-names.json')));
  try{for(const row of rows){manager.getAllCards=()=>all.filter(c=>c.fullName!==row.fullName);const parser=new engine.DeckImportParser();for(const input of [`${row.name} PBL ${row.number}`,`${row.name} PBL 0${row.number}`,`${row.fullName} ${row.number}`]){const parsed=parser.parseDeckList(`1 ${input}`);assert.equal(parsed.knownCards.length,0,input);assert.equal(parsed.unknownCards.length,1,input);assert.equal(parser.getCards([input]).cards.length,0,input)}}}finally{manager.getAllCards=original}
 });
+
+test('Sword & Shield numbered imports use their printed moves and artwork', async () => {
+  const engine = await mod;
+  const images = JSON.parse(fs.readFileSync(path.join(root, 'simulator-api/large-card-images.json')));
+  const prints = [
+    ['Galarian Ponyta SSH 081', 'Galarian Ponyta SSH', '81', 'Psy Bolt', 10],
+    ['Clobbopus SSH 111', 'Clobbopus SSH', '111', 'Bind', 20],
+    ['Clobbopus SSH 112', 'Clobbopus SSH 112', '112', 'Punch', 50],
+    ['Galvantula SSH 071', 'Galvantula SSH 71', '71', 'Volt Wave', 60],
+  ];
+  const cards = prints.map(([input]) => input);
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', {
+    deckList: cards.map(input => `1 ${input}`).join('\n'),
+  }))).json();
+  const lookup = await (await engine.handle(post('/v1/deck-import/get-cards', { cards }))).json();
+  assert.deepEqual(parsed.unknownCards, []);
+  for (const response of [parsed.knownCards, lookup.cards]) {
+    assert.equal(response.length, prints.length);
+    for (const [index, [input, fullName, number, name, damage]] of prints.entries()) {
+      const card = response[index];
+      assert.equal(card.fullName, fullName, input);
+      assert.equal(card.cardData.setNumber, number, input);
+      assert.equal(card.cardData.attacks[0].name, name, input);
+      assert.equal(card.cardData.attacks[0].damage, damage, input);
+      assert.equal(card.cardImage, images[`SSH ${number}`], input);
+    }
+  }
+});
+
+test('existing attack marker names remain available to puzzle builders', async () => {
+  const engine = await mod;
+  const response = await (await engine.handle(post('/v1/deck-import/get-cards', {
+    cards: ['Beedrill RR', 'Weezing DX', 'Octillery M4'],
+  }))).json();
+  assert.deepEqual(response.cards.map(card => card.markers), [
+    ['FLUTTER_WINGS_MARKER', 'NEEDLE_SHOCK_MARKER', 'CLEAR_NEEDLE_SHOCK_MARKER'],
+    ['DEFENDING_POKEMON_CANNOT_ATTACK_MARKER'],
+    ['OCTILLERY_M4_CORNER_STOP_MARKER', 'OCTILLERY_M4_CLEAR_MARKER', 'OCTILLERY_M4_USED_MARKER'],
+  ]);
+});

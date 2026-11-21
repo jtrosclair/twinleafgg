@@ -9,6 +9,10 @@ export class MarkerConstants {
   // ===== COMMON MARKERS (used across multiple cards) =====
   public static readonly ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
   public static readonly ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
+  public static readonly NEEDLE_SHOCK_USED_THIS_TURN = 'NEEDLE_SHOCK_MARKER';
+  public static readonly NEEDLE_SHOCK_USED_LAST_TURN = 'CLEAR_NEEDLE_SHOCK_MARKER';
+  public static readonly OCTAZOOKA_ATTACK_CANCELLATION = 'OCTAZOOKA_ATTACK_CANCELLATION';
+  public static readonly LEGACY_OCTILLERY_CORNER_STOP = 'OCTILLERY_M4_CORNER_STOP_MARKER';
   public static readonly DAMAGE_DEALT_MARKER = 'DAMAGE_DEALT_MARKER';
   public static readonly KNOCKOUT_MARKER = 'KNOCKOUT_MARKER';
   public static readonly ATTACK_KNOCK_OUT_AT_END_OF_TURN = 'ATTACK_KNOCK_OUT_AT_END_OF_TURN';

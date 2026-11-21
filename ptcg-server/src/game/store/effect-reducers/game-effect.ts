@@ -125,30 +125,6 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
   }
 
-  // Smokescreen / Sand-Attack: any tails cancels this attack before the
-  // attack's card-specific effects are allowed to run. Count the legacy
-  // marker form too, because saved puzzle payloads may contain it.
-  const legacyCancellationMarkers = [
-    ...attackingPokemon.marker.markers,
-    ...player.marker.markers,
-  ].filter(marker => marker.name === PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN);
-  const flips = attackingPokemon.coinFlipCancelAttackNextTurn + legacyCancellationMarkers.length;
-  if (flips > 0) {
-    let anyTails = false;
-    for (let i = 0; i < flips; i++) {
-      let heads = false;
-      state = COIN_FLIP_PROMPT(store, state, player, result => { heads = result; });
-      if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-      }
-      if (!heads) anyTails = true;
-    }
-    if (anyTails) {
-      state = store.reduceEffect(state, new EndTurnEffect(player));
-      return state;
-    }
-  }
-
   // Get the actual PokemonCard for power checks
   const attackingPokemonCard = attackingPokemon.getPokemonCard();
   // Check for barrage on powers (and not blocked)
@@ -179,6 +155,25 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
   if (StateUtils.checkEnoughEnergy(checkProvidedEnergy.energyMap, checkAttackCost.cost as CardType[]) === false) {
     throw new GameError(GameMessage.NOT_ENOUGH_ENERGY);
   }
+
+  // A legal attack must pass Smokescreen before its Confusion or card effects.
+  // Older snapshots keep one or two flips as markers rather than a slot field.
+  const pokemonMarkers = attackingPokemon.marker.markers;
+  const legacySingle = [...pokemonMarkers, ...player.marker.markers].filter(
+    marker => marker.name === MarkerConstants.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN
+      || (marker.name === MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER && marker.source?.fullName === 'Weezing DX')
+  ).length;
+  const legacyDouble = pokemonMarkers.some(marker => marker.name === MarkerConstants.LEGACY_OCTILLERY_CORNER_STOP);
+  const persistentFlips = attackingPokemon.marker.hasMarker(MarkerConstants.OCTAZOOKA_ATTACK_CANCELLATION) ? 1 : 0;
+  const flips = attackingPokemon.coinFlipCancelAttackNextTurn + legacySingle + (legacyDouble ? 2 : 0) + persistentFlips;
+  let anyTails = false;
+  for (let index = 0; index < flips; index++) {
+    let heads = false;
+    state = COIN_FLIP_PROMPT(store, state, player, result => { heads = result; });
+    if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+    if (!heads) anyTails = true;
+  }
+  if (anyTails) return store.reduceEffect(state, new EndTurnEffect(player));
 
   if (sp.includes(SpecialCondition.CONFUSED)) {
     let flip = false;

@@ -3,9 +3,9 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { GamePhase, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AbstractAttackEffect } from '../../game/store/effects/attack-effects';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
+import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 import { DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dustox extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -61,7 +61,7 @@ export class Dustox extends PokemonCard {
 
     // Smogscreen
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this);
     }
 

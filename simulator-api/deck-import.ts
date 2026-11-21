@@ -923,7 +923,8 @@ const REVIEWED_NUMBERED_PRINTS = new Set([
   'electrike|ar|62', 'electrike|ar|63', 'tangela|ar|76', 'tangela|ar|77',
   'treecko|ar|78', 'treecko|ar|79', 'manectric|ar|22', 'manectric|ar|44',
   'ponyta|ar|46', 'ponyta|ar|72', 'ponyta|ar|SH11',
-  'dialga|dpp|17', 'dialga|dpp|37'
+  'dialga|dpp|17', 'dialga|dpp|37',
+  'galarian ponyta|ssh|81', 'galvantula|ssh|71', 'clobbopus|ssh|111', 'clobbopus|ssh|112'
 ]);
 
 function reviewedPrintKey(name: string, set: string, number: string): string | undefined {

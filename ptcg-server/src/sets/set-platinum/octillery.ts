@@ -63,7 +63,7 @@ export class Octillery extends PokemonCard {
 
     // Octazooka
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this);
+      return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this, 1, 'while-active');
     }
 
     return state;
