@@ -240,6 +240,7 @@ export interface KnockOutEnergyAttachment {
   card: PokemonCard & EnergyCard;
   target: PokemonCardList;
   provides: CardType[];
+  promoteBeforePrizes?: boolean;
 }
 
 export interface EffectKnockOutOptions {
@@ -275,6 +276,7 @@ export class KnockOutEffect implements Effect {
   public rescueSource?: Card;
   public stadiumReplacement?: PokemonCard;
   public energyAttachment?: KnockOutEnergyAttachment;
+  public promoteBeforePrizes = false;
   public rescuedPokemon?: { card: PokemonCard; attachments: Card[] };
   public pokemonGoingToLostZone = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];

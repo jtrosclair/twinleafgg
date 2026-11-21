@@ -72,13 +72,13 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
 
       if (handCard instanceof PokemonCard) {
         const target = findCardList(state, action.target);
-        if (!(target instanceof PokemonCardList)) {
+        if (action.target.player !== PlayerType.BOTTOM_PLAYER || !(target instanceof PokemonCardList)) {
           throw new GameError(GameMessage.INVALID_TARGET);
         }
 
         // Some hand Abilities place an Evolution Pokémon directly on the Bench.
         // An occupied target still follows the normal evolution path.
-        if (action.target.player === PlayerType.BOTTOM_PLAYER && action.target.slot === SlotType.BENCH && target.cards.length === 0) {
+        if (action.target.slot === SlotType.BENCH && target.cards.length === 0) {
           const power = handCard.powers.find(item => item.useFromHand && item.useFromHandToBench);
           if (power) {
             const handTarget = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.HAND, index: action.handIndex };

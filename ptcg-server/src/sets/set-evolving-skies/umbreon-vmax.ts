@@ -1,12 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import {
-  StoreLike, State, StateUtils, GameError, GameMessage,
-  PlayerType, PowerType, ChoosePokemonPrompt, ConfirmPrompt, SlotType
+  StoreLike, State, StateUtils, GameMessage,
+  PlayerType, PowerType, ChoosePokemonPrompt, SlotType
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND } from '../../game/store/prefabs/prefabs';
 
 export class UmbreonVMAX extends PokemonCard {
 
@@ -28,7 +28,6 @@ export class UmbreonVMAX extends PokemonCard {
 
   public powers = [{
     name: 'Dark Signal',
-    useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     text: 'When you play this Pokémon from your hand to evolve 1 of ' +
       'your Pokémon during your turn, you may switch 1 of your ' +
@@ -55,40 +54,21 @@ export class UmbreonVMAX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = effect.player;
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+    // Ref: set-cosmic-eclipse/venusaur-and-snivy-gx.ts (opposing Ability protection on the selected slot).
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
+      const { player } = effect;
+      const opponent = StateUtils.getOpponent(state, player);
+      if (!opponent.bench.some(slot => slot.getPokemonCard()) || IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          const player = effect.player;
-          const opponent = StateUtils.getOpponent(state, player);
-          const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-          if (!hasBench) {
-            throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-          }
-
-          return store.prompt(state, new ChoosePokemonPrompt(
-            player.id,
-            GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-            PlayerType.TOP_PLAYER,
-            [SlotType.BENCH],
-            { allowCancel: false }
-          ), result => {
-            const cardList = result[0];
-            opponent.switchPokemon(cardList);
-            return state;
-          });
-        } else {
-          return state;
-        }
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (!accepted) return;
+        store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH,
+          PlayerType.TOP_PLAYER, [SlotType.BENCH], { allowCancel: false }), ([selected]) => {
+          const signal = new EffectOfAbilityEffect(player, this.powers[0], this, selected);
+          store.reduceEffect(state, signal);
+          if (!signal.preventDefault && signal.target) opponent.switchPokemon(signal.target, store, state);
+        });
       });
     }
     return state;

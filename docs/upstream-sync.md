@@ -4362,3 +4362,45 @@ All 5,225 sampled opening actions match, and all seven recorded
 solutions still win. The 2.51 MiB gzip runtime passes build attestation,
 ten packaged board scenarios and 209 client-service checks. All 32
 API checks pass.
+
+## Gameplay re-audit, batch 62
+
+Electrode SW 26 can use Energy Shift on either turn when attack damage
+Knocks it Out, including Ion Blast recoil. The original card becomes a
+Special Energy that supplies one Energy of any type. The stack follows
+the normal Knock Out destination, including the Lost Zone under Darkness
+Lost, and the opponent takes the Prize. Successful Energy Shift promotes
+a new Active Pokémon before taking Prizes. When both Active Pokémon are
+Knocked Out, promotion keeps the next player's priority. Chilly Breath
+suppresses the Poké-Power even when Glaceon LV.X is Knocked Out at the
+same time. Damage counters and Checkup do not trigger the Poké-Power.
+The attached Energy survives snapshot restore and reverts to Pokémon
+when it leaves play.
+[Official Secret Wonders card dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Official Energy Shift timing ruling](https://www.pokemon-card.com/rules/faq/search.php?page=32&regulation=all&sc_group_id=10)
+[Official Darkness Lost and Chilly Breath rulings](https://www.pokemon-card.com/rules/faq/search.php?page=10&regulation_faq_main=&sc_group_id=10)
+
+Dark Signal runs after a successful evolution from the owner's hand on
+their turn. All four Umbreon VMAX prints evolve normally when the opposing
+Bench is empty. When the opponent has a Benched Pokémon, the player can
+decline the Ability or select a target. Corviknight VMAX can be selected
+and stays on the Bench while Lustrous Body is active. Direct plays from
+the hand now reject opponent-owned Pokémon slots for Basics and evolutions.
+[Upstream Dark Signal change](https://github.com/twinleafgg/twinleafgg/commit/3348ebdc898f175a2ed8f999133cd13d1afd01f5)
+[Official Umbreon VMAX print](https://www.pokemon-card.com/card-search/details.php/card/40250)
+[Official Dark Signal and Lustrous Body ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%83%BC%E3%83%9E%E3%83%BC%E3%82%AC%E3%82%A2VMAX&regulation_faq_main_item1=all)
+
+The original import marked eight of 35 explicitly titled `fix` commits
+as deferred and ten as partial. The current ledger has 39 such commits,
+with zero fully deferred and 11 partial. Across all 100 tracked commits,
+eight are deferred and 57 are partial. These counts include mixed commits
+with catalog, frontend or retired features. The individual gameplay
+defect count remains open. Team Rocket's Ampharos was part of the
+separately titled Ability-effects refactor at `db4eebfcf`.
+
+All 20 focused cases pass, and 12 reproduce failures on the previous
+engine. The full engine passes 10,896 tests. The combined worktree passes
+222 targeted checks. All 559 comparable saved states and 5,225 sampled
+opening actions match, and all seven recorded solutions still win. All
+32 API checks, 209 client checks and ten packaged board scenarios pass.
+The 2.50 MiB gzip runtime passes build attestation.

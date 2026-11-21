@@ -218,6 +218,9 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
     const attachment = new AttachEnergyEffect(effect.player, energy.card, energy.target, 'in-play', heldEnergy);
     attachment.sourceCard = energy.card;
     state = store.reduceEffect(state, attachment);
+    if (energy.promoteBeforePrizes && effect.target === effect.player.active && energy.target.energies.cards.includes(energy.card)) {
+      effect.promoteBeforePrizes = true;
+    }
     if (heldEnergy.cards.length) {
       energy.card.clearAttachedEnergyForm?.();
       state = MOVE_CARDS(store, state, heldEnergy, effect.player.discard);

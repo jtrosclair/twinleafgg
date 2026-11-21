@@ -220,6 +220,48 @@ function chooseActivePokemons(state: State): ChoosePokemonPrompt[] {
   return prompts;
 }
 
+function* resolveActivePromotions(
+  next: Function, store: StoreLike, state: State, activePrompts: ChoosePokemonPrompt[]
+): Generator<State, State, void> {
+  for (const prompt of activePrompts) {
+    const player = state.players.find(p => p.id === prompt.playerId);
+    if (!player) {
+      throw new GameError(GameMessage.ILLEGAL_ACTION);
+    }
+
+    state = store.prompt(state, prompt, (result) => {
+      const selectedPokemon = result as PokemonCardList[];
+      if (selectedPokemon.length !== 1) {
+        throw new GameError(GameMessage.ILLEGAL_ACTION);
+      }
+      const benchIndex = player.bench.indexOf(selectedPokemon[0]);
+      if (benchIndex === -1 || player.active.cards.length > 0) {
+        throw new GameError(GameMessage.ILLEGAL_ACTION);
+      }
+      const temp = player.active;
+      player.active = player.bench[benchIndex];
+      player.bench[benchIndex] = temp;
+      recordActiveAbilityLockOrder(state);
+      const newActivePokemon = player.active.getPokemonCard();
+      if (newActivePokemon) {
+        // Add to new tracking system
+        if (!player.movedToActiveThisTurn.includes(newActivePokemon.id)) {
+          player.movedToActiveThisTurn.push(newActivePokemon.id);
+        }
+        // Keep existing boolean for backwards compatibility
+        newActivePokemon.movedToActiveThisTurn = true;
+        // Dispatch MovedToActiveEffect for cards that intercept it
+        store.reduceEffect(state, new MovedToActiveEffect(player, newActivePokemon));
+      }
+    });
+
+    if (store.hasPrompts()) {
+      yield store.waitPrompt(state, () => next());
+    }
+  }
+  return state;
+}
+
 // function choosePrizeCards(state: State, prizesToTake: [number, number]): ChooseCardsPrompt[] {
 //   const prompts: ChooseCardsPrompt[] = [];
 
@@ -414,6 +456,7 @@ function initiateSuddenDeath(store: StoreLike, state: State): State {
 
 export function* executeCheckState(next: Function, store: StoreLike, state: State, onComplete?: () => void): IterableIterator<State> {
   const prizeGroups: PrizeGroup[][] = state.players.map(() => []);
+  const promoteBeforePrizes = new Set<number>();
 
   // Resolve every Knock Out created by these effects before taking Prizes.
   const processed = new Set<PokemonCard>();
@@ -455,6 +498,9 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       group.count += Math.max(0, effect.prizeCount - effect.prizeReduction);
     }
     state = yield* resolveKnockOutGroup(() => next(), store, state, resolved);
+    for (const effect of resolved) {
+      if (effect.promoteBeforePrizes) promoteBeforePrizes.add(effect.player.id);
+    }
     // A printed discard cost can make the discarded cards available to the
     // rest of its effect. Finish that effect before taking any Prizes.
     for (const continueEffect of continuations) {
@@ -468,6 +514,13 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   checkBenchSize(store, state);
   if (store.hasPrompts()) {
     yield store.waitPrompt(state, () => next());
+  }
+
+  if (promoteBeforePrizes.size > 0) {
+    const prompts = chooseActivePokemons(state);
+    // Energy Shift promotes before Prizes. Keep turn order when both Active Pokémon were Knocked Out.
+    const lastEarly = prompts.map(prompt => promoteBeforePrizes.has(prompt.playerId)).lastIndexOf(true);
+    state = yield* resolveActivePromotions(next, store, state, prompts.slice(0, lastEarly + 1));
   }
 
   // Both players take their Prizes for this check before the winner is decided.
@@ -491,44 +544,8 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   // An equal result can start the configured tiebreaker setup.
   if (store.hasPrompts()) return state;
 
-  // Then handle new Active Pokémon selection in turn order.
   const activePrompts = chooseActivePokemons(state);
-  for (const prompt of activePrompts) {
-    const player = state.players.find(p => p.id === prompt.playerId);
-    if (!player) {
-      throw new GameError(GameMessage.ILLEGAL_ACTION);
-    }
-
-    state = store.prompt(state, prompt, (result) => {
-      const selectedPokemon = result as PokemonCardList[];
-      if (selectedPokemon.length !== 1) {
-        throw new GameError(GameMessage.ILLEGAL_ACTION);
-      }
-      const benchIndex = player.bench.indexOf(selectedPokemon[0]);
-      if (benchIndex === -1 || player.active.cards.length > 0) {
-        throw new GameError(GameMessage.ILLEGAL_ACTION);
-      }
-      const temp = player.active;
-      player.active = player.bench[benchIndex];
-      player.bench[benchIndex] = temp;
-      recordActiveAbilityLockOrder(state);
-      const newActivePokemon = player.active.getPokemonCard();
-      if (newActivePokemon) {
-        // Add to new tracking system
-        if (!player.movedToActiveThisTurn.includes(newActivePokemon.id)) {
-          player.movedToActiveThisTurn.push(newActivePokemon.id);
-        }
-        // Keep existing boolean for backwards compatibility
-        newActivePokemon.movedToActiveThisTurn = true;
-        // Dispatch MovedToActiveEffect for cards that intercept it
-        store.reduceEffect(state, new MovedToActiveEffect(player, newActivePokemon));
-      }
-    });
-
-    if (store.hasPrompts()) {
-      yield store.waitPrompt(state, () => next());
-    }
-  }
+  state = yield* resolveActivePromotions(next, store, state, activePrompts);
 
   // Promotion effects can themselves change which player wins.
   if (activePrompts.length > 0) checkWinner(store, state, onComplete);
