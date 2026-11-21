@@ -1,8 +1,9 @@
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { CoinFlipPrompt, GameError, GameMessage, PokemonCard, PowerType } from '../../game';
+import { GameError, GameMessage, PokemonCard, PowerType } from '../../game';
 import { ABILITY_USED, DRAW_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
@@ -64,20 +65,9 @@ export class MegaKangaskhanex extends PokemonCard {
 
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage += 50 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        effect.damage += 50 * heads;
+      });
     }
 
     return state;

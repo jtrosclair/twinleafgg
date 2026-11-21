@@ -27,6 +27,7 @@ export enum PlayCardEffects {
   TOOL_EFFECT = 'TOOL_EFFECT',
   STADIUM_EFFECT = 'STADIUM_EFFECT',
   SUPPORTER_EFFECT = 'SUPPORTER_EFFECT',
+  CHECK_ATTACK_COIN_REFLIP_EFFECT = 'CHECK_ATTACK_COIN_REFLIP_EFFECT',
   COIN_FLIP_EFFECT = 'COIN_FLIP_EFFECT',
   COIN_FLIP_SEQUENCE_EFFECT = 'COIN_FLIP_SEQUENCE_EFFECT',
   TRAINER_CARD_TO_DECK_EFFECT = 'TRAINER_CARD_TO_DECK_EFFECT',
@@ -281,6 +282,18 @@ export class SupporterEffect implements Effect {
   }
 }
 
+export class CheckAttackCoinReflipEffect implements Effect {
+  readonly type = PlayCardEffects.CHECK_ATTACK_COIN_REFLIP_EFFECT;
+  public preventDefault = false;
+  public readonly sources = new Map<string, Card>();
+
+  constructor(
+    public readonly player: Player,
+    public readonly attacker: PokemonCardList,
+    public readonly playerFlipped: boolean,
+  ) {}
+}
+
 export class CoinFlipEffect implements Effect {
   readonly type: string = PlayCardEffects.COIN_FLIP_EFFECT;
   public preventDefault = false;
@@ -289,8 +302,8 @@ export class CoinFlipEffect implements Effect {
   public result?: boolean;
   /** Optional card effect override (for example, Shiftry's Unlucky Wind). */
   public forcedResult?: boolean;
-  /** When true, stadiums like Glimwood Tangle will not intercept (used for reflips). */
-  public skipReflipStadium?: boolean;
+  /** Exclude non-attack coins and the individual flips inside an attack sequence. */
+  public skipAttackReflip?: boolean;
 
   constructor(player: Player, callback?: (result: boolean) => void) {
     this.player = player;

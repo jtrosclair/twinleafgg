@@ -141,7 +141,7 @@ export function* resolveAfterAttack(
     target.attackDamageKnockOut = undefined;
     store.log(state, GameLog.LOG_SURVIVES_ON_TEN_HP, { pokemon: pokemon.name, reason: 'Strong-Willed' });
   });
-  coin.skipReflipStadium = true;
+  coin.skipAttackReflip = true;
   state = store.reduceEffect(state, coin);
   if (store.hasPrompts()) yield store.waitPrompt(state, next);
   return state;

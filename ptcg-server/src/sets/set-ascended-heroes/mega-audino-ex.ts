@@ -67,8 +67,6 @@ export class MegaAudinoex extends PokemonCard {
             }
             SHUFFLE_DECK(store, state, player);
           });
-        } else {
-          SHUFFLE_DECK(store, state, player);
         }
       });
     }

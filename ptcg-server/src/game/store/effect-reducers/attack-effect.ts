@@ -135,7 +135,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
         // Resolve Guts before applying damage. The animation can finish while
         // the attack waits, and Glimwood Tangle applies only to attack flips.
         const coin = new CoinFlipEffect(targetOwner);
-        coin.skipReflipStadium = true;
+        coin.skipAttackReflip = true;
         state = store.reduceEffect(state, coin);
         if (coin.result === true) effect.surviveOnTenHPReason = effect.surviveOnTenHPCoin;
       }

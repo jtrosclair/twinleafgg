@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, CoinFlipPrompt, GameMessage, StateUtils } from '../../game';
+import { StoreLike, State, CoinFlipPrompt, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { DealDamageEffect, KnockOutOpponentEffect } from '../../game/store/effects/attack-effects';
+import { DealDamageEffect, DirectKnockOutAttackEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class IonosElectrode extends PokemonCard {
@@ -52,23 +52,13 @@ export class IonosElectrode extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      const recoil = new DealDamageEffect(effect, 100);
+      recoil.target = effect.source;
+      store.reduceEffect(state, recoil);
 
-      const dealDamage = new DealDamageEffect(effect, 100);
-      dealDamage.target = player.active;
-      store.reduceEffect(state, dealDamage);
-
-      return store.prompt(state, new CoinFlipPrompt(
-        effect.player.id, GameMessage.FLIP_COIN
-      ), (result) => {
-        if (!result) {
-          const dealDamage = new KnockOutOpponentEffect(effect, 999);
-          dealDamage.target = opponent.active;
-          store.reduceEffect(state, dealDamage);
-        }
+      return store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.FLIP_COIN), heads => {
+        if (heads) store.reduceEffect(state, new DirectKnockOutAttackEffect(effect));
       });
-
     }
 
     return state;

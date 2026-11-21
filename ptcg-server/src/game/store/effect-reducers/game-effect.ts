@@ -43,7 +43,7 @@ import { StoreLike } from '../store-like';
 import { MoveCardsEffect, PayHandEnergyAttachmentCostEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
+import { MOVE_CARDS, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
@@ -53,6 +53,7 @@ import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
+import { offerAttackCoinReflip } from '../prefabs/attack-coin-reflip';
 import { rollCoin } from '../prefabs/coin-flip-results';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
@@ -754,54 +755,30 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   }
 
   if (effect instanceof CoinFlipSequenceEffect) {
-    const seqEffect = effect as CoinFlipSequenceEffect;
-    const player = seqEffect.player;
-    const GLIMWOOD_REFLIP_USED = 'GLIMWOOD_REFLIP_USED';
-
-    const doOneFlip = (s: State, resultsSoFar: boolean[], onDone: (results: boolean[]) => void): State => {
-      const coinFlip = new CoinFlipEffect(player, (result: boolean) => {
-        const newResults = [...resultsSoFar, result];
-        if (seqEffect.mode === 'untilTails' && result) {
-          doOneFlip(s, newResults, onDone);
-        } else if (seqEffect.mode === 'untilTails' && !result) {
-          onDone(newResults);
-        } else if (typeof seqEffect.mode === 'number' && newResults.length < seqEffect.mode) {
-          doOneFlip(s, newResults, onDone);
-        } else {
-          onDone(newResults);
-        }
+    const { player, mode, callback } = effect;
+    const flipSequence = (results: boolean[], finished: (results: boolean[]) => void): State => {
+      const flip = new CoinFlipEffect(player, result => {
+        results.push(result);
+        if (mode === 'untilTails' ? result : results.length < mode) flipSequence(results, finished);
+        else finished(results);
       });
-      coinFlip.skipReflipStadium = true;
-      return store.reduceEffect(s, coinFlip);
+      flip.skipAttackReflip = true;
+      return store.reduceEffect(state, flip);
     };
-
-    const finish = (results: boolean[]) => {
-      const stadium = StateUtils.getStadiumCard(state);
-      const isGlimwood = stadium?.name === 'Glimwood Tangle';
-      if (state.phase === GamePhase.ATTACK && isGlimwood && stadium && !HAS_MARKER(GLIMWOOD_REFLIP_USED, player, stadium)) {
-        store.prompt(state, new ConfirmPrompt(player.id, GameMessage.WANT_TO_USE_ABILITY), wantToReflip => {
-          if (wantToReflip) {
-            store.log(state, GameLog.LOG_PLAYER_REFLIPS_WITH_GLIMWOOD_TANGLE, { name: player.name });
-            ADD_MARKER(GLIMWOOD_REFLIP_USED, player, stadium as Card);
-            doOneFlip(state, [], finish);
-          } else {
-            seqEffect.callback(results);
-          }
-        });
-      } else {
-        seqEffect.callback(results);
-      }
-    };
-
-    return doOneFlip(state, [], finish);
+    if (mode === 0) {
+      callback([]);
+      return state;
+    }
+    return flipSequence([], results => offerAttackCoinReflip(store, state,
+      () => callback(results), () => flipSequence([], callback), [player.id]));
   }
 
   if (effect instanceof CoinFlipEffect) {
     // Simulate coin flip and store result
     const result = rollCoin(state, effect.player, effect.forcedResult);
-    (effect as CoinFlipEffect).result = result;
+    effect.result = result;
 
-    const player = (effect as CoinFlipEffect).player;
+    const { player, callback } = effect;
 
     // Emit coin flip animation event
     const game = (store as any).handler;
@@ -825,12 +802,13 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       const gameMessage = result ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS;
       store.log(stateForCallback, gameMessage, { name: player.name });
 
-      // Call callback if provided
-      // The callback executes after the WaitPrompt completes
-      // Store the state in the effect so the callback can access it if needed
-      if ((effect as CoinFlipEffect).callback) {
-        (effect as CoinFlipEffect).callback!(result);
-      }
+      if (!callback) return;
+      if (effect.skipAttackReflip) return callback(result);
+      offerAttackCoinReflip(store, stateForCallback, () => callback(result), () => {
+        const reflip = new CoinFlipEffect(player, callback);
+        reflip.skipAttackReflip = true;
+        store.reduceEffect(stateForCallback, reflip);
+      }, [player.id]);
     });
 
     return state;

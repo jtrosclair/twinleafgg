@@ -48,6 +48,7 @@ export class TeamRocketsHypno extends PokemonCard {
         coinFlips++;
       });
 
+      effect.damage = 0;
       if (coinFlips > 0) {
         MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.opponent, coinFlips, results => {
           const tails = results.filter(r => !r).length;

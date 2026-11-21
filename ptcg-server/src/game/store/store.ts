@@ -3,6 +3,8 @@ import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffe
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
 import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails } from './prefabs/coin-flip-results';
+import { COIN_REFLIP_AGAIN_USED, LEGACY_GLIMWOOD_REFLIP_USED, legacyAttackCoinGroup, offerAttackCoinReflip,
+  suppressesAttackReflips, withoutAttackReflips } from './prefabs/attack-coin-reflip';
 import { CoinFlipPrompt } from './prompts/coin-flip-prompt';
 import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
@@ -13,7 +15,8 @@ import { Card } from './card/card';
 import { PokemonCard } from './card/pokemon-card';
 import { TrainerCard } from './card/trainer-card';
 import { Stage, TrainerType } from './card/card-types';
-import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect, AttachEnergyFromHandEffect, CheckEnergyAttachmentEffect, CopiedSupporterEffect } from './effects/play-card-effects';
+import { AfterAttachEnergyEffect, AfterAttachEnergyFromHandEffect, AttachEnergyEffect, AttachEnergyFromHandEffect,
+  CheckAttackCoinReflipEffect, CheckEnergyAttachmentEffect, CopiedSupporterEffect } from './effects/play-card-effects';
 import { resolveHandEnergyAttachments } from './prefabs/hand-energy-attachment';
 import { PowerType } from './card/pokemon-types';
 import { PokemonCardList } from './state/pokemon-card-list';
@@ -22,7 +25,8 @@ import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
 import { clearAttackDamageScopes } from './prefabs/attack-after-damage';
-import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, PowerEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
+import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EffectOfAbilityEffect, EvolveEffect, KnockOutEffect,
+  PowerEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
 import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
 import { MarkerConstants } from './markers/marker-constants';
 import { EndTurnEffect } from './effects/game-phase-effects';
@@ -278,8 +282,13 @@ export class Store implements StoreLike {
       }
       state = this.propagatePlayerMarkerEffect(state, effect);
     }
-    state = this.propagateEffect(state, effect);
-    state = resolveCopyAttackSessions(this, state, effect);
+    if (state.phase === GamePhase.ATTACK && (effect instanceof AbstractAttackEffect || effect instanceof EffectOfAbilityEffect
+      || effect instanceof PowerEffect || effect instanceof KnockOutEffect || effect instanceof AfterAttachEnergyEffect)) {
+      state = withoutAttackReflips(state, () => resolveCopyAttackSessions(this, this.propagateEffect(state, effect), effect));
+    } else {
+      state = this.propagateEffect(state, effect);
+      state = resolveCopyAttackSessions(this, state, effect);
+    }
 
     if (effect.preventDefault === true) {
       return state;
@@ -290,6 +299,8 @@ export class Store implements StoreLike {
       state = this.propagatePlayerMarkerEffect(state, effect);
       if (effect.preventDefault) return state;
       effect.player.marker.removeMarker(COIN_FLIPS_TREATED_AS_TAILS);
+      effect.player.marker.removeMarker(COIN_REFLIP_AGAIN_USED);
+      effect.player.marker.removeMarker(LEGACY_GLIMWOOD_REFLIP_USED);
     }
 
     state = gamePhaseReducer(this, state, effect);
@@ -335,6 +346,17 @@ export class Store implements StoreLike {
   public prompt(state: State, prompts: Prompt<any>[] | Prompt<any>, then: (results: any) => void): State {
     if (!(prompts instanceof Array)) {
       prompts = [prompts];
+    }
+
+    const complete = then;
+    const attackCoins = legacyAttackCoinGroup(state, prompts);
+    if (attackCoins) {
+      then = results => offerAttackCoinReflip(this, state, () => complete(results), () => {
+        const reflips = attackCoins.map(coin => new CoinFlipPrompt(coin.playerId, coin.message));
+        this.prompt(state, reflips, complete);
+      }, attackCoins.map(coin => coin.playerId));
+    } else if (suppressesAttackReflips(state)) {
+      then = results => withoutAttackReflips(state, () => complete(results));
     }
 
     for (let i = 0; i < prompts.length; i++) {
@@ -698,6 +720,17 @@ export class Store implements StoreLike {
   }
 
   private propagateEffect(state: State, effect: Effect): State {
+    if (effect instanceof CheckAttackCoinReflipEffect) {
+      const stadium = StateUtils.getStadiumCard(state);
+      const cards = new Set<Card>(effect.attacker.tools);
+      for (const slot of effect.player.getPokemonInPlay()) {
+        const pokemon = slot.getPokemonCard();
+        if (pokemon) cards.add(pokemon);
+      }
+      if (stadium) cards.add(stadium);
+      for (const card of cards) state = this.callReduceEffect(card, this, state, effect);
+      return state;
+    }
     const cards: Card[] = [];
     const virtual = new Set(effect instanceof CheckProvidedEnergyEffect ? mirrorOnlyEnergyForQuery(state, effect) : []);
     for (const player of state.players) {

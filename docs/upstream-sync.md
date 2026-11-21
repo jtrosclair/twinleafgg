@@ -4404,3 +4404,60 @@ engine. The full engine passes 10,896 tests. The combined worktree passes
 opening actions match, and all seven recorded solutions still win. All
 32 API checks, 209 client checks and ten packaged board scenarios pass.
 The 2.50 MiB gzip runtime passes build attestation.
+
+## Gameplay re-audit, batch 63
+
+Victory Star, Trick Coin, Retry Badge and Glimwood Tangle use a shared
+reroll choice. The attacking player can keep the original outcomes or
+spend the turn's reroll on one eligible source. Fixed groups and supported
+until-tails attacks replace the whole group before applying its results.
+The existing browser coin prompts still supply the results for legacy
+attacks. Typed rolls still run through the engine with the same animation
+and forced-tails rules. Confusion, pre-attack cancellation, Trainer flips
+and defensive reactions use their own resolution.
+[Official Victory Star print](https://www.pokemon-card.com/card-search/details.php/card/27369)
+[Official Trick Coin rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A4%E3%82%AB%E3%82%B5%E3%83%9E%E3%82%B3%E3%82%A4%E3%83%B3)
+[Official Glimwood Tangle rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%9F%E3%83%8A%E3%82%B9%E3%83%A1%E3%82%A4%E3%82%BA%E3%81%AE%E6%A3%AE&regulation_faq_main_item1=all)
+
+Retry Badge M5 requires the attacking player's coin and an effective
+Colorless type on the Pokémon carrying the Tool. Trick Coin and Victory
+Star can also replace the defender's coins when the attack instructs the
+defender to flip. The defender cannot spend their own Victory Star during
+the attacker's turn. Team Rocket's Hypno uses this route for Bench
+Manipulation and deals zero damage if there are zero coins to flip.
+[Official Retry Badge print](https://www.pokemon-card.com/card-search/details.php/card/50293)
+[Official Team Rocket’s Hypno print](https://www.pokemon-card.com/card-search/details.php/card/47431)
+[Official opponent coin ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=405)
+
+Rapid-Fire Combo keeps its browser coin prompts and waits for the first
+tails before offering the choice. Copied attacks use the Tool carried by
+the Pokémon using the attack. Kaleidowaltz uses all three final results
+and leaves the deck alone when all three are tails. Remove Lost counts
+the final series, deals damage before moving exactly that many available
+Energy cards and moves them to the Lost Zone before the Knock Out. Iono's
+Electrode deals 100 damage to itself and uses heads for the defender's
+Knock Out. Mist Energy can prevent that attack effect.
+[Official Rapid-Fire Combo print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/me01/104)
+[Official Retry Badge and Kaleidowaltz ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%BF%E3%83%96%E3%83%B3%E3%83%8DEX)
+[Official Kaleidowaltz all-tails correction](https://community.pokemon.com/en-us/discussion/24087/version-1-38-0-patch-notes)
+[Official Remove Lost timing](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%87%E3%82%A3%E3%82%A2%E3%83%AB%E3%82%AC&page=9&regulation=all)
+[Official Thump-Thump Boom print summary](https://www.pokemon-card.com/ex/sv9/index.html)
+
+Some attacks still issue a separate legacy prompt for each coin. That
+includes attacks whose first result gates a copied attack with its own
+coin results. The official Assist ruling requires restarting at the first
+coin, so those call sites require a separate migration and replay tests.
+An inventory identifies 19 remaining definitions with until-tails wording
+and raw coin prompts. Tyrantrum POR already reproduces the ordering issue
+in source because Wreak Havoc moves cards on individual heads. Its printed
+sequence counts heads before discarding. Will and the legacy-prompt path
+for Malamar XYP's Contrary are open.
+[Official Tyrantrum print](https://www.pokemon-card.com/card-search/details.php/card/49677/regu/DP)
+[Official Assist ruling](https://www.pokemon-card.com/rules/faq/search.php?page=4&regulation=all&regulation_faq_main=&sc_group_id=325)
+
+All 21 focused cases pass, and 18 reproduce failures on the previous
+engine. The full engine passes 10,917 tests. The combined worktree passes
+210 targeted checks. The 559 comparable saved states and 5,225 sampled
+opening actions match, and all seven recorded solutions still win. All
+32 API checks, 209 client checks and ten packaged board scenarios pass.
+The 2.51 MiB gzip runtime passes build attestation.

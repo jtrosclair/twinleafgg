@@ -1,11 +1,14 @@
-import { ChooseCardsPrompt, CoinFlipPrompt, GameError, GameMessage, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { LostZoneCardsEffect } from '../../game/store/effects/attack-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
+import { ChooseCardsPrompt, GameError, GameMessage, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import {CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect} from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import {PlayPokemonEffect} from '../../game/store/effects/play-card-effects';
-import {IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+import {IS_POKEBODY_BLOCKED, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
 
 export class DialgaGLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
@@ -54,37 +57,23 @@ export class DialgaGLVX extends PokemonCard {
       }
     }
 
-    // Remove Lost
-    if (WAS_ATTACK_USED(effect, 0, this)){
-      const player = effect.player;
-      const opponent = effect.opponent;
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (flip until tails, then apply the final series).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        if (heads === 0) return;
+        afterAttackDamage(state, effect, (store, state) => {
+          const target = effect.opponent.active;
+          const count = Math.min(heads, target.energies.cards.length);
+          if (count === 0) return state;
 
-      let numFlips = 0;
-
-      return store.prompt(state, [
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-      ], result => {
-        if (result === true) {
-          numFlips++;
-          return this.reduceEffect(store, state, effect);
-        }
-
-        if (numFlips === 0) {
-          return state;
-        }
-
-        return store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-          opponent.active,
-          { superType: SuperType.ENERGY },
-          { min: 0, max: numFlips, allowCancel: false }
-        ), selected => {
-          const cards = selected || [];
-          if (cards.length > 0) {
-            MOVE_CARDS(store, state, opponent.active, opponent.lostzone, { cards: cards });
-          }
-          return state;
+          const move = new LostZoneCardsEffect(effect, []);
+          store.reduceEffect(state, move);
+          if (move.preventDefault) return state;
+          return store.prompt(state, new ChooseCardsPrompt(effect.player, GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
+            target.energies, { superType: SuperType.ENERGY }, { min: count, max: count, allowCancel: false }), cards => {
+            move.cards = cards;
+            store.reduceEffect(state, move);
+          });
         });
       });
     }

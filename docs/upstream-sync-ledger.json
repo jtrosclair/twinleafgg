@@ -5,6 +5,27 @@
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
+      "sha": "354a45c1c4b3a47651984e66fb56241d59181d05",
+      "date": "2026-07-20",
+      "subject": "add(engine, frontend): Coin Flip/Re-Flip Handling, Frontend Visuals, Prefabs",
+      "status": "partial",
+      "notes": "Historical upstream record. Batch 63 adapts the shared attack reflip, Glimwood Tangle and Retry Badge, including source selection, the active player’s printed timing and the actual attacker. Rapid-Fire Combo preserves legacy coin prompts and restarts from the first flip. Kaleidowaltz replaces all three coins, and an all-tails result leaves the deck alone. The React animation paths and remaining sequential legacy handlers are outside this port."
+    },
+    {
+      "sha": "440e7857fbeadf3e61f8a4a509bc6526567673e5",
+      "date": "2026-08-02",
+      "subject": "refactor(cards): Many More Refactors",
+      "status": "partial",
+      "notes": "Historical upstream record. Batch 63 adapts Trick Coin to the shared reflip for the actual attacker and respects Tool suppression. Official rulings let the attacker request a replacement group when the defending player flips for the attack. The other refactor paths are reviewed separately."
+    },
+    {
+      "sha": "1a468f56f67e1d1dd930e6c5aedb5e55bb88bf31",
+      "date": "2026-08-08",
+      "subject": "refactor(cards): COIN_FLIP_PROMPT",
+      "status": "partial",
+      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Some older attacks still need full-sequence conversion, including conditional copied attacks such as Assist."
+    },
+    {
       "sha": "8ba948645d71148d536e0956c002004135a3f0ae",
       "date": "2026-05-31",
       "subject": "fix(cards): update Telepathic Psychic Energy set code",

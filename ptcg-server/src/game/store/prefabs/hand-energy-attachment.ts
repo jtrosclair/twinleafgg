@@ -159,7 +159,7 @@ export function resolveHandEnergyAttachments(store: StoreLike, state: State, req
       flip(index + 1, permitted);
     });
     // Slimy Room belongs to the opposing Pokémon even if an attack caused the attachment.
-    coin.skipReflipStadium = true;
+    coin.skipAttackReflip = true;
     return store.reduceEffect(state, coin);
   };
   return flip(0, []);
