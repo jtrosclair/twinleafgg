@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, PowerType, GameLog } from '../../game';
+import { StoreLike, State, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, SIMULATE_COIN_FLIP, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Glimmora extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -37,33 +37,17 @@ export class Glimmora extends PokemonCard {
   public fullName: string = 'Glimmora PAL';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Shattering Crystal
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)){ return state; }
-
-      // checking if this is the target for the damage
-      if (effect.target.getPokemonCard() !== this){ return state; }
-
-      // Flip a coin, and if heads, prevent damage.
-      try {
-        const coinFlip = new CoinFlipEffect(player);
-        store.reduceEffect(state, coinFlip);
-      } catch {
-        return state;
-      }
-
-      const coinFlipResult = SIMULATE_COIN_FLIP(store, state, player);
-
-      if (coinFlipResult) {
-        effect.prizeCount = 0;
-        store.log(state, GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
-      }
+    // Shattering Crystal applies to any Knock Out of this Pokémon.
+    if (effect instanceof KnockOutEffect && effect.target.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      const coin = new CoinFlipEffect(effect.player, heads => {
+        if (heads) effect.preventPrizes = true;
+      });
+      coin.skipAttackReflip = true;
+      return store.reduceEffect(state, coin);
     }
 
-    // Energy Feather
+    // Poison Petals
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;
 

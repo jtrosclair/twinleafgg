@@ -1,11 +1,10 @@
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { GamePhase } from '../../game/store/state/state';
-import { PokemonCard, StateUtils, StoreLike, State } from '../../game';
-import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PokemonCard, StoreLike, State } from '../../game';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Cinccinoex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,20 +35,10 @@ export class Cinccinoex extends PokemonCard {
   public fullName: string = 'Cinccino ex M4';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if ((effect instanceof PutDamageEffect || effect instanceof DealDamageEffect) && effect.target.cards.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
-      if (state.phase !== GamePhase.ATTACK) return state;
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) return state;
-      return COIN_FLIP_PROMPT(store, state, player, result => {
-        if (result) {
-          if (effect instanceof PutDamageEffect) {
-            effect.preventDefault = true;
-          } else {
-            (effect as DealDamageEffect).damage = 0;
-          }
-        }
-      });
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this) {
+      effect.damagePreventionCoin = { source: this };
     }
+
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const checkProvidedEnergy = new CheckProvidedEnergyEffect(effect.player, effect.source);
       store.reduceEffect(state, checkProvidedEnergy);

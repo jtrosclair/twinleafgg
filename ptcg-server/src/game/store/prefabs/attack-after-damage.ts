@@ -131,6 +131,8 @@ const checkedForStrongWilled = new WeakSet<AttackDamageKnockOut>();
 export function* resolveAfterAttack(
   next: () => void, store: StoreLike, state: State, effect: AfterAttackEffect
 ): IterableIterator<State> {
+  // A prevention effect may still be resolving the hit that precedes this phase.
+  if (store.hasPrompts()) yield store.waitPrompt(state, next);
   state = store.reduceEffect(state, effect);
   if (store.hasPrompts()) yield store.waitPrompt(state, next);
 

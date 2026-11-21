@@ -6101,3 +6101,44 @@ Live attacks reproduced a displayed heads followed by an awarded Prize
 for Glimmora and damage taken for Fezandipiti. A single attack on Cinccino
 ex generated two damage-prevention flips. Chansey MEW already has
 coverage for its one visible Prize flip and the timing of its self-benching.
+
+## Gameplay re-audit, batch 101
+
+Closed the four modern card paths in `440e7857f`. Glimmora PAL uses its
+visible Shattering Crystal flip for any Knock Out. A heads result prevents
+all Prizes for that Pokémon, including bonus Prizes, and works during
+Pokémon Checkup. Chansey MEW retains its tested single Prize flip and
+post-take Bench movement.
+[Glimmora](https://asia.pokemon-card.com/sg/card-search/detail/6938/)
+[Shattering Crystal and Critical Bite rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AD%E3%83%A9%E3%83%95%E3%83%AD%E3%83%AB&page=2&regulation=all&regulation_faq_main_item1=all)
+
+Fezandipiti TWM and all registered Cinccino ex printings now use one
+damage-prevention flip for the Pokémon receiving damage. The engine checks
+remaining damage, Ability suppression and Shred before asking for the flip.
+Adrena-Pheromone checks Energy as currently provided and works on self-side
+Bench damage. Will can choose the result for an eligible Ability flip
+during its owner's turn. Attack reroll effects do not reroll these
+Ability coins. Energy Feather counts Energy on the actual attacker when
+copied. Scream Tail ex's Crunch deals damage before discarding Energy.
+A successful Adrena-Pheromone flip still leaves that discard to resolve.
+[Fezandipiti](https://asia.pokemon-card.com/sg/card-search/detail/13795/)
+[Adrena-Pheromone and Crunch rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AD%E3%83%81%E3%82%AD%E3%82%AE%E3%82%B9&regulation_faq_main_item1=all)
+[Cinccino ex](https://asia.pokemon-card.com/my/card-search/detail/25296/)
+[Smooth Coat rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%81%E3%83%A9%E3%83%81%E3%83%BC%E3%83%8E&regulation_faq_main_item1=all)
+[Scream Tail ex](https://asia.pokemon-card.com/sg/card-search/detail/12577/)
+
+All 559 compatible saved boards deserialize and round-trip byte-for-byte.
+All 5,484 sampled opening actions match. The 26 focused tests pass, with 21
+failures on the preceding engine. The integration checkout with the pending
+WebView changes passed 105 checks, and the API passed 33.
+All 11,758 engine checks passed. The attested package passed all ten
+mouse and touch prompt checks. All 211 client checks passed, and eight
+recorded puzzle solutions won on both replays.
+
+The next modern review covers the remaining copy-attack handlers from
+`3ee8aac13`. Live actions show that Skill Thief and Metronome both omit
+Poison Spray's Poison when copying Brute Bonnet. The same attack poisons
+the defender and places a Checkup counter through Genome Hacking.
+[Thievul](https://asia.pokemon-card.com/sg/card-search/detail/25782/)
+[Clefable](https://asia.pokemon-card.com/sg/card-search/detail/12562/)
+[Brute Bonnet](https://asia.pokemon-card.com/my/card-search/detail/12601/)

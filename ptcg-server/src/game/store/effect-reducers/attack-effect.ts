@@ -21,11 +21,14 @@ import { MarkerConstants } from '../markers/marker-constants';
 import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
-import { CheckHpEffect } from '../effects/check-effects';
-import { CardTag, Stage } from '../card/card-types';
-import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
+import { CheckHpEffect, CheckProvidedEnergyEffect } from '../effects/check-effects';
+import { CardTag, CardType, Stage } from '../card/card-types';
+import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../prefabs/prefabs';
 import { scheduleEffectKnockOut } from './check-effect';
 import { attackDamagePositions, attackEffectKnockOuts } from '../state/pokemon-card-list';
+import { Player } from '../state/player';
+import { PokemonCard } from '../card/pokemon-card';
+import { getWillCoinChoicePlayer } from '../prefabs/will-coin-choice';
 
 export function getActiveAttackDamageBonus(effect: DealDamageEffect | PutDamageEffect): number {
   const bonus = effect.source.activeDamageBonusNextTurn;
@@ -132,116 +135,28 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       && target.defendingPokemonExtraDamageAttackerId === effect.player.id) {
       effect.damage += target.defendingPokemonExtraDamageNextTurn;
     }
-    const damage = Math.max(0, effect.damage);
-    if (effect.attackEffect && target.surviveOnTenHpNextTurn) {
-      effect.surviveOnTenHPReason = target.surviveOnTenHpNextTurn;
-    }
-    if (effect.surviveOnTenHPCoin && !effect.surviveOnTenHPReason && damage > 0) {
-      const hp = new CheckHpEffect(targetOwner, target);
-      state = store.reduceEffect(state, hp);
-      if (target.damage < hp.hp && target.damage + damage >= hp.hp) {
-        // Resolve Guts before applying damage. The animation can finish while
-        // the attack waits, and Glimwood Tangle applies only to attack flips.
-        const coin = new CoinFlipEffect(targetOwner);
-        coin.skipAttackReflip = true;
-        state = store.reduceEffect(state, coin);
-        if (coin.result === true) effect.surviveOnTenHPReason = effect.surviveOnTenHPCoin;
-      }
-    }
-    const damageBefore = target.damage;
-    target.damage += damage;
-    const retaliation = target.retaliateOnDamageNextTurn;
-    const defendingPlayer = targetOwner;
-    if (damage > 0 && effect.attackEffect && retaliation
-      && (!('coinFlipPrevent' in retaliation) || retaliation.coinFlipPrevent !== true)
-      && retaliation.attackerPlayerId === defendingPlayer.id
-      && StateUtils.getOpponent(state, defendingPlayer) === effect.player) {
-      const retaliationDamage = 'reflect' in retaliation && retaliation.reflect
-        ? damage
-        : ('damage' in retaliation ? retaliation.damage : 0);
-      const retaliatingPlayer = defendingPlayer;
-      const revenge = new AttackEffect(retaliatingPlayer, effect.player, retaliation.attack);
-      revenge.source = target;
-      const counters = new PutCountersEffect(revenge, retaliationDamage);
-      counters.target = effect.source;
-      if (retaliationDamage > 0) store.reduceEffect(state, counters);
-    }
-    if (damage > 0 && effect.attackEffect) {
-      const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
-      store.reduceEffect(state, hp);
-      if (damageBefore < hp.hp && target.damage >= hp.hp) {
-        effect.attackEffect.lethalDamageTargets?.add(targetCard);
-        attackEffectKnockOuts.delete(targetCard);
-        target.attackDamageKnockOut = {
-          attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,
-          turn: state.turn
-        };
-        attackDamagePositions.set(target.attackDamageKnockOut, {
-          active: targetOwner.active === target,
-          protectAttacker: effect.attackEffect.protectAttackerOnDamageKnockOut
+    if (canFlipToPreventDamage(store, state, effect, targetOwner)) {
+      const prevent = () => {
+        effect.preventDefault = true;
+        store.log(state, GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: targetOwner.name, pokemon: targetCard.name });
+      };
+      if (getWillCoinChoicePlayer(state) === targetOwner) {
+        const coin = new CoinFlipEffect(targetOwner, heads => {
+          if (heads) prevent();
+          else applyAttackDamage(store, state, effect, targetCard, targetOwner, sourceOwner);
         });
+        coin.skipAttackReflip = true;
+        return store.reduceEffect(state, coin);
+      }
+      const coin = new CoinFlipEffect(targetOwner);
+      coin.skipAttackReflip = true;
+      state = store.reduceEffect(state, coin);
+      if (coin.result === true) {
+        prevent();
+        return state;
       }
     }
-
-    if (damage > 0) {
-      store.log(state, GameLog.LOG_PLAYER_DEALS_DAMAGE, {
-        name: sourceOwner.name,
-        damage: damage,
-        target: targetCard.name,
-        effect: effect.attack.name,
-      });
-
-      const targetOwner = StateUtils.findOwner(state, target);
-      targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
-
-      // Track damage dealt by the attacking Pokemon
-      if (effect.attackEffect && effect.source) {
-        GameStatsTracker.trackDamageDealt(effect.player, effect.source, damage);
-      }
-
-      if (targetCard.damageTakenLastTurn !== undefined) {
-        targetCard.damageTakenLastTurn += damage;
-      }
-
-      if (effect.surviveOnTenHPReason !== undefined) {
-        const checkHpEffect = new CheckHpEffect(targetOwner, target);
-        state = store.reduceEffect(state, checkHpEffect);
-        if (target.damage >= checkHpEffect.hp) {
-          store.log(state, GameLog.LOG_SURVIVES_ON_TEN_HP, {
-            pokemon: targetCard.name,
-            reason: effect.surviveOnTenHPReason,
-          });
-          target.damage = checkHpEffect.hp - 10;
-          target.attackDamageKnockOut = undefined;
-        }
-      }
-
-      if (effect.attackEffect.damageKnockOutsToLostZone && target.attackDamageKnockOut
-        && StateUtils.findOwner(state, target) === effect.opponent) {
-        const hp = new CheckHpEffect(effect.opponent, target);
-        store.reduceEffect(state, hp);
-        if (damageBefore < hp.hp && target.damage >= hp.hp) {
-          target.attackDamageKnockOut.destination = 'lostzone';
-          target.attackDamageKnockOut.targetCard = targetCard;
-        }
-      }
-
-      const afterDamageEffect = new AfterDamageEffect(effect.attackEffect, damage);
-      afterDamageEffect.target = effect.target;
-      store.reduceEffect(state, afterDamageEffect);
-    }
-
-    // --- Track damaged targets for animation ---
-    if (effect.attackEffect && effect.attackEffect.player && (effect.attackEffect.player.active as any).pendingAttackTargets) {
-      try {
-        const cardTarget = getCardTarget(effect.attackEffect.player, state, target);
-        const pending = (effect.attackEffect.player.active as any).pendingAttackTargets;
-        if (Array.isArray(pending) && !pending.some(t => t.player === cardTarget.player && t.slot === cardTarget.slot && t.index === cardTarget.index)) {
-          pending.push(cardTarget);
-        }
-      } catch (e) { /* ignore if cannot resolve target */ }
-    }
-    // --- End tracking ---
+    return applyAttackDamage(store, state, effect, targetCard, targetOwner, sourceOwner);
   }
 
   if (effect instanceof AfterWeaknessAndResistanceEffect) {
@@ -447,6 +362,136 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
   return state;
 }
 
+
+function applyAttackDamage(
+  store: StoreLike, state: State, effect: PutDamageEffect, targetCard: PokemonCard, targetOwner: Player, sourceOwner: Player,
+): State {
+  const { target } = effect;
+  const damage = Math.max(0, effect.damage);
+  if (effect.attackEffect && target.surviveOnTenHpNextTurn) {
+    effect.surviveOnTenHPReason = target.surviveOnTenHpNextTurn;
+  }
+  if (effect.surviveOnTenHPCoin && !effect.surviveOnTenHPReason && damage > 0) {
+    const hp = new CheckHpEffect(targetOwner, target);
+    state = store.reduceEffect(state, hp);
+    if (target.damage < hp.hp && target.damage + damage >= hp.hp) {
+      // Resolve Guts before applying damage. The animation can finish while
+      // the attack waits, and Glimwood Tangle applies only to attack flips.
+      const coin = new CoinFlipEffect(targetOwner);
+      coin.skipAttackReflip = true;
+      state = store.reduceEffect(state, coin);
+      if (coin.result === true) effect.surviveOnTenHPReason = effect.surviveOnTenHPCoin;
+    }
+  }
+  const damageBefore = target.damage;
+  target.damage += damage;
+  const retaliation = target.retaliateOnDamageNextTurn;
+  const defendingPlayer = targetOwner;
+  if (damage > 0 && effect.attackEffect && retaliation
+    && (!('coinFlipPrevent' in retaliation) || retaliation.coinFlipPrevent !== true)
+    && retaliation.attackerPlayerId === defendingPlayer.id
+    && StateUtils.getOpponent(state, defendingPlayer) === effect.player) {
+    const retaliationDamage = 'reflect' in retaliation && retaliation.reflect
+      ? damage
+      : ('damage' in retaliation ? retaliation.damage : 0);
+    const retaliatingPlayer = defendingPlayer;
+    const revenge = new AttackEffect(retaliatingPlayer, effect.player, retaliation.attack);
+    revenge.source = target;
+    const counters = new PutCountersEffect(revenge, retaliationDamage);
+    counters.target = effect.source;
+    if (retaliationDamage > 0) store.reduceEffect(state, counters);
+  }
+  if (damage > 0 && effect.attackEffect) {
+    const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
+    store.reduceEffect(state, hp);
+    if (damageBefore < hp.hp && target.damage >= hp.hp) {
+      effect.attackEffect.lethalDamageTargets?.add(targetCard);
+      attackEffectKnockOuts.delete(targetCard);
+      target.attackDamageKnockOut = {
+        attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,
+        turn: state.turn
+      };
+      attackDamagePositions.set(target.attackDamageKnockOut, {
+        active: targetOwner.active === target,
+        protectAttacker: effect.attackEffect.protectAttackerOnDamageKnockOut
+      });
+    }
+  }
+
+  if (damage > 0) {
+    store.log(state, GameLog.LOG_PLAYER_DEALS_DAMAGE, {
+      name: sourceOwner.name,
+      damage: damage,
+      target: targetCard.name,
+      effect: effect.attack.name,
+    });
+
+    const targetOwner = StateUtils.findOwner(state, target);
+    targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
+
+    // Track damage dealt by the attacking Pokemon
+    if (effect.attackEffect && effect.source) {
+      GameStatsTracker.trackDamageDealt(effect.player, effect.source, damage);
+    }
+
+    if (targetCard.damageTakenLastTurn !== undefined) {
+      targetCard.damageTakenLastTurn += damage;
+    }
+
+    if (effect.surviveOnTenHPReason !== undefined) {
+      const checkHpEffect = new CheckHpEffect(targetOwner, target);
+      state = store.reduceEffect(state, checkHpEffect);
+      if (target.damage >= checkHpEffect.hp) {
+        store.log(state, GameLog.LOG_SURVIVES_ON_TEN_HP, {
+          pokemon: targetCard.name,
+          reason: effect.surviveOnTenHPReason,
+        });
+        target.damage = checkHpEffect.hp - 10;
+        target.attackDamageKnockOut = undefined;
+      }
+    }
+
+    if (effect.attackEffect.damageKnockOutsToLostZone && target.attackDamageKnockOut
+      && StateUtils.findOwner(state, target) === effect.opponent) {
+      const hp = new CheckHpEffect(effect.opponent, target);
+      store.reduceEffect(state, hp);
+      if (damageBefore < hp.hp && target.damage >= hp.hp) {
+        target.attackDamageKnockOut.destination = 'lostzone';
+        target.attackDamageKnockOut.targetCard = targetCard;
+      }
+    }
+
+    const afterDamageEffect = new AfterDamageEffect(effect.attackEffect, damage);
+    afterDamageEffect.target = effect.target;
+    store.reduceEffect(state, afterDamageEffect);
+  }
+
+  // --- Track damaged targets for animation ---
+  if (effect.attackEffect && effect.attackEffect.player && (effect.attackEffect.player.active as any).pendingAttackTargets) {
+    try {
+      const cardTarget = getCardTarget(effect.attackEffect.player, state, target);
+      const pending = (effect.attackEffect.player.active as any).pendingAttackTargets;
+      if (Array.isArray(pending) && !pending.some(t => t.player === cardTarget.player && t.slot === cardTarget.slot && t.index === cardTarget.index)) {
+        pending.push(cardTarget);
+      }
+    } catch (e) { /* ignore if cannot resolve target */ }
+  }
+  // --- End tracking ---
+  return state;
+}
+
+function canFlipToPreventDamage(store: StoreLike, state: State, effect: PutDamageEffect, owner: Player): boolean {
+  const prevention = effect.damagePreventionCoin;
+  if (!prevention || effect.damage <= 0 || effect.ignoresDefendingDamageEffects
+    || state.phase !== GamePhase.ATTACK || effect.target.getPokemonCard() !== prevention.source
+    || IS_ABILITY_BLOCKED(store, state, owner, prevention.source)) return false;
+
+  const { requiredEnergy } = prevention;
+  if (requiredEnergy === undefined) return true;
+  const provided = new CheckProvidedEnergyEffect(owner, effect.target);
+  store.reduceEffect(state, provided);
+  return provided.energyMap.some(entry => entry.provides.includes(requiredEnergy) || entry.provides.includes(CardType.ANY));
+}
 
 function recordAttackEffectKnockOut(
   store: StoreLike, state: State, effect: KnockOutOpponentEffect | PutCountersEffect, damageBefore: number

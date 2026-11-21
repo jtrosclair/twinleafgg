@@ -44,7 +44,7 @@
       "date": "2026-08-02",
       "subject": "refactor(cards): Many More Refactors",
       "status": "partial",
-      "notes": "Historical upstream record. Batch 63 adapts Trick Coin to the shared reflip for the actual attacker and respects Tool suppression. Official rulings let the attacker request a replacement group when the defending player flips for the attack. The other refactor paths are reviewed separately."
+      "notes": "Historical upstream record. Batch 63 adapts Trick Coin to the shared reflip for the actual attacker and respects Tool suppression. Official rulings let the attacker request a replacement group when the defending player flips for the attack. The other refactor paths are reviewed separately. Batch 101 completes the modern card paths. Glimmora PAL uses the visible Shattering Crystal coin for all Knock Outs and prevents the entire Prize award on heads, including the official Critical Bite case. Fezandipiti TWM and all registered Cinccino ex prints use one defending Ability flip after damage calculation. Fezandipiti checks effective Darkness and the physical Energy Feather attacker. Shred, Ability suppression, Will and attacker-only rerolls retain the printed behavior. Chansey MEW is covered by the earlier Prize-coin port. Scream Tail ex TWM now resolves Crunch’s Energy discard after damage per the official Adrena-Pheromone ruling."
     },
     {
       "sha": "1a468f56f67e1d1dd930e6c5aedb5e55bb88bf31",

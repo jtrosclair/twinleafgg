@@ -1,5 +1,6 @@
 import { Card } from '../card/card';
-import { SpecialCondition } from '../card/card-types';
+import { CardType, SpecialCondition } from '../card/card-types';
+import { PokemonCard } from '../card/pokemon-card';
 import { Attack } from '../card/pokemon-types';
 import { Player } from '../state/player';
 import { PokemonCardList } from '../state/pokemon-card-list';
@@ -83,6 +84,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   public damageIncreased = true;
   public wasKnockedOutFromFullHP: boolean = false;
   public surviveOnTenHPCoin?: string;
+  public damagePreventionCoin?: { source: PokemonCard; requiredEnergy?: CardType };
   public surviveOnTenHPReason: undefined | string = undefined;
   public weaknessApplied: boolean = false;
   public damageBonusAfterWeakness = 0;

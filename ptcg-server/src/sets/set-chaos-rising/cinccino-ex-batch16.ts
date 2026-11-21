@@ -3,10 +3,8 @@ import { PowerType } from '../../game/store/card/pokemon-types';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { GamePhase } from '../../game/store/state/state';
 import { PokemonCard, StoreLike, State } from '../../game';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class CinccinoexBatch172 extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,33 +38,10 @@ export class CinccinoexBatch172 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Smooth Coat
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-      const pokemonCard = effect.target.getPokemonCard();
-
-      if (pokemonCard !== this || state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (effect.damage <= 0) {
-        return state;
-      }
-
-      const coinFlip = new CoinFlipEffect(player);
-      store.reduceEffect(state, coinFlip);
-
-      if (coinFlip.result === false) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-      return state;
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this) {
+      effect.damagePreventionCoin = { source: this };
     }
-    // Energized Slap
+
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const source = effect.source;

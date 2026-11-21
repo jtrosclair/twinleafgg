@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { StoreLike, State, GameError, GameMessage, StateUtils, CardTag, CardType, Stage, Card, ChooseCardsPrompt, SuperType } from '../../game';
+import { StoreLike, State, GameError, GameMessage, StateUtils, CardTag, CardType, Stage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { PlaySupporterEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ScreamTailex extends PokemonCard {
@@ -69,27 +70,10 @@ export class ScreamTailex extends PokemonCard {
       }
     }
 
+    // Crunch resolves damage before removing the Energy.
     if (WAS_ATTACK_USED(effect, 1, this)) {
-
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Defending Pokemon has no energy cards attached
-      if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
-        return state;
-      }
-
-      let card: Card;
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        opponent.active,
-        { superType: SuperType.ENERGY },
-        { min: 1, max: 1, allowCancel: false }
-      ), selected => {
-        card = selected[0];
-        return store.reduceEffect(state, new DiscardCardsEffect(effect, [card]));
-      });
+      afterAttackDamageForOriginalDefender(state, effect, (effectStore, next) =>
+        DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(effectStore, next, effect));
     }
 
     if (effect instanceof PlaySupporterEffect) {
