@@ -1,10 +1,7 @@
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, TrainerType, SuperType } from '../../game/store/card/card-types';
-import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, StateUtils, GameMessage, TrainerCard, GameError, ChooseCardsPrompt, Card, ShowCardsPrompt, SelectPrompt, ShuffleDeckPrompt } from '../../game';
+import { ChooseCardsPrompt, GameMessage, PokemonCard, PowerType, SelectOptionPrompt, Stage, CardType, State, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { DiscardToHandEffect } from '../../game/store/effects/play-card-effects';
+import { IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 
 export class Pelipper extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,97 +33,35 @@ export class Pelipper extends PokemonCard {
   public fullName: string = 'Pelipper PAL';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-destined-rivals/team-rockets-golbat.ts (trigger after the hand evolution completes).
+    if (!JUST_EVOLVED_FROM_HAND(effect, state, this)) return state;
+    const player = effect.player;
+    if (IS_ABILITY_BLOCKED(store, state, player, this)) return state;
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    const filter = { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER };
+    const recover = new DiscardToHandEffect(player, this);
+    state = store.reduceEffect(state, recover);
+    const canRecover = !recover.preventDefault
+      && player.discard.cards.some(card => card instanceof TrainerCard && card.trainerType === TrainerType.SUPPORTER);
+    const canSearch = player.deck.cards.length > 0;
+    if (!canRecover && !canSearch) return state;
 
-      // if (player.deck.cards.length === 0) {
-      //   return state;
-      // }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
+    return store.prompt(state, new SelectOptionPrompt(player.id, GameMessage.CHOOSE_OPTION,
+      [GameMessage.CHOOSE_SUPPORTER_FROM_DISCARD, GameMessage.CHOOSE_SUPPORTER_FROM_DECK],
+      { allowCancel: true, disabled: [!canRecover, !canSearch] },
+    ), choice => {
+      if (choice === 0 && canRecover) {
+        store.prompt(state, new ChooseCardsPrompt(
+          player, GameMessage.CHOOSE_CARD_TO_HAND, player.discard, filter,
+          { min: 1, max: 1, allowCancel: false },
+        ), selected => {
+          MOVE_CARDS(store, state, player.discard, player.hand, {
+            cards: selected ?? [], sourceCard: this, sourceEffect: effect,
+          });
+        });
+      } else if (choice === 1 && canSearch) {
+        SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, filter, { min: 0, max: 1, allowCancel: false }, effect);
       }
-
-      const options: { message: GameMessage, action: () => void }[] = [
-        {
-          message: GameMessage.CHOOSE_SUPPORTER_FROM_DISCARD,
-          action: () => {
-
-            const hasSupporter = player.discard.cards.some(c => {
-              return c instanceof TrainerCard && c.trainerType === TrainerType.SUPPORTER;
-            });
-
-            if (!hasSupporter) {
-              throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-            }
-
-            let cards: Card[] = [];
-            return store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_CARD_TO_HAND,
-              player.discard,
-              { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-              { min: 1, max: 1, allowCancel: true }
-            ), selected => {
-              cards = selected || [];
-              if (cards.length > 0) {
-                store.prompt(state, [new ShowCardsPrompt(
-                  opponent.id,
-                  GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                  cards
-                )], () => {
-                  player.discard.moveCardsTo(cards, player.hand);
-                });
-              }
-
-              return state;
-            });
-          }
-        },
-        {
-          message: GameMessage.CHOOSE_SUPPORTER_FROM_DECK,
-          action: () => {
-
-            return store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_CARD_TO_HAND,
-              player.deck,
-              { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-              { min: 0, max: 1, allowCancel: false }
-            ), selected => {
-              const cards = selected || [];
-
-              store.prompt(state, [new ShowCardsPrompt(
-                opponent.id,
-                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                cards
-              )], () => {
-                player.deck.moveCardsTo(cards, player.hand);
-              });
-              return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                player.deck.applyOrder(order);
-              });
-            });
-
-          }
-        }
-      ];
-
-      return store.prompt(state, new SelectPrompt(
-        player.id,
-        GameMessage.CHOOSE_OPTION,
-        options.map(opt => opt.message),
-        { allowCancel: false }
-      ), choice => {
-        const option = options[choice];
-        option.action();
-      });
-
-    }
-
-    return state;
+    });
   }
 }

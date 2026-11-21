@@ -1,10 +1,11 @@
 import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
-import { AttachEnergyPrompt, Card, CardList, CardTag, CardType, EnergyCard, GameMessage, PlayerType, PokemonCard, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
+import { AttachEnergyPrompt, CardList, CardTag, CardType, EnergyCard, GameMessage, PlayerType, PokemonCard, ShowCardsPrompt, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_TRANSFERS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Laprasex extends PokemonCard implements CopiedAttackOwnershipContract {
 
@@ -65,105 +66,46 @@ export class Laprasex extends PokemonCard implements CopiedAttackOwnershipContra
 
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
 
+    // Ref: set-surging-sparks/rotom.ts (counts the Energy supplied by the actual attacker).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      const player = effect.player;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.getPokemonCard() === this) {
-          const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, cardList);
-          store.reduceEffect(state, checkProvidedEnergy);
-
-          const blockedCards: Card[] = [];
-
-          checkProvidedEnergy.energyMap.forEach(em => {
-            if (!em.provides.includes(CardType.ANY)) {
-              blockedCards.push(em.card);
-            }
-          });
-
-          const damagePerEnergy = 40;
-
-          effect.damage = checkProvidedEnergy.energyMap.length * damagePerEnergy;
-        }
-      });
-
-      return state;
+      const provided = new CheckProvidedEnergyEffect(effect.player, effect.source);
+      state = store.reduceEffect(state, provided);
+      const units = provided.energyMap.reduce((sum, entry) => sum + entry.provides.length, 0);
+      const base = units * 40;
+      effect.damage = base > 0 ? Math.max(0, effect.damage + base - effect.attack.damage) : 0;
     }
 
+    // Ref: set-temporal-forces/metang.ts (look at the top cards, attach, then shuffle the remainder).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const temp = new CardList();
-      // Create deckBottom and move hand into it
-      const deckBottom = new CardList();
+      afterAttackDamage(state, effect, (store, afterState) => {
+        const player = effect.player;
+        if (player.deck.cards.length === 0) return afterState;
+        const looked = new CardList();
+        player.deck.moveTo(looked, Math.min(20, player.deck.cards.length));
+        const energyCount = looked.cards.filter(card => card instanceof EnergyCard).length;
+        const returnRemainder = () => {
+          if (looked.cards.length === 0) return;
+          looked.moveTo(player.deck);
+          SHUFFLE_DECK(store, afterState, player);
+        };
 
-      player.deck.moveTo(temp, 20);
-      // Check if any cards drawn are basic energy
-      const energyCardsDrawn = temp.cards.filter(card => {
-        return card instanceof EnergyCard;
-      });
-
-      // If no energy cards were drawn, move all cards to deck & shuffle
-      if (energyCardsDrawn.length == 0) {
-
-        store.prompt(state, [new ShowCardsPrompt(
-          player.id,
-          GameMessage.CARDS_SHOWED_BY_EFFECT,
-          temp.cards
-        )], () => {
-          temp.cards.forEach(card => {
-            store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-              temp.applyOrder(order);
-              temp.moveCardTo(card, deckBottom);
-              deckBottom.applyOrder(order);
-              deckBottom.moveTo(player.deck);
-
-            });
-            return state;
-          });
-          return state;
-        });
-      }
-
-      if (energyCardsDrawn.length >= 1) {
-
-        // Prompt to attach energy if any were drawn
-        return store.prompt(state, new AttachEnergyPrompt(
-          player.id,
-          GameMessage.ATTACH_ENERGY_CARDS,
-          temp, // Only show drawn energies
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH, SlotType.ACTIVE],
-          { superType: SuperType.ENERGY },
-          { min: 0, max: energyCardsDrawn.length }
+        if (energyCount === 0) {
+          return store.prompt(afterState, new ShowCardsPrompt(
+            player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, looked.cards.slice(),
+          ), returnRemainder);
+        }
+        return store.prompt(afterState, new AttachEnergyPrompt(
+          player.id, GameMessage.ATTACH_ENERGY_CARDS, looked, PlayerType.BOTTOM_PLAYER,
+          [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY }, { min: 0, max: energyCount },
         ), transfers => {
-
-          // Attach energy based on prompt selection
-          if (transfers) {
-            for (const transfer of transfers) {
-              const target = StateUtils.getTarget(state, player, transfer.to);
-              temp.moveCardTo(transfer.card, target); // Move card to target
-            }
-            temp.cards.forEach(card => {
-              store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                temp.applyOrder(order);
-                temp.moveCardTo(card, deckBottom);
-                deckBottom.applyOrder(order);
-                deckBottom.moveTo(player.deck);
-              });
-              return state;
-            });
-          }
+          ATTACH_ENERGY_TRANSFERS(store, afterState, player, transfers ?? [], 'deck', {
+            sourceList: looked,
+            sourceCard: effect.source.getPokemonCard(),
+            onAttached: returnRemainder,
+          });
         });
-      }
-      // Shuffle the deck
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-        return state;
       });
     }
-
-    
     return state;
   }
 }

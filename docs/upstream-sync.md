@@ -5618,3 +5618,54 @@ All 559 comparable saved boards match. Of 3,636 opening actions, 3,539
 match exactly. An exact comparison accounts for all 97 differences
 by the new single-source flag on the Adrena-Brain prompt. All seven
 recorded solutions win twice.
+
+## Gameplay re-audit, batch 90
+
+Screened the 37 modern card paths in `95313f768` together. Most upstream
+edits reorder zone animation events. This batch fixes gameplay on seven modern cards. Poké Ball searches and shuffles only on heads. Team Rocket's
+Great Ball searches for the matching Stage and shuffles on either face,
+even when the player takes no card from the deck.
+[Poké Ball print](https://asia.pokemon-card.com/ph/card-search/detail/5755/)
+[Poké Ball failed-search ruling](https://www.pokemon-card.com/rules/faq/details.php?id=7589)
+[Team Rocket's Great Ball print](https://www.pokemon-card.com/card-search/details.php/card/47481)
+
+Miracle Headset and Max Rod now respect Slime Mold Colony. Hearsay
+runs after Pelipper has evolved from hand. The player can decline the
+Ability, and a blocked discard recovery leaves its deck option available.
+Brilliant Blender requires at least one card. It uses the engine's
+discard move so a chosen Prism Star goes to the Lost Zone.
+[Miracle Headset print](https://asia.pokemon-card.com/sg/card-search/detail/16748/)
+[Max Rod print](https://asia.pokemon-card.com/ph/card-search/detail/17615/)
+[Pelipper print](https://asia.pokemon-card.com/sg/card-search/detail/6971/)
+[Toedscruel print](https://asia.pokemon-card.com/my/card-search/detail/10924/)
+[Brilliant Blender selection ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%91%E3%83%BC%E3%83%95%E3%82%A7%E3%82%AF%E3%83%88%E3%83%9F%E3%82%AD%E3%82%B5%E3%83%BC&regulation_faq_main_item1=all)
+
+Larimar Rain looks at no more than 20 cards. It uses deck Energy
+attachment rules for both Basic and Special Energy, then returns the
+unused cards and shuffles once. With no Energy in view, only the
+attacker sees the cards. Power Splash counts the Energy units provided
+to the actual attacker and preserves existing attack modifiers.
+[Lapras ex print](https://asia.pokemon-card.com/ph/card-search/detail/14008/)
+[Lapras ex rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%97%E3%83%A9%E3%82%B9ex&regulation_faq_main_item1=all)
+[Multi-unit Energy ruling](https://asia.pokemon-card.com/sg/rules/search/?keyword=Double+Turbo+Energy)
+
+Tyme's current flow reveals the chosen Pokémon before drawing.
+Energy Retrieval's current gameplay already allows one or two Basic
+Energy cards from the public discard. Tropius still shows its full
+top-six preview to the opponent, and Iron Thorns only shows Future
+Pokémon when the printed effect reveals all five top cards and counts
+all Future cards. Noctowl still starts Jewel Seeker from the play
+attempt. These three modern paths remain open.
+[Tyme print](https://www.pokemon-card.com/card-search/details.php/card/47114/regu/all)
+[Energy Retrieval print](https://asia.pokemon-card.com/my/card-search/detail/5741/)
+[Tropius print](https://www.pokemon-card.com/card-search/details.php/card/50220)
+[Noctowl print](https://asia.pokemon-card.com/sg/card-search/detail/14091/)
+[Iron Thorns print](https://asia.pokemon-card.com/my/card-search/detail/12152/)
+
+All 21 new engine tests pass. The previous engine fails 13 of them.
+The complete engine suite passes 11,473 checks and the checkout with
+in-progress working changes passes 147 focused checks. The API passes
+33 checks. All 559 comparable boards serialize identically. Eleven
+expanded boards differ only in Miracle Headset's printed description.
+Of 3,636 opening actions, 3,633 match exactly. The other three differ
+only in Max Rod's prompt saying the cards go to hand.

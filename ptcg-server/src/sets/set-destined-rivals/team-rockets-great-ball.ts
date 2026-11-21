@@ -1,13 +1,8 @@
+import { CardTag, GameError, GameMessage, PokemonCard, Stage, State, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { GameError } from '../../game/game-error';
-import { GameLog, GameMessage } from '../../game/game-message';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, CoinFlipPrompt, PokemonCard, ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
+import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
 
 export class TeamRocketsGreatBall extends TrainerCard {
 
@@ -28,111 +23,21 @@ export class TeamRocketsGreatBall extends TrainerCard {
   public text: string = 'Flip a coin. If heads, search your deck for an Evolution Team Rocket Pokémon, reveal it, and put it into your hand. If tails, search your deck for a Basic Team Rocket Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
+    const player = effect.player;
+    if (player.deck.cards.length === 0) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
-      if (player.deck.cards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
+    // Ref: set-scarlet-and-violet/pokeball.ts (optional private search after the flip).
+    return store.prompt(state, new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP), heads => {
       const blocked: number[] = [];
       player.deck.cards.forEach((card, index) => {
-        if (card instanceof PokemonCard &&
-          ((card.stage === Stage.BASIC) || !card.tags.includes(CardTag.TEAM_ROCKET))) {
-          blocked.push(index);
-        }
+        if (!(card instanceof PokemonCard)) return;
+        const stageMatches = heads ? card.stage === Stage.STAGE_1 || card.stage === Stage.STAGE_2
+          : card.stage === Stage.BASIC;
+        if (!stageMatches || !card.tags.includes(CardTag.TEAM_ROCKET)) blocked.push(index);
       });
-
-      const blocked2: number[] = [];
-      player.deck.cards.forEach((card, index) => {
-        if (card instanceof PokemonCard &&
-          ((card.stage !== Stage.BASIC) || !card.tags.includes(CardTag.TEAM_ROCKET))) {
-          blocked2.push(index);
-        }
-      });
-
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      return store.prompt(state, new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP), flipResult => {
-        if (flipResult) {
-          let cards: Card[] = [];
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_HAND,
-            player.deck,
-            { superType: SuperType.POKEMON },
-            { min: 0, max: 1, allowCancel: false, blocked }
-          ), selectedCards => {
-            cards = selectedCards || [];
-
-            // Operation canceled by the user
-            if (cards.length === 0) {
-              return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                player.deck.applyOrder(order);
-              });
-            }
-
-            cards.forEach((card, index) => {
-              store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-            });
-
-
-            if (cards.length > 0) {
-              state = store.prompt(state, new ShowCardsPrompt(
-                opponent.id,
-                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                cards), () => state);
-            }
-
-            cards.forEach(card => {
-              MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
-            });
-            return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-              player.deck.applyOrder(order);
-            });
-          });
-        }
-        if (!flipResult) {
-          let cards: Card[] = [];
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_HAND,
-            player.deck,
-            { superType: SuperType.POKEMON, stage: Stage.BASIC },
-            { min: 0, max: 1, allowCancel: false, blocked: blocked2 }
-          ), selectedCards => {
-            cards = selectedCards || [];
-
-            // Operation canceled by the user
-            if (cards.length === 0) {
-              return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                player.deck.applyOrder(order);
-              });
-            }
-
-            cards.forEach((card, index) => {
-              store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-            });
-
-            if (cards.length > 0) {
-              state = store.prompt(state, new ShowCardsPrompt(
-                opponent.id,
-                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                cards), () => state);
-            }
-            cards.forEach(card => {
-              MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
-            });
-            return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-              player.deck.applyOrder(order);
-            });
-          });
-        }
-        return state;
-      });
-    }
-    return state;
+      SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: SuperType.POKEMON },
+        { min: 0, max: 1, allowCancel: false, blocked }, effect);
+    });
   }
 }
