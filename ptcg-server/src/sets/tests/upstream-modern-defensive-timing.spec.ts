@@ -1,5 +1,6 @@
+import { GamePhase } from '../../game/store/state/state';
 import { ChooseAttackPromptType } from '../../game/store/prompts/choose-attack-prompt';
-import { endTurn, useAbility, useAttack } from './card-test-helpers';
+import { createDamageEffect, endTurn, playTrainerCard, useAbility, useAttack } from './card-test-helpers';
 import { getCardByName, padDeck, PlayerConfig, setupGame } from './test-helpers';
 
 const fire = 'Fire Energy SVE';
@@ -202,5 +203,185 @@ describe('Next-turn attack shields', () => {
     board.player2.active.damage = 0;
     useAttack(board.store, board.state, 1, 'Brave Wing');
     expect(board.player1.active.damage).toBe(60);
+  });
+});
+
+
+describe('Modern shields and the defending owner', () => {
+  const rock = 'Rock Chestplate SVI';
+  const vest = 'Defiance Vest PAR';
+  const koraidon = 'Koraidon ex SVI';
+  const salamence = 'Salamence ex JTG';
+  const carbink = "Steven's Carbink DRI";
+  const jasmine = "Jasmine's Gaze SSP";
+  const iron = 'Iron Defender M1L';
+  const orthworm = 'Orthworm ex SCR';
+  const moltres = "Team Rocket's Moltres ex DRI";
+  const garganacl = 'Garganacl ex SCR';
+
+  it('Rock Chestplate applies once to a Fighting Active', () => {
+    const board = game({ active: { card: charizard, energy: [fire] } }, { active: { card: koraidon, tools: [rock] } });
+    useAttack(board.store, board.state, 0, 'Brave Wing');
+    expect(board.player2.active.damage).toBe(30);
+  });
+
+  for (const activeFighting of [false, true]) {
+    it(`Rock Chestplate checks the hit Benched Pokémon with Fighting Active = ${activeFighting}`, () => {
+      const board = game({ active: { card: salamence, energy: [fire, water, water] } },
+        { active: { card: activeFighting ? koraidon : mew },
+          bench: [{ card: activeFighting ? mew : koraidon, tools: [rock] }] });
+      useAttack(board.store, board.state, 0, 'Wide Blast');
+      expect(board.player2.bench[0].damage).toBe(activeFighting ? 50 : 20);
+    });
+  }
+
+  for (const [attackerPrizes, defenderPrizes, expected] of [[3, 6, 20], [6, 6, 60], [6, 3, 60]]) {
+    it(`Defiance Vest uses the attached player's Prize count (${defenderPrizes} versus ${attackerPrizes})`, () => {
+      const board = game({ prizeCount: attackerPrizes, active: { card: charizard, energy: [fire] } },
+        { prizeCount: defenderPrizes, active: { card: mew, tools: [vest] } });
+      useAttack(board.store, board.state, 0, 'Brave Wing');
+      expect(board.player2.active.damage).toBe(expected);
+    });
+  }
+
+  for (const copies of [0, 1, 2]) {
+    it(`Stone Palace checks ${copies} defending Benched Carbink and applies at most once`, () => {
+      const board = game({ active: { card: charizard, energy: [fire] }, bench: [{ card: carbink }] },
+        { active: { card: "Steven's Metagross ex DRI" }, bench: Array.from({ length: copies }, () => ({ card: carbink })) });
+      useAttack(board.store, board.state, 0, 'Brave Wing');
+      expect(board.player2.active.damage).toBe(copies ? 90 : 120);
+    });
+  }
+
+  it('Stone Palace stacks with Granite Cave for the same defending Pokémon', () => {
+    const board = game({ active: { card: charizard, energy: [fire] } },
+      { active: { card: "Steven's Metagross ex DRI" }, bench: [{ card: carbink }, { card: carbink }] });
+    board.player1.stadium.cards.push(getCardByName('Granite Cave DRI'));
+    useAttack(board.store, board.state, 0, 'Brave Wing');
+    expect(board.player2.active.damage).toBe(60);
+  });
+
+  for (const [attacker, defender] of [[charizard, 'Copperajah ex PAL'], [orthworm, 'Cetitan SSP']]) {
+    it(`applies the printed Ability on ${defender} after Weakness in a direct attack hit`, () => {
+      const board = game({ active: { card: attacker } }, { active: { card: defender } });
+      board.state.phase = GamePhase.ATTACK;
+      board.store.reduceEffect(board.state, createDamageEffect(board, 0, { damage: 60 }));
+      expect(board.player2.active.damage).toBe(90);
+    });
+  }
+
+  it('Bronze Body does protect its own side from Nosequake', () => {
+    const copperajah = 'Copperajah ex PAL';
+    const board = game({ active: { card: copperajah, energy: [metal, metal, water] }, bench: [{ card: copperajah }] },
+      { active: { card: mew } });
+    useAttack(board.store, board.state, 0, 'Nosequake');
+    expect(board.player1.bench[0].damage).toBe(0);
+  });
+
+  it('Curly Wall does not protect its own side from friendly Nosequake', () => {
+    const board = game({ active: { card: 'Copperajah ex PAL', energy: [metal, metal, water] },
+      bench: [{ card: 'Bouffalant SCR' }, { card: 'Bouffalant SCR' }] }, { active: { card: mew } });
+    useAttack(board.store, board.state, 0, 'Nosequake');
+    expect(board.player1.bench.slice(0, 2).map(slot => slot.damage)).toEqual([30, 30]);
+  });
+
+  it('Curly Wall uses Weakness first and does not stack', () => {
+    const board = game({ active: { card: koraidon } },
+      { active: { card: 'Bouffalant SCR' }, bench: [{ card: 'Bouffalant SCR' }, { card: 'Bouffalant SCR' }] });
+    board.state.phase = GamePhase.ATTACK;
+    board.store.reduceEffect(board.state, createDamageEffect(board, 0, { damage: 70 }));
+    expect(board.player2.active.damage).toBe(80);
+  });
+
+  it('Jasmine protects the defending team and leaves Slight Intrusion recoil intact', () => {
+    const board = game({ active: { card: mew }, hand: [jasmine] },
+      { active: { card: 'Rellor TEF', energy: [water] } });
+    playTrainerCard(board.store, board.state, 0, jasmine);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Slight Intrusion');
+    expect(board.player1.active.damage).toBe(0);
+    expect(board.player2.active.damage).toBe(10);
+  });
+
+  it('Iron Defender reduces only opposing hits, adds separate copies, and expires', () => {
+    const board = game({ active: { card: orthworm }, hand: [iron, iron] },
+      { active: { card: charizard, energy: [fire] } });
+    playTrainerCard(board.store, board.state, 0, iron);
+    playTrainerCard(board.store, board.state, 0, iron);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Brave Wing');
+    expect(board.player1.active.damage).toBe(60);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Brave Wing');
+    expect(board.player1.active.damage).toBe(180);
+  });
+
+  it('Iron Defender leaves the opposing Copperajah’s friendly Metal hit intact', () => {
+    const board = game({ active: { card: orthworm }, hand: [iron] },
+      { active: { card: 'Copperajah ex PAL', energy: [metal, metal, water] }, bench: [{ card: orthworm }] });
+    playTrainerCard(board.store, board.state, 0, iron);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Nosequake');
+    expect(board.player1.active.damage).toBe(230);
+    expect(board.player2.bench[0].damage).toBe(30);
+  });
+
+  it('Flame Screen reduces full damage after Lightning Weakness and expires', () => {
+    const board = game({ active: { card: moltres, energy: [fire, water, water] } },
+      { active: { card: 'Electivire TEF', energy: [lightning, lightning, water, water] } });
+    useAttack(board.store, board.state, 0, 'Flame Screen');
+    useAttack(board.store, board.store.state, 1, 'Electroslug');
+    expect(board.player1.active.damage).toBe(230);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Electroslug');
+    expect(board.player1.active.damage).toBe(510);
+  });
+
+  it('Memory Helix puts Flame Screen on the actual attacker', () => {
+    const board = game({ active: { card: 'Mew ex 30C', energy: [fire, water, water] }, bench: [{ card: moltres }] },
+      { active: { card: charizard, energy: [fire] } });
+    board.overridePrompt(ChooseAttackPromptType, () => ({ index: 0, attack: 'Flame Screen' }));
+    useAbility(board.store, board.state, 0, 'Memory Helix');
+    board.player2.active.damage = 0;
+    useAttack(board.store, board.store.state, 1, 'Brave Wing');
+    expect(board.player1.active.damage).toBe(10);
+  });
+
+  it('an Iron Defender effect survives its physical card leaving the discard', () => {
+    const board = game({ active: { card: orthworm }, hand: [iron] },
+      { active: { card: charizard, energy: [fire] } });
+    playTrainerCard(board.store, board.state, 0, iron);
+    const spent = board.player1.discard.cards.find(card => card.fullName === iron)!;
+    board.player1.discard.moveCardsTo([spent], board.player1.lostzone);
+    endTurn(board.store, board.store.state);
+    useAttack(board.store, board.store.state, 1, 'Brave Wing');
+    expect(board.player1.active.damage).toBe(90);
+  });
+
+  it('a legacy Flame Screen survives until the end of the opposing turn', () => {
+    const board = game({ active: { card: charizard, energy: [fire] } }, { active: { card: moltres } });
+    const defender = board.player2.active.getPokemonCard()!;
+    board.player2.active.marker.addMarker('FLAME_SCREEN_MARKER', defender);
+    board.player1.marker.addMarker('CLEAR_FLAME_SCREEN_MARKER', defender);
+    useAttack(board.store, board.state, 0, 'Brave Wing');
+    expect(board.player2.active.damage).toBe(10);
+    expect(board.player2.active.marker.hasMarker('FLAME_SCREEN_MARKER')).toBe(false);
+  });
+
+  it('Block Hammer protects the actual Memory Helix attacker', () => {
+    const board = game({ active: { card: 'Mew ex 30C', energy: [fighting, water, water] }, bench: [{ card: garganacl }] },
+      { active: { card: charizard, energy: [fire] } });
+    board.overridePrompt(ChooseAttackPromptType, () => ({ index: 0, attack: 'Block Hammer' }));
+    useAbility(board.store, board.state, 0, 'Memory Helix');
+    useAttack(board.store, board.store.state, 1, 'Brave Wing');
+    expect(board.player1.active.damage).toBe(100);
+  });
+
+  it('Block Hammer does not reduce an opposing Shred attack', () => {
+    const board = game({ active: { card: garganacl, energy: [fighting, water, water] } },
+      { active: { card: 'Koraidon TEF', energy: [fire, fighting, water] } });
+    useAttack(board.store, board.state, 0, 'Block Hammer');
+    useAttack(board.store, board.store.state, 1, 'Shred');
+    expect(board.player1.active.damage).toBe(130);
   });
 });

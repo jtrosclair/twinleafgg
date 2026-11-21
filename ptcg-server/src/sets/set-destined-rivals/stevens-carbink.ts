@@ -39,20 +39,13 @@ export class StevensCarbink extends PokemonCard {
   public fullName: string = 'Steven\'s Carbink DRI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof PutDamageEffect && StateUtils.isPokemonInPlay(effect.player, this, SlotType.BENCH)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-        return state;
+    if (effect instanceof PutDamageEffect && effect.source.getPokemonCard()
+      && effect.target.getPokemonCard()?.tags.includes(CardTag.STEVENS)) {
+      const defender = StateUtils.findOwner(state, effect.target);
+      if (defender !== effect.player && StateUtils.isPokemonInPlay(defender, this, SlotType.BENCH)
+        && !IS_ABILITY_BLOCKED(store, state, defender, this)) {
+        effect.reduceDamageAfterWeakness(30, this.powers[0].name);
       }
-
-      if (effect.target.getPokemonCard()?.tags.includes(CardTag.STEVENS)) {
-        effect.reduceDamage(30, this.powers[0].name);
-      }
-      return state;
     }
     return state;
   }

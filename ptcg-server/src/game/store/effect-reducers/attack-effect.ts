@@ -21,7 +21,7 @@ import { MarkerConstants } from '../markers/marker-constants';
 import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
-import { CheckHpEffect, CheckProvidedEnergyEffect } from '../effects/check-effects';
+import { CheckHpEffect, CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from '../effects/check-effects';
 import { CardTag, CardType } from '../card/card-types';
 import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../prefabs/prefabs';
 import { scheduleEffectKnockOut } from './check-effect';
@@ -112,6 +112,18 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
         && state.players[state.activePlayer] === sourceOwner && targetOwner !== sourceOwner
         && target.marker.hasMarker(MarkerConstants.MABOSSTIFF_HEADBUTT_DAMAGE)) {
         effect.damage += 100;
+      }
+    }
+    if (!ignoreDefendingDamageEffects && state.phase === GamePhase.ATTACK && sourceOwner !== targetOwner
+      && sourceOwner === state.players[state.activePlayer] && effect.source.getPokemonCard()) {
+      const protections = targetOwner.marker.markers;
+      const jasmineCount = protections.filter(marker => marker.name === MarkerConstants.JASMINES_GAZE_MARKER).length;
+      const ironCount = protections.filter(marker => marker.name === MarkerConstants.IRON_DEFENDER_MARKER).length;
+      if (jasmineCount > 0) effect.reduceDamageAfterWeakness(30 * jasmineCount);
+      if (ironCount > 0) {
+        const type = new CheckPokemonTypeEffect(target);
+        state = store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.METAL)) effect.reduceDamageAfterWeakness(30 * ironCount);
       }
     }
     effect.applyPostWeaknessReductions();

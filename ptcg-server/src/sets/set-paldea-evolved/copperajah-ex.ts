@@ -1,10 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, PlayerType, PowerType } from '../../game';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, PlayerType, PowerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Copperajahex extends PokemonCard {
   public tags = [CardTag.POKEMON_ex];
@@ -39,19 +38,8 @@ export class Copperajahex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this) {
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(effect.player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
-        return state;
-      }
-
-      effect.damage -= 30;
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) effect.reduceDamageAfterWeakness(30);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

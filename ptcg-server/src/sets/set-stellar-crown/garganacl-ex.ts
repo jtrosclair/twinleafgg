@@ -1,6 +1,6 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, GamePhase, PowerType, StateUtils, PlayerType } from '../../game';
+import { StoreLike, State, PowerType, StateUtils, PlayerType } from '../../game';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
@@ -54,10 +54,7 @@ export class Garganaclex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      player.active.marker.addMarker(this.BLOCK_HAMMER_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_BLOCK_HAMMER_MARKER, this);
+      effect.source.damageReductionNextTurn = 60;
     }
 
     // Salty Body
@@ -101,28 +98,12 @@ export class Garganaclex extends PokemonCard {
       });
     }
 
-    // Reduce damage by 60
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-
-      if (!effect.target.marker.hasMarker(this.BLOCK_HAMMER_MARKER)) {
-        return state;
-      }
-
-      // It's not this pokemon card
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      // It's not an attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      effect.damage -= 60;
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && effect.target.marker.hasMarker(this.BLOCK_HAMMER_MARKER)
+      && effect.player !== StateUtils.findOwner(state, effect.target)) {
+      effect.reduceDamageAfterWeakness(60, this.fullName);
     }
 
     return state;
   }
-
 }

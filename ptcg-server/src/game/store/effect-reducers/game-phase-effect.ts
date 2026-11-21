@@ -331,6 +331,8 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
         }
       }
     });
+    opponent.marker.removeMarker(MarkerConstants.JASMINES_GAZE_MARKER);
+    opponent.marker.removeMarker(MarkerConstants.IRON_DEFENDER_MARKER);
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
       cardList.damageReductionNextTurn = 0;
       cardList.damageReductionNextTurnFilter = undefined;

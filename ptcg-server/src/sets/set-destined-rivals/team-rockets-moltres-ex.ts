@@ -3,6 +3,7 @@ import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/stor
 import { StoreLike, State, GameMessage, PlayerType, StateUtils, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class TeamRocketsMoltresex extends PokemonCard {
@@ -41,11 +42,13 @@ export class TeamRocketsMoltresex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Flame Screen
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
+      effect.source.damageReductionNextTurn = 50;
+    }
 
-      player.active.marker.addMarker(this.FLAME_SCREEN_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_FLAME_SCREEN_MARKER, this);
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && effect.target.marker.hasMarker(this.FLAME_SCREEN_MARKER, this)
+      && effect.player !== StateUtils.findOwner(state, effect.target)) {
+      effect.reduceDamageAfterWeakness(50, this.fullName);
     }
 
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.CLEAR_FLAME_SCREEN_MARKER, this)) {

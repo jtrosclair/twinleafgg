@@ -1,5 +1,6 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -31,29 +32,19 @@ export class Bouffalant extends PokemonCard {
   public fullName: string = 'Bouffalant SCR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof PutDamageEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const player = StateUtils.findOwner(state, cardList);
-      let bouffalantCount = 0;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.name === 'Bouffalant') {
-          bouffalantCount++;
+    if (effect instanceof PutDamageEffect && effect.source.getPokemonCard()
+      && effect.target.getPokemonCard()?.stage === Stage.BASIC) {
+      const defender = StateUtils.findOwner(state, effect.target);
+      if (defender !== effect.player && StateUtils.isPokemonInPlay(defender, this)
+        && defender.getPokemonInPlay().some(slot => {
+          const pokemon = slot.getPokemonCard();
+          return pokemon !== this && pokemon?.name === 'Bouffalant';
+        }) && !IS_ABILITY_BLOCKED(store, state, defender, this)) {
+        const type = new CheckPokemonTypeEffect(effect.target);
+        state = store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.COLORLESS)) {
+          effect.reduceDamageAfterWeakness(60, this.powers[0].name);
         }
-      });
-
-      if (bouffalantCount < 2) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const targetPokemon = effect.target.getPokemonCard();
-      if (targetPokemon && targetPokemon.cardType === CardType.COLORLESS && targetPokemon.stage === Stage.BASIC && StateUtils.findOwner(state, effect.target) === player) {
-        effect.reduceDamage(60, this.powers[0].name);
       }
     }
     return Bouffalant.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);

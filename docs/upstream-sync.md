@@ -6362,3 +6362,81 @@ matched both before and after serialization, and all 5,486 sampled
 opening actions matched. The production package passed build attestation,
 all ten mouse and touch prompt checks, and all 211 client checks. Eight
 recorded puzzle solutions won on both replays.
+
+## Gameplay re-audit, batch 107
+
+The four modern card paths in Twinleaf's Guard change `a6024190b` are
+complete. Flame Screen and Block Hammer join Shell Press and Metal Block
+in using slot-scoped damage reduction. The shield follows the Pokémon
+that actually attacked, expires after the opposing turn, and honors
+Shred. Legacy saved Flame Screen and Block Hammer markers still work.
+[Upstream Guard change](https://github.com/the-epsd/twinleafgg/commit/a6024190b44f8639c69688cb5c31ab3ca304dd71)
+[Team Rocket’s Moltres ex](https://asia.pokemon-card.com/sg/card-search/detail/19739/)
+[Garganacl ex](https://asia.pokemon-card.com/sg/card-search/detail/14065/)
+
+Rock Chestplate checks the hit Pokémon's current type and reduces once
+per physical Tool. Defiance Vest checks the defending holder's Prize
+count, including the official tied-count case. Stone Palace looks for
+its holder on the defending Bench. Multiple Carbink apply once, and
+Granite Cave stacks for a combined reduction of 60. Curly Wall requires
+another Bouffalant, checks the hit Basic Pokémon's current type, and
+only reduces opposing damage. Bronze Body and Solid Body apply after
+Weakness and Resistance and also cover friendly attack damage.
+[Rock Chestplate](https://asia.pokemon-card.com/sg/card-search/detail/5762/)
+[Defiance Vest ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%BE%E3%81%91%E3%82%93%E3%81%8D%E3%83%81%E3%83%A7%E3%83%83%E3%82%AD&regulation_faq_main_item1=all)
+[Stone Palace and Granite Cave ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=939)
+[Bouffalant](https://asia.pokemon-card.com/ph/card-search/detail/14095/)
+[Copperajah ex](https://asia.pokemon-card.com/sg/card-search/detail/6962/)
+[Cetitan](https://asia.pokemon-card.com/sg/card-search/detail/16766/)
+
+Jasmine's Gaze and Iron Defender apply only to their owner's Pokémon
+hit by the opponent on the next turn. Iron Defender checks the target's
+current Metal type and applies both copies for a reduction of 60. The
+protection is read from the player's saved markers, survives the card
+leaving the discard, and expires when the opponent ends their turn.
+[Jasmine’s Gaze](https://asia.pokemon-card.com/sg/card-search/detail/16743/)
+[Iron Defender](https://asia.pokemon-card.com/sg/card-search/detail/21710/)
+[Iron Defender stacking ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%87%E3%82%A3%E3%83%95%E3%82%A7%E3%83%B3%E3%83%80%E3%83%BC&regulation_faq_main_item1=all)
+
+Closed the 16 modern card paths in `bc849aeed`. Batches 16–19 cover
+Huntail, Exp. Share, Heavy Baton, Amulet of Hope, Legacy Energy,
+Munkidori ex and Mega Gengar ex. Batch 21 covers Maractus and Vengeful
+Punch. Batches 23–24 cover Gengar, Cofagrigus ex and Marshadow. Batches
+27 and 29 cover Golisopod, Briar, Anthea & Concordia and Legendary
+Summit. Their regression suites exercise genuine lethal hits and the
+relevant counter-placement, direct Knock Out, survival, or stale-marker
+controls. The fork uses per-Pokémon attack and Knock Out data for those
+checks, which preserves each reaction's triggering attack and target.
+[Upstream damage attribution change](https://github.com/the-epsd/twinleafgg/commit/bc849aeed)
+
+The five modern definitions in `cfd71b70e` also have a completed gameplay
+review. Kubfu's Jab has no additional effect. The Aura Seeker rules suite
+verifies Meowth's Pay Day, Persian's Large Coin and Greedy Slash, and both
+Urshifu Energy costs and resulting damage. These cards keep their existing
+FLO saved names.
+[Official Aura Seeker preview](https://www.pokemon-card.com/ex/m7/index.html)
+
+Five of the 13 previously open post-base commits with direct modern card
+paths identified in batch 89 now have explicit gameplay closure.
+These are `95313f768`, `49205ef17`, `786a7e7fc`, `bc849aeed`, and
+`cfd71b70e`. The eight still awaiting a complete gameplay review in this
+set are `3348ebdc8`, `db4eebfcf`, `f43aa6ed9`, `d89efe580`, `afe935782`,
+`ffd7c12f5`, `958482a2c`, and `b014163c0`. This count measures that
+13-commit queue. The wider audit also covers shared engine changes and
+historical commits where they affect modern cards.
+
+All 24 new focused cases pass. The preceding engine fails 16 of them.
+The full engine passes 11,872 checks. The checkout with the in-progress
+WebView changes passes 124 focused checks and the API passes 33. All 559
+comparable saved boards and all 5,486 sampled opening actions match.
+The attested browser build passes ten mouse and touch prompt checks and
+211 client checks. Eight recorded puzzle solutions win on both replays.
+
+Two further cases reproduced on this revision. Intimidating Stare leaves
+Hop's Rookidee taking 260 from Electroslug instead of 240. Snarl leaves a
+Benched Mew ex taking 50 from Wide Blast instead of zero. The printed
+reductions apply to the affected attacker's damage before Weakness and
+apply to its Bench damage as well. These cases are queued for the next
+attack-reduction batch.
+[Hop’s Rookidee](https://asia.pokemon-card.com/my/card-search/detail/17980/)
+[Houndoom](https://asia.pokemon-card.com/sg/card-search/detail/13788/)

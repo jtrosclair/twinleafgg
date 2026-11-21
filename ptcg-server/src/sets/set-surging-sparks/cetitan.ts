@@ -4,7 +4,7 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { PowerType } from '../../game';
+import { PowerType, StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 
 export class Cetitan extends PokemonCard {
@@ -37,9 +37,9 @@ export class Cetitan extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Solid Body
-    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this){
-      if (IS_ABILITY_BLOCKED(store, state, effect.opponent, this)){ return state; }
-      effect.damage -= 30;
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) effect.reduceDamageAfterWeakness(30);
     }
 
     return state;

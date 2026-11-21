@@ -4,6 +4,7 @@ import { State, GamePhase } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { StateUtils, TrainerCard } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 
@@ -21,39 +22,18 @@ export class RockChestplate extends TrainerCard {
     'The [F] Pokémon this card is attached to takes 30 less damage from attacks from your opponent\'s Pokémon (after applying Weakness and Resistance).';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Reduce damage by 30
-    if (effect instanceof PutDamageEffect && effect.target.tools.includes(this)) {
-
-      // It's not an attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      // Try to reduce ToolEffect, to check if something is blocking the tool from working
-      if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
-
-      const player = StateUtils.findOwner(state, effect.target);
-      const sourceCard = player.active.getPokemonCard();
-
-      // Do not ignore self-damage
-      const opponent = StateUtils.findOwner(state, effect.source);
-      if (player === opponent) {
-        return state;
-      }
-
-      if (sourceCard?.cardType == CardType.FIGHTING) {
-
-        // Check if damage target is owned by this card's owner 
-        const targetPlayer = StateUtils.findOwner(state, effect.target);
-        if (targetPlayer === player) {
-          effect.reduceDamage(30);
-        }
-
-        return state;
-      }
+    if (!(effect instanceof PutDamageEffect) || state.phase !== GamePhase.ATTACK || !effect.target.tools.includes(this)) {
       return state;
+    }
+    const owner = StateUtils.findOwner(state, effect.target);
+    if (owner === effect.player || !effect.source.getPokemonCard() || IS_TOOL_BLOCKED(store, state, owner, this)) {
+      return state;
+    }
+    const type = new CheckPokemonTypeEffect(effect.target);
+    state = store.reduceEffect(state, type);
+    if (type.cardTypes.includes(CardType.FIGHTING)) {
+      effect.reduceDamageAfterWeakness(30, this.fullName + ':' + this.id);
     }
     return state;
   }
 }
-
