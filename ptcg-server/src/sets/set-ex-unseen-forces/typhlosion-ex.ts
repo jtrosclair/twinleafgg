@@ -3,7 +3,7 @@ import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/stor
 import { AttachEnergyPrompt, Card, CardTarget, ChooseCardsPrompt, ChooseEnergyPrompt, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 
 export class Typhlosionex extends PokemonCard {
@@ -36,7 +36,7 @@ export class Typhlosionex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);

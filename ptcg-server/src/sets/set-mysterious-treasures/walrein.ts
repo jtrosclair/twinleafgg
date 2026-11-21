@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, ConfirmPrompt, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, MOVE_POKEMON_OFF_BOARD, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, MOVE_POKEMON_OFF_BOARD, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Walrein extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -33,7 +33,7 @@ export class Walrein extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Freeze-up
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (!wantToUse) {
           return;

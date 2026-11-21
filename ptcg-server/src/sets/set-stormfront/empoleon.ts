@@ -4,7 +4,7 @@ import { GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game
 import { Effect } from '../../game/store/effects/effect';
 import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { THIS_POKEMON_TAKES_LESS_DAMAGE_FROM_ATTACKS_DURING_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/effect-of-attack-prefabs';
-import { COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Empoleon extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -42,7 +42,7 @@ export class Empoleon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Emperor Aura
-    if (JUST_EVOLVED(effect, this) && effect.target === effect.player.active
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && effect.target === effect.player.active
       && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (!wantToUse) {

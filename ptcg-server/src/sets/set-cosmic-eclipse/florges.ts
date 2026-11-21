@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, ConfirmPrompt, GameMessage, ShowCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 
 export class Florges extends PokemonCard {
@@ -43,7 +43,7 @@ export class Florges extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Flower Picking (on-evolve)
     // Ref: set-hidden-fates/charmeleon.ts (Burning Fighter - on-evolve)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -61,19 +61,10 @@ export class Florges extends PokemonCard {
         GameMessage.WANT_TO_USE_ABILITY
       ), wantToUse => {
         if (wantToUse) {
-          const handSize = opponent.hand.cards.length;
-          const numToShuffle = Math.min(2, handSize);
-
-          // Choose random cards
-          const indices: number[] = [];
-          while (indices.length < numToShuffle) {
-            const idx = Math.floor(Math.random() * handSize);
-            if (!indices.includes(idx)) {
-              indices.push(idx);
-            }
-          }
-
-          const randomCards = indices.map(i => opponent.hand.cards[i]);
+          const candidates = opponent.hand.cards.slice();
+          const count = Math.min(2, candidates.length);
+          const randomCards = Array.from({ length: count }, () =>
+            candidates.splice(Math.floor(Math.random() * candidates.length), 1)[0]);
 
           // Show the cards
           store.prompt(state, new ShowCardsPrompt(

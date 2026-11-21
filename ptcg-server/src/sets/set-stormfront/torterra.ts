@@ -3,8 +3,8 @@ import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK, SWITCH_ACTIVE_WITH_BENCHED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { EvolveEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK, SWITCH_ACTIVE_WITH_BENCHED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Torterra extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -45,7 +45,7 @@ export class Torterra extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sunshine Song
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (!wantToUse) {
           return;
@@ -86,9 +86,8 @@ export class Torterra extends PokemonCard {
             ), selected => {
               const cards = selected || [];
               if (cards.length > 0) {
-                MOVE_CARDS(store, state, player.deck, target, { cards, sourceCard: this });
-                target.clearEffects();
-                target.pokemonPlayedTurn = state.turn;
+                // Ref: set-brilliant-stars/clefable.ts (Moonlit Miracle evolves from its deck source).
+                store.reduceEffect(state, new EvolveEffect(player, target, cards[0] as PokemonCard, player.deck));
               }
               evolveNext(index + 1);
             });

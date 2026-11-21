@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { AttachEnergyPrompt, Card, CardTarget, ChooseCardsPrompt, PlayerType, SlotType, StateUtils } from '../../game';
+import { Card, ChooseCardsPrompt } from '../../game';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 
 export class Flygonex extends PokemonCard {
@@ -44,44 +44,11 @@ export class Flygonex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
-      const player = effect.player;
-
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() !== this) {
-          blockedTo.push({
-            player: PlayerType.BOTTOM_PLAYER,
-            slot: cardList === player.active ? SlotType.ACTIVE : SlotType.BENCH,
-            index: cardList === player.active ? 0 : player.bench.indexOf(cardList)
-          });
-        }
-      });
-
-      store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        {
-          min: 0,
-          max: 2,
-          allowCancel: false,
-          blockedTo
-        }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
-        }
-      });
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)
+      && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+      return ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON(
+        store, state, effect.player, 2, undefined, { min: 0, allowCancel: true, targetFilter: slot => slot === effect.target },
+      );
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

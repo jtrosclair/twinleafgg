@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, DISCARD_TOP_X_OF_OPPONENTS_DECK, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, DISCARD_TOP_X_OF_OPPONENTS_DECK, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { GameMessage } from '../../game/game-message';
 
 export class Rhyperior extends PokemonCard {
@@ -35,7 +35,7 @@ export class Rhyperior extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Earth Fissure
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const opponent = StateUtils.getOpponent(state, effect.player);
       if (opponent.deck.cards.length === 0) {
         return state;

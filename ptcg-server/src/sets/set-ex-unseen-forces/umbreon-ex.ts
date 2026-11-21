@@ -2,7 +2,7 @@ import { CardTag, CardType, ChoosePokemonPrompt, GameError, GameMessage, PlayerT
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
-import { ADD_MARKER, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, REMOVE_MARKER_AT_END_OF_TURN, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_MARKER, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, REMOVE_MARKER_AT_END_OF_TURN, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Umbreonex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -44,7 +44,7 @@ export class Umbreonex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Darker Ring
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       const hasBench = opponent.bench.some(b => b.cards.length > 0);

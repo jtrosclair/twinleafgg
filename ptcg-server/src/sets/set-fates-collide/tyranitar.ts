@@ -4,11 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage, EnergyCard, PlayerType, SlotType } from '../../game';
+import { PowerType, StoreLike, State, StateUtils, GameMessage, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { ConfirmPrompt } from '../../game/store/prompts/confirm-prompt';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED, ATTACH_ENERGY_PROMPT, DISCARD_TOP_X_CARDS_FROM_YOUR_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON, DISCARD_TOP_X_CARDS_FROM_YOUR_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Tyranitar extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -44,7 +44,7 @@ export class Tyranitar extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Raging Roar
     // Refs: set-flashfire/forretress.ts (on-evolve ability), set-breakthrough/marowak-break.ts (prize count)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -77,13 +77,9 @@ export class Tyranitar extends PokemonCard {
         }
 
         const maxAttach = Math.min(prizesTaken, darkEnergyInDiscard);
-        ATTACH_ENERGY_PROMPT(
-          store, state, player,
-          PlayerType.BOTTOM_PLAYER,
-          SlotType.DISCARD,
-          [SlotType.ACTIVE],
-          { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Darkness Energy' },
-          { min: 1, max: maxAttach, allowCancel: true }
+        ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON(
+          store, state, player, maxAttach, CardType.DARK,
+          { min: maxAttach, energyFilter: { energyType: EnergyType.BASIC }, targetFilter: slot => slot === effect.target },
         );
       });
     }

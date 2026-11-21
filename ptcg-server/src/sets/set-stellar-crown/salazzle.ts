@@ -2,7 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameMessage, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_MARKER, HAS_MARKER, IS_ABILITY_BLOCKED, JUST_EVOLVED, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
+import { ADD_MARKER, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class Salazzle extends PokemonCard {
@@ -37,9 +38,11 @@ export class Salazzle extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-      const player = effect.player;
-      ADD_MARKER(this.SUDDEN_SCORCHING_MARKER, player, this);
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this) {
+      const stack = effect.target.getPokemons();
+      if (stack[stack.length - 2]?.name === 'Salandit') {
+        ADD_MARKER(this.SUDDEN_SCORCHING_MARKER, effect.player, this);
+      }
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.SUDDEN_SCORCHING_MARKER, this);
@@ -48,12 +51,10 @@ export class Salazzle extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
     
-      const markerCount = HAS_MARKER(this.SUDDEN_SCORCHING_MARKER, player, this) ? 3 : 1;
-
-      if (opponent.hand.cards.length < markerCount) {
-        const cards = opponent.hand.cards;
-        opponent.hand.moveCardsTo(cards, player.discard);
-        return state;
+      const required = HAS_MARKER(this.SUDDEN_SCORCHING_MARKER, player, this) ? 3 : 1;
+      const count = Math.min(required, opponent.hand.cards.length);
+      if (count === opponent.hand.cards.length) {
+        return MOVE_CARDS(store, state, opponent.hand, opponent.discard, { count });
       }
 
       store.prompt(state, new ChooseCardsPrompt(
@@ -61,10 +62,9 @@ export class Salazzle extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_DISCARD,
         opponent.hand,
         {},
-        { min: markerCount, max: markerCount, allowCancel: false }
+        { min: count, max: count, allowCancel: false }
       ), selected => {
-        const cards = selected || [];
-        opponent.hand.moveCardsTo(cards, opponent.discard);
+        MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: selected || [] });
       });
 
       return state;

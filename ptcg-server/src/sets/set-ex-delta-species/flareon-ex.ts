@@ -2,7 +2,7 @@ import { CardTag, CardType, GamePhase, PokemonCard, Power, PowerType, Stage, Sta
 import { AddMarkerEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_BURN_TO_PLAYER_ACTIVE, ADD_CONFUSION_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_BURN_TO_PLAYER_ACTIVE, ADD_CONFUSION_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Flareonex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -43,7 +43,7 @@ export class Flareonex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Devo Flash
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

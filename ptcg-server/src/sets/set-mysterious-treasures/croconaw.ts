@@ -1,8 +1,7 @@
-import { PokemonCard, Stage, PowerType, CardList, EnergyCard, GameMessage, State, StoreLike, SuperType, ShuffleDeckPrompt, StateUtils, ChooseCardsPrompt, GameLog, ShowCardsPrompt } from '../../game';
+import { PokemonCard, Stage, PowerType, CardList, EnergyCard, GameMessage, ShowCardsPrompt, State, StoreLike, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
-import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 
 export class Croconaw extends PokemonCard {
@@ -35,55 +34,30 @@ export class Croconaw extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
-      const player = (effect as EvolveEffect).player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const temp = new CardList();
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)
+      && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+      const player = effect.player;
+      if (player.deck.cards.length === 0) return state;
 
-      player.deck.moveTo(temp, 5);
-
-      // Check if any cards drawn are basic energy
-      const energyCardsDrawn = temp.cards.filter(card => {
-        return card instanceof EnergyCard;
-      });
-
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        temp,
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: energyCardsDrawn.length, max: energyCardsDrawn.length }
-      ), chosenCards => {
-
-        if (chosenCards.length == 0) {
-          // No Energy chosen, shuffle all back
-          temp.cards.forEach(card => {
-            temp.moveCardTo(card, player.deck);
-          });
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (!accepted) return;
+        const viewed = new CardList();
+        player.deck.moveTo(viewed, 5);
+        const energy = viewed.cards.filter(card => card instanceof EnergyCard);
+        const finish = () => {
+          viewed.moveCardsTo(energy, player.hand);
+          // Ref: set-vivid-voltage/trumbeak.ts (return the unselected part of a viewed deck subset).
+          player.deck.cards.unshift(...viewed.cards);
+          viewed.cards = [];
+          SHUFFLE_DECK(store, state, player);
+        };
+        if (energy.length === 0) {
+          finish();
+        } else {
+          const opponent = StateUtils.getOpponent(state, player);
+          store.prompt(state, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
+            energy, { sourcePlayerId: player.id }), finish);
         }
-
-        if (chosenCards.length > 0) {
-          // Move chosen Energy to hand
-          const energyCard = chosenCards[0];
-          temp.moveCardTo(energyCard, player.hand);
-          player.supporter.moveCardTo(this, player.discard);
-          temp.moveTo(player.deck);
-
-          chosenCards.forEach((card, index) => {
-            store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-          });
-
-          if (chosenCards.length > 0) {
-            state = store.prompt(state, new ShowCardsPrompt(
-              opponent.id,
-              GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-              chosenCards), () => state);
-          }
-        }
-
-        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-        });
       });
     }
 

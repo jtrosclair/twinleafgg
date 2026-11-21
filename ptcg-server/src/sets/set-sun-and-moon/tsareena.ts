@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { Card, ChooseCardsPrompt, ConfirmPrompt, GameMessage, PowerType, ShowCardsPrompt, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { HEAL_X_DAMAGE_FROM_THIS_POKEMON } from '../../game/store/prefabs/attack-effects';
 
 export class Tsareena extends PokemonCard {
@@ -41,7 +41,7 @@ export class Tsareena extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Queenly Majesty
     // Refs: set-fates-collide/servine.ts (on-evolve ability pattern), set-x-and-y/malamar.ts (opponent hand discard)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

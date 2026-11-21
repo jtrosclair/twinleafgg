@@ -8,7 +8,7 @@ import { PowerType, PlayerType, StoreLike, State, StateUtils, PokemonCardList, G
 import { AbstractAttackEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 
 export class Crobat extends PokemonCard {
@@ -47,7 +47,7 @@ export class Crobat extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Sound Veil (on-evolve - prevent all effects including damage)
     // Ref: set-lost-thunder/pupitar.ts (Hard Shell Evolution - on-evolve prevent damage)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

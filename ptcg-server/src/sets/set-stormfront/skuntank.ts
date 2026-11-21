@@ -3,7 +3,7 @@ import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
-import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Skuntank extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,7 +42,7 @@ export class Skuntank extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Evolutionary Gas
-    if (JUST_EVOLVED(effect, this) && effect.target === effect.player.active
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && effect.target === effect.player.active
       && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (!wantToUse) {

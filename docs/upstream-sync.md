@@ -3481,3 +3481,42 @@ Angular service and board checks passed. Upstream main remains at
 `d3d7a0031`. There are 52 remaining card definitions using the legacy
 evolution helper. The next pass still needs to check their printed trigger
 wording and resolve each case individually.
+
+## Gameplay re-audit, batch 45
+
+Checked the English prints for all 52 remaining card definitions that used
+`JUST_EVOLVED` and removed that helper. The hand-triggered effects now wait
+for the evolved Pokémon to be in play. Salazzle SCR keeps the printed
+exception. Sudden Scorching checks whether the card actually evolved from
+Salandit that turn, works through Ability suppression, and discards a short
+hand to the opponent's discard pile. Summon Minions on Dark Dragonite
+requires a hand play and offers the search without an Ability confirmation.
+
+Emerge Charge now attaches from the discard pile. Raging Roar can attach to
+a Benched Tyranitar. Greedy Evolution lets the player select which Darkness
+Energy to attach. Evolutionary Vitality can be declined or gather every
+revealed Energy, and Blissful Nurse clears the actual attached cards on the
+healed Pokémon. Cast-off Shell can select Shedinja from either printed source.
+Mapping can be declined without a shuffle. Sunshine Song uses the shared
+deck-evolution lifecycle, and Shadow Pain runs target-side Ability protection.
+[Salazzle SCR 24](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SCR/SCR_024_R_EN.png)
+[Flygon ex LM 87](https://images.pokemontcg.io/ex12/87_hires.png)
+[Sharpedo UNB 111](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/UNB/UNB_111_R_EN.png)
+[Croconaw MT 44](https://images.pokemontcg.io/dp2/44_hires.png)
+[Stormfront Torterra 11](https://images.pokemontcg.io/dp7/11_hires.png)
+
+All 167 focused cases passed. The previous build failed those cases.
+All 559 comparable saved states matched, including 401 active states. All
+3,633 sampled Trainer, attack and Ability openings and 242 sampled opening
+evolutions matched. Seven recorded solutions reached a win. The independent
+simulator API passed 32 tests. The full engine suite passed 10,253 tests.
+The worktree with the existing local edits passed 535 targeted cases. The
+2.46 MiB packaged build passed attestation, 10 board scenarios and 209
+Angular service and component checks. Upstream main remains at
+`d3d7a0031`.
+
+The remaining direct `EvolveEffect` calls span 29 card definitions, including
+permission checks that intentionally run before play. Review each against
+its print before moving it. Po Town, Galactic HQ and Wyndon Stadium are
+first in the next comparison because their printed hand-only effects
+currently listen to deck evolutions as well.

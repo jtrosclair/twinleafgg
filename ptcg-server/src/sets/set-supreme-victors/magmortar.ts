@@ -3,7 +3,7 @@ import { CardType, SpecialCondition, Stage, SuperType } from '../../game/store/c
 import { Effect } from '../../game/store/effects/effect';
 import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
-import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Magmortar extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -39,7 +39,7 @@ export class Magmortar extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Evolutionary Flame
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, result => {
         if (result) {
           const player = effect.player;

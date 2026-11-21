@@ -4,11 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, PokemonCardList, GameMessage, ConfirmPrompt, CardList } from '../../game';
-import { EnergyCard } from '../../game/store/card/energy-card';
+import { PowerType, StoreLike, State, GameMessage, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY } from '../../game/store/prefabs/prefabs';
 
 export class Sharpedo extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -43,8 +42,7 @@ export class Sharpedo extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Greedy Evolution (on-evolve - attach D energy from top 6 cards)
-    // Ref: set-team-up/lycanroc-gx.ts (Twilight Eyes - JUST_EVOLVED + ConfirmPrompt pattern)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -60,24 +58,11 @@ export class Sharpedo extends PokemonCard {
         GameMessage.WANT_TO_USE_ABILITY,
       ), wantToUse => {
         if (wantToUse) {
-          const topCards = new CardList();
-          const count = Math.min(6, player.deck.cards.length);
-          player.deck.moveTo(topCards, count);
-
-          // Find D energy cards
-          const darkEnergy = topCards.cards.filter(c =>
-            c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.provides.includes(CardType.DARK)
-          );
-
-          // Attach all D energy to this Pokemon
-          const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
-          darkEnergy.forEach(card => {
-            topCards.moveCardTo(card, cardList);
+          // Ref: set-roaring-skies/togekiss-2.ts (Serene Grace chooses from a viewed deck subset).
+          LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY(store, state, player, 6, 6, {
+            energyFilter: { energyType: EnergyType.BASIC, name: 'Darkness Energy' },
+            targetFilter: slot => slot === effect.target,
           });
-
-          // Shuffle remaining cards back
-          topCards.moveTo(player.deck);
-          SHUFFLE_DECK(store, state, player);
         }
       });
 

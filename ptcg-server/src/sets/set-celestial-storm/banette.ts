@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameMessage, Card, ChooseCardsPrompt, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE } from '../../game/store/prefabs/attack-effects';
 
 export class Banette extends PokemonCard {
@@ -35,7 +35,7 @@ export class Banette extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

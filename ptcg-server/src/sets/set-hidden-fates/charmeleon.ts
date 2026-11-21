@@ -7,7 +7,7 @@ import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, ConfirmPrompt, GameMessage, StateUtils } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class Charmeleon extends PokemonCard {
@@ -42,7 +42,7 @@ export class Charmeleon extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Burning Fighter (on-evolve)
     // Ref: set-dragons-majesty/charmeleon.ts (Burning Fighter)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

@@ -2,7 +2,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, StateUtils, ChoosePokemonPrompt, PlayerType, SlotType, Card, ChooseCardsPrompt } from '../../game';
-import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 
 export class Weavile extends PokemonCard {
@@ -36,7 +36,7 @@ export class Weavile extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
 
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (wantToUse) {

@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, HEAL_X_DAMAGE_FROM_THIS_POKEMON, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, HEAL_X_DAMAGE_FROM_THIS_POKEMON, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { GameMessage } from '../../game/game-message';
 
 export class Togekiss extends PokemonCard {
@@ -36,7 +36,7 @@ export class Togekiss extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Serene Grace
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       return CONFIRMATION_PROMPT(store, state, player, wantTo => {
         if (!wantTo) {

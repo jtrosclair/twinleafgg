@@ -1,7 +1,7 @@
 import { GameMessage, PokemonCard, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
-import { AFTER_ATTACK, ADD_MARKER, CONFIRMATION_PROMPT, DEVOLVE_POKEMON, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, REMOVE_MARKER_AT_END_OF_TURN, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AFTER_ATTACK, ADD_MARKER, CONFIRMATION_PROMPT, DEVOLVE_POKEMON, HAS_MARKER, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, REMOVE_MARKER_AT_END_OF_TURN, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Omastar extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -37,7 +37,7 @@ export class Omastar extends PokemonCard {
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.PRIMAL_SWIRL_MARKER, this);
 
     // Primal Swirl
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

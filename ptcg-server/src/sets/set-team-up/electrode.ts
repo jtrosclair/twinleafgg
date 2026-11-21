@@ -7,7 +7,7 @@ import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, MoveEnergyPrompt } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Electrode extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -41,8 +41,8 @@ export class Electrode extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Electro Shaker (on-evolve - move Lightning energy)
-    // Refs: set-lost-thunder/pupitar.ts (JUST_EVOLVED pattern), set-lost-thunder/xerneas.ts (MoveEnergyPrompt)
-    if (JUST_EVOLVED(effect, this)) {
+    // Refs: set-lost-thunder/pupitar.ts (JUST_EVOLVED_FROM_HAND pattern), set-lost-thunder/xerneas.ts (MoveEnergyPrompt)
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

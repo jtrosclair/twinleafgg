@@ -3,7 +3,7 @@ import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/ca
 import { EnergyCard, GameMessage, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
-import { ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, DAMAGE_OPPONENT_POKEMON, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, DAMAGE_OPPONENT_POKEMON, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Infernape extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -41,7 +41,7 @@ export class Infernape extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Blaze Dance
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (!wantToUse) {
           return;

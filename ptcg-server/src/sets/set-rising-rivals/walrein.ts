@@ -3,7 +3,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Walrein extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -34,7 +34,7 @@ export class Walrein extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Gather Ice
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const waterCount = player.hand.cards.filter(c => c instanceof EnergyCard && c.name === 'Water Energy').length;
       if (waterCount === 0) {

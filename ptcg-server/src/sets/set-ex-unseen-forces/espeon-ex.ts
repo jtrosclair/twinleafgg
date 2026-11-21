@@ -1,7 +1,7 @@
 import { CardTag, CardTarget, CardType, ChoosePokemonPrompt, GameMessage, PlayerType, PokemonCard, Power, PowerType, SlotType, Stage, State, StateUtils, StoreLike, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
-import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Espeonex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -41,7 +41,7 @@ export class Espeonex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Devo Flash
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

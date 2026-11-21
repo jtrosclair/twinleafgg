@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { GameMessage, PlayerType, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_ABILITY_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED, DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED, DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/prefabs/prefabs';
 import { ConfirmPrompt } from '../../game/store/prompts/confirm-prompt';
 
 export class Salamence extends PokemonCard {
@@ -37,7 +37,7 @@ export class Salamence extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Breakwing - when evolved, discard all opponent's tools
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

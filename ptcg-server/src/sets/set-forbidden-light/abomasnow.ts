@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_ABILITY_BLOCKED, JUST_EVOLVED } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND } from '../../game/store/prefabs/prefabs';
 import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ConfirmPrompt } from '../../game/store/prompts/confirm-prompt';
 import { GameMessage } from '../../game/game-message';
@@ -42,7 +42,7 @@ export class Abomasnow extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Blessings of the Frost (on-evolve)
     // Ref: set-ultra-prism/abomasnow.ts (Blessings of the Frost)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

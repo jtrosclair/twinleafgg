@@ -1,7 +1,7 @@
 import { CardTag, CardType, PokemonCard, Power, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS } from '../../game/store/prefabs/attack-effects';
-import { CONFIRMATION_PROMPT, DRAW_UP_TO_X_CARDS, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, DRAW_UP_TO_X_CARDS, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Vaporeonex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,7 +42,7 @@ export class Vaporeonex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

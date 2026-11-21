@@ -1,8 +1,9 @@
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, ChooseCardsPrompt, GameMessage, StateUtils } from '../../game';
-import { IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS_TO_HAND, MULTIPLE_COIN_FLIPS_PROMPT, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { StoreLike, State, PowerType } from '../../game';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MULTIPLE_COIN_FLIPS_PROMPT, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Porygon2 extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,27 +35,17 @@ export class Porygon2 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)
+      && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      if (player.deck.cards.length === 0) return state;
 
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.TRAINER, trainerType: TrainerType.STADIUM },
-        { min: 0, max: 1, allowCancel: false }
-      ), cards => {
-        if (cards.length > 0) {
-          MOVE_CARDS_TO_HAND(store, state, player, cards);
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) {
+          const stadium: Partial<TrainerCard> = { superType: SuperType.TRAINER, trainerType: TrainerType.STADIUM };
+          SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this,
+            stadium, { min: 0, max: 1, allowCancel: false }, this.powers[0]);
         }
-
-        SHUFFLE_DECK(store, state, player);
       });
     }
 

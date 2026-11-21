@@ -1,6 +1,6 @@
 import { Attack, CardType, PokemonCard, Power, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND } from '../../game/store/prefabs/prefabs';
 
 export class Ivysaur extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,7 +34,7 @@ export class Ivysaur extends PokemonCard {
   public fullName: string = 'Ivysaur SV';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       if (CONFIRMATION_PROMPT(store, state, effect.player, result => {
         if (result) {
           ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);

@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, ConfirmPrompt, GameMessage, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, DEVOLVE_POKEMON } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, DEVOLVE_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class PorygonZ extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -40,7 +40,7 @@ export class PorygonZ extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Initialize (on-evolve)
     // Ref: set-guardians-rising/salazzle.ts (Hot Poison - on-evolve ability)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

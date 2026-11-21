@@ -1,10 +1,10 @@
-import { Card, GameMessage, PlayerType, PowerType, State, StoreLike } from '../../game';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { GameMessage, PlayerType, PowerType, State, StoreLike } from '../../game';
+import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Blissey extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,7 +36,7 @@ export class Blissey extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       CONFIRMATION_PROMPT(store, state, player, result => {
         if (result) {
@@ -46,11 +46,15 @@ export class Blissey extends PokemonCard {
               const healEffect = new HealEffect(player, cardList, cardList.damage);
               state = store.reduceEffect(state, healEffect);
 
-              const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, cardList);
-              state = store.reduceEffect(state, checkProvidedEnergy);
-
-              const cards: Card[] = checkProvidedEnergy.energyMap.map(e => e.card);
-              MOVE_CARDS(store, state, cardList.energies, player.discard, { cards: cards });
+              const provided = new CheckProvidedEnergyEffect(player, cardList);
+              store.reduceEffect(state, provided);
+              const providedCards = new Set(provided.energyMap.map(entry => entry.card));
+              const attached = cardList.cards.filter(card => card.superType === SuperType.ENERGY || providedCards.has(card));
+              MOVE_CARDS(store, state, cardList, player.discard, {
+                cards: attached, sourceCard: this, sourceEffect: this.powers[0],
+              });
+              // Some legacy snapshots store an attachment only in the Energy list.
+              MOVE_CARDS(store, state, cardList.energies, player.discard, { sourceCard: this, sourceEffect: this.powers[0] });
             }
           });
         }

@@ -7,7 +7,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { Card, ChooseEnergyPrompt, ConfirmPrompt, GameMessage, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Crawdaunt extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -43,7 +43,7 @@ export class Crawdaunt extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Unruly Claw
     // Ref: set-cosmic-eclipse/stoutland.ts (Arf Arf Bark - evolve trigger discard energy)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

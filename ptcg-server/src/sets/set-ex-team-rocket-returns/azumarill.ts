@@ -2,7 +2,7 @@ import { Attack, CardType, CoinFlipPrompt, GameMessage, PokemonCard, Power, Powe
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Azumarill extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,7 +34,7 @@ export class Azumarill extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this) && effect.target === effect.player.active) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this) && effect.target === effect.player.active) {
       CONFIRMATION_PROMPT(store, state, effect.player, result => {
         if (result) {
           const opponent = StateUtils.getOpponent(state, effect.player);

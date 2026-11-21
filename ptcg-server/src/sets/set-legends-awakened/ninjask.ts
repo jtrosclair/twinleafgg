@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
-import { ChooseCardsPrompt, GameMessage, PowerType, State, StoreLike } from '../../game';
+import { CardList, ChooseCardsPrompt, GameMessage, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Ninjask extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -35,7 +35,7 @@ export class Ninjask extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Cast-off Shell
-    if (JUST_EVOLVED(effect, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       if (player.bench.every(b => b.cards.length > 0)) {
         return state;
@@ -44,32 +44,26 @@ export class Ninjask extends PokemonCard {
       if (!openSlot) {
         return state;
       }
-      const hasShedinja = player.hand.cards.some(c => c instanceof PokemonCard && c.name === 'Shedinja')
-        || player.discard.cards.some(c => c instanceof PokemonCard && c.name === 'Shedinja');
-      if (!hasShedinja) {
-        return state;
-      }
+      const available = new CardList();
+      available.cards = [...player.hand.cards, ...player.discard.cards]
+        .filter(card => card instanceof PokemonCard && card.name === 'Shedinja');
+      if (available.cards.length === 0) return state;
+
       CONFIRMATION_PROMPT(store, state, player, wantToUse => {
-        if (!wantToUse) {
-          return;
-        }
-        const fromHand = player.hand.cards.some(c => c instanceof PokemonCard && c.name === 'Shedinja');
-        const source = fromHand ? player.hand : player.discard;
+        if (!wantToUse) return;
         store.prompt(state, new ChooseCardsPrompt(
           player,
           GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
-          source,
+          available,
           { superType: SuperType.POKEMON, name: 'Shedinja' },
-          { min: 1, max: 1, allowCancel: true },
+          { min: 1, max: 1, allowCancel: false },
         ), selected => {
-          const cards = selected || [];
-          if (cards.length === 0) {
-            return;
-          }
-          MOVE_CARDS(store, state, source, openSlot, { cards, sourceCard: this });
+          const card = selected[0];
+          const source = player.hand.cards.includes(card) ? player.hand : player.discard;
+          MOVE_CARDS(store, state, source, openSlot, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
           openSlot.pokemonPlayedTurn = state.turn;
         });
-      }, GameMessage.WANT_TO_USE_ABILITY);
+      });
     }
 
     // Chip Off

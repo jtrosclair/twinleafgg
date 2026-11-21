@@ -6,9 +6,10 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, PlayerType, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { PowerEffect, PutDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PutDamagePrompt } from '../../game/store/prompts/put-damage-prompt';
 import { DamageMap } from '../../game/store/prompts/move-damage-prompt';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 
 export class Gengar extends PokemonCard {
@@ -43,8 +44,8 @@ export class Gengar extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Shadow Pain (on-evolve - put 6 damage counters on GX/EX)
-    // Refs: set-lost-thunder/pupitar.ts (JUST_EVOLVED pattern), set-lost-thunder/chandelure.ts (damage counters in any way)
-    if (JUST_EVOLVED(effect, this)) {
+    // Refs: set-lost-thunder/pupitar.ts (JUST_EVOLVED_FROM_HAND pattern), set-lost-thunder/chandelure.ts (damage counters in any way)
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -92,7 +93,8 @@ export class Gengar extends PokemonCard {
             const results = targets || [];
             for (const result of results) {
               const target = StateUtils.getTarget(state, player, result.target);
-              target.damage += result.damage;
+              const power = new PowerEffect(player, this.powers[0], this, target);
+              store.reduceEffect(state, new PutDamageCountersEffect(power, result.damage));
             }
           });
         }

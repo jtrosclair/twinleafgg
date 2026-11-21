@@ -8,7 +8,7 @@ import { Card, ChooseEnergyPrompt, ConfirmPrompt, GameMessage, PowerType, StoreL
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class LycanrocGx2 extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -50,7 +50,7 @@ export class LycanrocGx2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Twilight Eyes
     // Ref: set-team-up/lycanroc-gx.ts (Twilight Eyes)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

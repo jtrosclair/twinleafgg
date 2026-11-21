@@ -7,7 +7,7 @@ import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
-import { JUST_EVOLVED, ABILITY_USED, IS_ABILITY_BLOCKED, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, ABILITY_USED, IS_ABILITY_BLOCKED, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY } from '../../game/store/prefabs/prefabs';
 
 export class Togekiss2 extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -42,7 +42,7 @@ export class Togekiss2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Serene Grace (on-evolve trigger)
     // Ref: set-temporal-forces/metang.ts (Metal Maker - look at top cards and attach energy)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
