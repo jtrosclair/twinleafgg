@@ -35,7 +35,8 @@ export function resolveHandEnergyReactions(
     };
 
     const first = available[0];
-    if (available.every(reaction => reaction.label === first.label && reaction.target === first.target)) {
+    if (available.every(reaction => reaction.label === first.label && reaction.target === first.target
+      && reaction.attachmentLabel === first.attachmentLabel)) {
       resolve(0);
       return;
     }
@@ -43,10 +44,41 @@ export function resolveHandEnergyReactions(
     const multipleTargets = available.some(reaction => reaction.target !== first.target);
     const labels = available.map(({ label, target }) =>
       multipleTargets ? `${label} (${target.getPokemonCard()?.name ?? ''})` : label);
-    store.prompt(state, new SelectPrompt(chooser.id, GameMessage.CHOOSE_ENERGY_ATTACHMENT_EFFECT, labels,
+    const locations = labels.map((label, index) => {
+      if (!multipleTargets || labels.indexOf(label) === labels.lastIndexOf(label)) return label;
+      const { target } = available[index];
+      const owner = state.players.find(player => player.active === target || player.bench.includes(target));
+      if (!owner) return label;
+      const slot = owner.active === target ? 'Active' : `Bench ${owner.bench.indexOf(target) + 1}`;
+      return `${label} · ${owner === chooser ? slot : `Opponent's ${slot}`}`;
+    });
+    const choices = locations.map((label, index) => {
+      const { attachmentLabel } = available[index];
+      return attachmentLabel && locations.indexOf(label) !== locations.lastIndexOf(label)
+        ? `${label} · ${attachmentLabel}` : label;
+    });
+    store.prompt(state, new SelectPrompt(chooser.id, GameMessage.CHOOSE_ENERGY_ATTACHMENT_EFFECT, choices,
       { allowCancel: false }), resolve);
   };
   waitForHandEnergyPrompts(store, state, next);
+}
+
+export function resolveEnergyAttachmentCompletions(
+  store: StoreLike, state: State, player: Player, completions: AfterAttachEnergyEffect[],
+): void {
+  const reactions: QueuedHandEnergyReaction[] = [];
+  const complete = (index: number): void => {
+    const completion = completions[index];
+    if (!completion) {
+      const chooser = state.players[state.activePlayer] ?? player;
+      resolveHandEnergyReactions(store, state, chooser, reactions);
+      return;
+    }
+    completion.reactionBatch = reactions;
+    state = store.reduceEffect(state, completion);
+    waitForHandEnergyPrompts(store, state, () => complete(index + 1));
+  };
+  if (completions.length > 0) complete(0);
 }
 
 export function queueSpecialEnergyReaction(
@@ -79,7 +111,7 @@ export function isHandAttachmentBeforeAttack(state: State, effect: AfterAttachEn
 
 export function queuePokemonEnergyReaction(
   store: StoreLike, state: State, effect: AfterAttachEnergyEffect, pokemon: PokemonCard,
-  resolve: () => void, eligible: () => boolean = () => true,
+  resolve: () => void, eligible: () => boolean = () => true, attachmentLabel?: string,
 ): void {
   const { player, target } = effect;
   const power = pokemon.powers[0];
@@ -88,5 +120,5 @@ export function queuePokemonEnergyReaction(
     : power.powerType === PowerType.POKEMON_POWER ? IS_POKEMON_POWER_BLOCKED : IS_ABILITY_BLOCKED;
   const canResolve = () => player.getPokemonInPlay().some(slot => slot.getPokemonCard() === pokemon)
     && player.getPokemonInPlay().includes(target) && eligible() && !blocked(store, state, player, pokemon);
-  if (canResolve()) effect.reactions.set(power.name, { label: power.name, canResolve, resolve });
+  if (canResolve()) effect.reactions.set(power.name, { label: power.name, attachmentLabel, canResolve, resolve });
 }

@@ -56,7 +56,7 @@ export class Vileplume extends PokemonCard {
           const opponent = StateUtils.getOpponent(state, player);
           APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(store, state, player, this.powers[0], this, opponent.active, conditions);
         });
-      }, canUse);
+      }, canUse, effect.energyCard.name);
     }
 
     // Disturbing Pollen

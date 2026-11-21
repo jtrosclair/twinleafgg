@@ -46,7 +46,7 @@ export class Eevee extends PokemonCard {
             searchEnergyEvolution(store, state, effect, this, getAttachedEnergyTypes(store, state, effect));
           }
         });
-      }, canUse);
+      }, canUse, energyCard.name);
     }
     return state;
   }

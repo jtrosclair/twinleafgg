@@ -19,6 +19,7 @@ import {
 import { Effect } from '../effects/effect';
 import {
   AfterEvolveEffect,
+  AfterHealEffect,
   AttackEffect,
   EffectOfAbilityEffect,
   EvolveEffect,
@@ -532,7 +533,11 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     const pokemon = effect.target.getPokemonCard();
     const hasAlphaRecovery = pokemon?.powers.some(power =>
       power.powerType === PowerType.ANCIENT_TRAIT && power.name === ALPHA_RECOVERY.name);
-    effect.target.damage = Math.max(0, effect.target.damage - effect.damage * (hasAlphaRecovery ? 2 : 1));
+    const previousDamage = effect.target.damage;
+    effect.target.damage = Math.max(0, previousDamage - effect.damage * (hasAlphaRecovery ? 2 : 1));
+    if (effect.target.damage < previousDamage) {
+      return store.reduceEffect(state, new AfterHealEffect(effect.target, previousDamage - effect.target.damage));
+    }
     return state;
   }
 

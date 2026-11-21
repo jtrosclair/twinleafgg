@@ -51,8 +51,9 @@ export class AttachEnergyEffect implements Effect {
   public target: PokemonCardList;
   /** Set by the hand attachment resolver after checking interception and payment. */
   public handAttachmentPrepared = false;
-  public completionBatch?: AfterAttachEnergyFromHandEffect[];
+  public completionBatch?: AfterAttachEnergyEffect[];
   public sourcePower?: PowerType;
+  public sourceCard?: Card;
 
   constructor(
     player: Player, energyCard: EnergyCard, target: PokemonCardList,
@@ -105,6 +106,7 @@ export class AttachEnergyFromHandEffect implements Effect {
 
 export interface HandEnergyReaction {
   label: string;
+  attachmentLabel?: string;
   canResolve: () => boolean;
   resolve: () => void;
 }
@@ -119,6 +121,7 @@ export class AfterAttachEnergyEffect implements Effect {
   public readonly activePokemonAtAttachment: PokemonCard | undefined;
   public readonly recipientAtAttachment: PokemonCard | undefined;
   public readonly reactions = new Map<string, HandEnergyReaction>();
+  public reactionBatch?: QueuedHandEnergyReaction[];
 
   constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {
     this.activePokemonAtAttachment = player.active.getPokemonCard();
@@ -128,8 +131,6 @@ export class AfterAttachEnergyEffect implements Effect {
 
 /** Sent only after an Energy card was successfully attached from the hand. */
 export class AfterAttachEnergyFromHandEffect extends AfterAttachEnergyEffect {
-  public reactionBatch?: QueuedHandEnergyReaction[];
-
   constructor(player: Player, energyCard: EnergyCard, target: PokemonCardList, public readonly sourcePower?: PowerType) {
     super(player, energyCard, target);
   }

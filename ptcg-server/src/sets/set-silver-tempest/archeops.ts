@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, SuperType, EnergyType, BoardEffect } from '../../game/store/card/card-types';
+import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, State, StoreLike, GameError } from '../../game';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, BLOCK_IF_DECK_EMPTY, MOVE_CARDS, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Archeops extends PokemonCard {
 
@@ -67,6 +67,7 @@ export class Archeops extends PokemonCard {
       if (player.marker.hasMarker(this.PRIMAL_TURBO_MARKER, this)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
+      BLOCK_IF_DECK_EMPTY(player);
 
       state = store.prompt(state, new AttachEnergyPrompt(
         player.id,
@@ -77,23 +78,12 @@ export class Archeops extends PokemonCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
         { allowCancel: false, min: 0, max: 2, sameTarget: true }
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          return;
-        }
         player.marker.addMarker(this.PRIMAL_TURBO_MARKER, this);
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-          }
-        });
+        ABILITY_USED(player, this);
 
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
+          MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this });
         }
         SHUFFLE_DECK(store, state, player);
       });

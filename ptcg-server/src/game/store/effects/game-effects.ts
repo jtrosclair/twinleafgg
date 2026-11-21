@@ -20,6 +20,7 @@ export enum GameEffects {
   ATTACK_EFFECT = 'ATTACK_EFFECT',
   KNOCK_OUT_EFFECT = 'KNOCK_OUT_EFFECT',
   HEAL_EFFECT = 'HEAL_EFFECT',
+  AFTER_HEAL_EFFECT = 'AFTER_HEAL_EFFECT',
   EVOLVE_EFFECT = 'EVOLVE_EFFECT',
   CHECK_EVOLVE_EFFECT = 'CHECK_EVOLVE_EFFECT',
   AFTER_EVOLVE_EFFECT = 'AFTER_EVOLVE_EFFECT',
@@ -273,6 +274,13 @@ export class HealEffect implements Effect {
     this.target = target;
     this.damage = damage;
   }
+}
+
+export class AfterHealEffect implements Effect {
+  readonly type: string = GameEffects.AFTER_HEAL_EFFECT;
+  public preventDefault = false;
+
+  constructor(public readonly target: PokemonCardList, public readonly damageHealed: number) {}
 }
 
 export class EvolveEffect implements Effect {

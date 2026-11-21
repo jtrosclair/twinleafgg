@@ -52,8 +52,8 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       });
     }
     const reactions = [...effect.reactions.values()].map(reaction => ({ ...reaction, target: effect.target }));
-    if (handAttachment?.reactionBatch) {
-      handAttachment.reactionBatch.push(...reactions);
+    if (effect.reactionBatch) {
+      effect.reactionBatch.push(...reactions);
     } else if (reactions.length > 0) {
       const chooser = state.players[state.activePlayer] ?? effect.player;
       const resolve = () => resolveHandEnergyReactions(store, state, chooser, reactions);
@@ -89,7 +89,9 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       if (!effect.target.cards.includes(effect.energyCard)) {
         const source = effect.sourceList ?? effect.player[effect.sourceZone];
         if (!source.cards.includes(effect.energyCard)) return state;
-        state = store.reduceEffect(state, new MoveCardsEffect(source, effect.target, { cards: [effect.energyCard] }));
+        state = store.reduceEffect(state, new MoveCardsEffect(source, effect.target, {
+          cards: [effect.energyCard], sourceCard: effect.sourceCard,
+        }));
       }
       if (!effect.target.cards.includes(effect.energyCard)) return state;
     } else {
@@ -116,12 +118,12 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       index
     });
 
-    if (fromHand && effect.target.cards.includes(effect.energyCard)) {
-      const completion = new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target, effect.sourcePower);
+    if ((fromHand || effect.sourceZone) && effect.target.cards.includes(effect.energyCard)) {
+      const completion = fromHand
+        ? new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target, effect.sourcePower)
+        : new AfterAttachEnergyEffect(effect.player, effect.energyCard, effect.target);
       if (effect.completionBatch) effect.completionBatch.push(completion);
       else state = store.reduceEffect(state, completion);
-    } else if (effect.sourceZone) {
-      state = store.reduceEffect(state, new AfterAttachEnergyEffect(effect.player, effect.energyCard, effect.target));
     }
     return state;
   }

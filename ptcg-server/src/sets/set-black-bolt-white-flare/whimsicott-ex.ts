@@ -1,44 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, PlayerType, SlotType, StateUtils, TrainerCard } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
-import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-
-function* useEnergyGift(next: Function, store: StoreLike, state: State,
-  effect: AttackEffect): IterableIterator<State> {
-
-  const player = effect.player;
-
-  if (player.deck.cards.length === 0) {
-    return state;
-  }
-
-  yield store.prompt(state, new AttachEnergyPrompt(
-    player.id,
-    GameMessage.ATTACH_ENERGY_TO_BENCH,
-    player.deck,
-    PlayerType.BOTTOM_PLAYER,
-    [SlotType.BENCH, SlotType.ACTIVE],
-    { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-    { allowCancel: false, min: 0, max: 3 }
-  ), transfers => {
-    transfers = transfers || [];
-    for (const transfer of transfers) {
-      const target = StateUtils.getTarget(state, player, transfer.to);
-      player.deck.moveCardTo(transfer.card, target);
-      next();
-    }
-  });
-
-  return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-    player.deck.applyOrder(order);
-
-  });
-}
+import { ATTACH_ENERGY_TRANSFERS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Whimsicottex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -73,8 +39,19 @@ export class Whimsicottex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Energy Gift
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const generator = useEnergyGift(() => generator.next(), store, state, effect);
-      return generator.next().value;
+      const player = effect.player;
+      if (player.deck.cards.length === 0) return state;
+
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { allowCancel: false, min: 0, max: 3 },
+      ), transfers => {
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+          sourceCard: this,
+          onAttached: () => SHUFFLE_DECK(store, state, player)
+        });
+      });
     }
     // Wonder Cotton
     if (WAS_ATTACK_USED(effect, 1, this)) {

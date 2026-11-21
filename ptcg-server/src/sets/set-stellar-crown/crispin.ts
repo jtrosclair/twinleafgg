@@ -3,8 +3,9 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { GameError, GameMessage, PlayerType, AttachEnergyPrompt, SlotType, StateUtils, ChooseCardsPrompt, CardList, ShowCardsPrompt, ShuffleDeckPrompt } from '../../game';
+import { GameError, GameMessage, PlayerType, AttachEnergyPrompt, SlotType, StateUtils, ChooseCardsPrompt, Card, CardList, ShowCardsPrompt } from '../../game';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { ATTACH_ENERGY_TRANSFERS, BLOCK_IF_DECK_EMPTY, MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Crispin extends TrainerCard {
 
@@ -29,74 +30,52 @@ export class Crispin extends TrainerCard {
 
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const supporterTurn = player.supporterTurn;
-
-      if (supporterTurn > 0) {
+      if (player.supporterTurn > 0) {
         throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
       }
+      BLOCK_IF_DECK_EMPTY(player);
 
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
+      player.hand.moveCardTo(this, player.supporter);
       effect.preventDefault = true;
 
-      const cardList = new CardList();
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { min: 0, max: 2, allowCancel: false }
+      const filter = { superType: SuperType.ENERGY, energyType: EnergyType.BASIC };
+      return store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_HAND, player.deck,
+        filter, { min: 0, max: 2, allowCancel: false, differentTypes: true },
       ), selected => {
-        const cards = selected || [];
-        if (cards.length > 1) {
-          if (cards[0].name === cards[1].name) {
-            throw new GameError(GameMessage.CAN_ONLY_SELECT_TWO_DIFFERENT_ENERGY_TYPES);
-          }
+        if (selected.length === 0) {
+          SHUFFLE_DECK(store, state, player);
+          return;
         }
-
+        const opponent = StateUtils.getOpponent(state, player);
         store.prompt(state, new ShowCardsPrompt(
-          opponent.id,
-          GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-          selected
-        ), () => state);
+          opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected,
+        ), () => {
+          const putInHand = (card: Card) => {
+            MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
+          };
 
-        player.deck.moveCardsTo(cards, cardList);
-
-        if (cardList.cards.length === 2) {
-          state = store.prompt(state, new AttachEnergyPrompt(
-            player.id,
-            GameMessage.ATTACH_ENERGY_CARDS,
-            cardList,
-            PlayerType.BOTTOM_PLAYER,
-            [SlotType.BENCH, SlotType.ACTIVE],
-            { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-            { allowCancel: false, min: 1, max: 1, differentTargets: true }
+          // Only a second Energy can be attached.
+          if (selected.length === 1) {
+            putInHand(selected[0]);
+            SHUFFLE_DECK(store, state, player);
+            return;
+          }
+          const revealed = new CardList();
+          revealed.cards = selected.slice();
+          store.prompt(state, new AttachEnergyPrompt(
+            player.id, GameMessage.ATTACH_ENERGY_CARDS, revealed, PlayerType.BOTTOM_PLAYER,
+            [SlotType.BENCH, SlotType.ACTIVE], filter,
+            { allowCancel: false, min: 1, max: 1, differentTargets: true },
           ), transfers => {
-            transfers = transfers || [];
-
-            for (const transfer of transfers) {
-              const target = StateUtils.getTarget(state, player, transfer.to);
-              cardList.moveCardTo(transfer.card, target);
-            }
-
-            // Move the remaining card to the player's hand
-            const remainingCard = cardList.cards[0];
-            cardList.moveCardTo(remainingCard, player.hand);
+            const [first, second] = selected;
+            const remaining = first === transfers[0].card ? second : first;
+            putInHand(remaining);
+            ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+              sourceCard: this,
+              onAttached: () => SHUFFLE_DECK(store, state, player)
+            });
           });
-        }
-
-        if (cardList.cards.length === 1) {
-          const remainingCard = cardList.cards[0];
-          cardList.moveCardTo(remainingCard, player.hand);
-        }
-
-
-
-        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-          return state;
         });
       });
     }

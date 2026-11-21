@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, State, StoreLike } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { HealEffect } from '../../game/store/effects/game-effects';
-import { ADD_MARKER, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { AfterHealEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { ADD_MARKER, HAS_MARKER, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class Goodra extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -40,39 +40,17 @@ export class Goodra extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Hydration
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-        return state;
-      }
-
-      if (effect.energyCard.energyType === EnergyType.BASIC && effect.energyCard.provides.includes(CardType.WATER)) {
-        const healEffect = new HealEffect(effect.player, effect.target, 20);
-        return store.reduceEffect(state, healEffect);
-      }
-
-      // Check special energies that provide [W]
-      if (effect.energyCard.energyType === EnergyType.SPECIAL) {
-        // Temporarily push the energy card to the list of cards to check if it provides [W]
-        effect.target.cards.push(effect.energyCard);
-        const checkWaterEnergy = new CheckProvidedEnergyEffect(effect.player, effect.target);
-        store.reduceEffect(state, checkWaterEnergy);
-        effect.target.cards.pop();
-
-        const energyMap = checkWaterEnergy.energyMap.find(element => element.card === effect.energyCard);
-        const providedEnergy = energyMap?.provides;
-        if (providedEnergy?.includes(CardType.WATER)
-          || providedEnergy?.includes(CardType.ANY)
-          || providedEnergy?.includes(CardType.WLFM)
-          || providedEnergy?.includes(CardType.GRW)) {
-          const healEffect = new HealEffect(effect.player, effect.target, 20);
-          return store.reduceEffect(state, healEffect);
-        }
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.recipientAtAttachment === this
+      && attachedEnergyProvides(store, state, effect, CardType.WATER, CardType.GRW, CardType.WLFM)) {
+      const { player, target, energyCard } = effect;
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(player, target, 20));
+      }, () => target.getPokemonCard() === this && target.cards.includes(energyCard));
     }
 
     // Healed this turn tracker
-    if (effect instanceof HealEffect && effect.target.getPokemonCard() === this) {
-      ADD_MARKER(this.HYDRATION_MARKER, effect.player, this);
+    if (effect instanceof AfterHealEffect && effect.target.getPokemonCard() === this) {
+      ADD_MARKER(this.HYDRATION_MARKER, StateUtils.findOwner(state, effect.target), this);
     }
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this && HAS_MARKER(this.HYDRATION_MARKER, effect.player, this)) {
       REMOVE_MARKER(this.HYDRATION_MARKER, effect.player, this);

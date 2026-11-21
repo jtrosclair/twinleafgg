@@ -43,5 +43,5 @@ export function queueBasicEnergyEvolution(
     CONFIRMATION_PROMPT(store, state, player, accepted => {
       if (accepted && canSearch()) searchEnergyEvolution(store, state, effect, eevee, energyCard.provides);
     });
-  }, canSearch);
+  }, canSearch, energyCard.name);
 }

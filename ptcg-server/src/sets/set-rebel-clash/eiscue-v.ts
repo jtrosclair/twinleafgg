@@ -3,13 +3,14 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class EiscueV extends PokemonCard {
   public tags = [CardTag.POKEMON_V];
@@ -42,40 +43,14 @@ export class EiscueV extends PokemonCard {
   public fullName: string = 'Eiscue V RCL';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Cold Absorption (passive - heal when attaching Water Energy from hand to this Pokemon)
-    // Ref: set-crimson-invasion/miltank.ts (Moomoo Malt - AttachEnergyEffect + HealEffect)
-    if (effect instanceof AttachEnergyEffect) {
-      // Only trigger when energy is attached to this Pokemon
-      if (!effect.target.cards.includes(this)) {
-        return state;
-      }
-
-      if (effect.target.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // Only Water Energy (basic)
-      if (!effect.energyCard.provides.includes(CardType.WATER)) {
-        return state;
-      }
-
-      if (effect.energyCard.energyType !== EnergyType.BASIC) {
-        return state;
-      }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Only trigger when the owner is attaching from their own hand
-      if (effect.player !== player) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const healEffect = new HealEffect(player, effect.target, 30);
-      store.reduceEffect(state, healEffect);
+    // Cold Absorption
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.recipientAtAttachment === this
+      && state.players[state.activePlayer] === effect.player
+      && attachedEnergyProvides(store, state, effect, CardType.WATER, CardType.GRW, CardType.WLFM)) {
+      const { player, target, energyCard } = effect;
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(player, target, 30));
+      }, () => target.getPokemonCard() === this && target.cards.includes(energyCard));
     }
 
     // Attack 1: Blizzard

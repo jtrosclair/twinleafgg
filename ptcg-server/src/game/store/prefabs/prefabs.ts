@@ -1,7 +1,7 @@
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
-import { TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
+import { AfterAttachEnergyEffect, TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
@@ -15,6 +15,8 @@ import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects'
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { preventRetreatEffect, preventDamageEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
+import { CardAssign } from '../prompts/attach-energy-prompt';
+import { resolveEnergyAttachmentCompletions } from './hand-energy-reactions';
 export { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
 
 /**
@@ -954,17 +956,28 @@ export function DAMAGE_OPPONENT_POKEMON(
   });
 }
 
-function attachEnergyTransfers(
-  store: StoreLike, state: State, player: Player, transfers: { to: CardTarget; card: Card }[],
-  sourceZone?: 'deck' | 'discard', sourceList?: CardList,
-): { to: CardTarget; card: Card }[] {
-  return transfers.filter(({ to, card }) => {
+/** Finish an attachment prompt, including its follow-up instructions, before resolving reactions. */
+export function ATTACH_ENERGY_TRANSFERS(
+  store: StoreLike, state: State, player: Player, transfers: CardAssign[],
+  sourceZone?: 'deck' | 'discard',
+  options: { sourceList?: CardList; sourceCard?: Card; onAttached?: (attached: CardAssign[]) => void } = {},
+): void {
+  const completions: AfterAttachEnergyEffect[] = [];
+  const attached = transfers.filter(({ to, card }) => {
     if (!(card instanceof EnergyCard)) return false;
     const target = StateUtils.getTarget(state, player, to);
     const wasAttached = target.cards.includes(card);
-    store.reduceEffect(state, new AttachEnergyEffect(player, card, target, sourceZone, sourceList));
+    const attachment = new AttachEnergyEffect(player, card, target, sourceZone, options.sourceList);
+    attachment.sourceCard = options.sourceCard;
+    if (sourceZone) attachment.completionBatch = completions;
+    store.reduceEffect(state, attachment);
     return !wasAttached && target.cards.includes(card);
   });
+  options.onAttached?.(attached);
+  if (completions.length === 0) return;
+  const finish = () => resolveEnergyAttachmentCompletions(store, state, player, completions);
+  if (store.hasPrompts()) store.waitPrompt(state, finish);
+  else finish();
 }
 
 export function ATTACH_ENERGY_PROMPT(store: StoreLike, state: State, player: Player, playerType: PlayerType, sourceSlot: SlotType, destinationSlots: SlotType[], filter: Partial<EnergyCard> = {}, options: Partial<AttachEnergyOptions> = {}): State {
@@ -975,10 +988,11 @@ export function ATTACH_ENERGY_PROMPT(store: StoreLike, state: State, player: Pla
   return store.prompt(state, new AttachEnergyPrompt(
     player.id, GameMessage.ATTACH_ENERGY_CARDS, source, playerType, destinationSlots, filter, options,
   ), transfers => {
-    attachEnergyTransfers(store, state, player, transfers ?? [], sourceZone);
-    if (sourceSlot === SlotType.DECK) {
-      SHUFFLE_DECK(store, state, player);
-    }
+    ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], sourceZone, {
+      onAttached: () => {
+        if (sourceSlot === SlotType.DECK) SHUFFLE_DECK(store, state, player);
+      }
+    });
   });
 }
 
@@ -1222,8 +1236,7 @@ export function ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON(
     promptEnergyFilter,
     promptOptions
   ), transfers => {
-    const attached = attachEnergyTransfers(store, state, player, transfers ?? [], 'discard');
-    onAttached?.(attached);
+    ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', { onAttached });
   });
 }
 
@@ -1306,10 +1319,12 @@ export function ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON(
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
 
-    const attached = attachEnergyTransfers(store, state, player, transfers, 'deck');
-    onAttached?.(attached);
-
-    SHUFFLE_DECK(store, state, player);
+    ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+      onAttached: attached => {
+        onAttached?.(attached);
+        SHUFFLE_DECK(store, state, player);
+      }
+    });
   });
 }
 
@@ -2243,9 +2258,10 @@ export function LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY(
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
 
-    attachEnergyTransfers(store, state, player, transfers, 'deck', topCards);
-
-    moveRemainingTopDeckCards(store, state, player, topCards, remainderDestination);
+    ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+      sourceList: topCards,
+      onAttached: () => moveRemainingTopDeckCards(store, state, player, topCards, remainderDestination)
+    });
   });
 }
 

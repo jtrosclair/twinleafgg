@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, SlotType, StateUtils, ShuffleDeckPrompt } from '../../game';
+import { StoreLike, State, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Joltik extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -29,40 +29,9 @@ export class Joltik extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      //attach grass energy prompt
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        {
-          allowCancel: true,
-          min: 0,
-          max: 4,
-          validCardTypes: [CardType.GRASS, CardType.LIGHTNING],
-          maxPerType: 2
-        },
-      ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          return state;
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-        }
-
-        // Shuffles deck after attaching both types of energies
-        state = store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-        });
-      });
+      return ATTACH_ENERGY_PROMPT(store, state, effect.player, PlayerType.BOTTOM_PLAYER, SlotType.DECK,
+        [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { allowCancel: true, min: 0, max: 4, validCardTypes: [CardType.GRASS, CardType.LIGHTNING], maxPerType: 2 });
     }
     return state;
   }

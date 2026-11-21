@@ -4010,3 +4010,60 @@ titled `fix`, 11 are partial and zero are deferred. This tally includes
 commits that mix gameplay with retired code. An individual defect count
 requires card-level review. Ampharos was originally deferred as part of
 the separately titled Ability refactor `db4eebfcf`.
+
+## Gameplay re-audit, batch 56
+
+Deck and discard attachments can now finish as a group. Each physical
+attachment retains its original source. Any draw or shuffle instructed by
+the originating card finishes before the turn player chooses the triggered
+effects. The order prompt distinguishes duplicate Pokémon by slot and
+shows the Energy type when it changes the outcome, as with two different
+types fed to the same Eevee. Identical attachment effects such as Solar
+Evolution keep their existing prompt flow.
+[Pokémon Professor rules update](https://professorprogram.pokemon.com/news/11473085)
+
+Crispin validates distinct Basic Energy types during selection. The
+reveal comes first. One selected card goes to the hand. With two selected,
+the second attaches from the deck, and the deck shuffles after both
+moves. A zero-card search of a nonempty deck still shuffles. Glass
+Trumpet checks for a Tera Pokémon and a Colorless Bench recipient before
+play and groups the attachments to separate Bench slots. Sada draws only
+when a Basic Energy actually reaches an Ancient Pokémon. Her attachment
+can resolve with an empty deck.
+[Crispin print](https://asia.pokemon-card.com/my/card-search/detail/14109/)
+[Crispin ruling for a one-card search](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%AB%E3%83%9E%E3%83%84&regulation_faq_main_item1=all)
+[Glass Trumpet print](https://asia.pokemon-card.com/sg/card-search/detail/14111/)
+[Professor Sada’s Vitality rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AA%E3%83%BC%E3%83%AA%E3%83%A0%E5%8D%9A%E5%A3%AB%E3%81%AE%E6%B0%97%E8%BF%AB&regulation_faq_main_item1=all)
+
+Jolting Charge attaches the selected Grass and Lightning Energy before
+its shuffle. Energy Gift shuffles after a zero-card selection. The two
+Water healing Abilities on Goodra FLI and Eiscue V RCL react only to
+successful hand attachments, including a Special Energy that provides
+Water. Goodra’s Soaking Horn bonus requires damage to be removed. Dyna
+Tree Hill and full HP each leave the bonus unavailable.
+[Joltik print](https://www.pokemon-card.com/card-search/details.php/card/46156)
+[Whimsicott ex print](https://www.pokemon-card.com/card-search/details.php/card/48071/regu/all)
+[Goodra print](https://www.pokemon-card.com/card-search/details.php/card/34742/regu/BW)
+[Eiscue V print](https://www.pokemon-card.com/card-search/details.php/card/37775/regu/all)
+
+Archeops spends Primal Turbo when it completes a search with zero results.
+It preserves the existing move-and-shuffle path for Special Energy. The
+official ruling permits a Primal Turbo attachment of Single Strike Energy
+to Lugia VSTAR before the incompatible Energy is discarded, while
+several current local Special Energy checks reject the move at the
+attachment step. The remaining Special Energy review must distinguish
+those two steps before switching Primal Turbo to the shared reactions.
+[Archeops print](https://www.pokemon-card.com/card-search/details.php/card/42211)
+[Primal Turbo and Single Strike Energy ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=867)
+
+All 17 focused cases pass. Fourteen fail on the previous engine. All
+559 comparable saved states match and the seven recorded solutions still
+win. Of 5,225 sampled opening actions, the only 38 changes are prompt
+options for distinct Crispin Energy types and relevant Glass Trumpet
+Bench targets. The same settled boards result from 27 real Crispin
+plays, six Glass Trumpet plays and one Sada play, including reprints.
+The production package also resolves a real Crispin search by mouse and
+touch, putting one Energy in hand and attaching the other. The full
+engine suite passes 10,711 checks and 159 targeted checks pass with the
+existing local edits. The 2.50 MiB gzip package passes attestation, ten
+board scenarios and 209 client-service checks. All 32 API checks pass.
