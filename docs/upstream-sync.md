@@ -5523,3 +5523,7 @@ including Meowth's Tuck Tail. All 559 comparable saved boards match.
 All 3,636 sampled opening actions match, and all seven recorded
 solutions win twice. The API passes 33 tests, client services pass
 209, and the browser package passes attestation and ten board checks.
+
+For the saved-puzzle action comparison, `--workers=4` reduced local
+wall time from 199 to 61 seconds. The serial and parallel reports
+matched across all 559 boards and 3,636 sampled actions.

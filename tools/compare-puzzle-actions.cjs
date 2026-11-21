@@ -3,12 +3,13 @@
 
 // Read-only, deterministic first-action comparison for saved PrizeMap puzzles.
 // Usage: node tools/compare-puzzle-actions.cjs BASE_SOURCE CANDIDATE_SOURCE WEB_SOURCE
-//   [--mode=all|both|trainers|attacks|abilities] [--limit=N] [--min-comparable=N] [--min-actions=N]
+//   [--mode=all|both|trainers|attacks|abilities] [--limit=N] [--min-comparable=N] [--min-actions=N] [--workers=N]
 // Only aggregate card names and outcome counts are printed; puzzle contents are not written to disk.
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { createRequire } = require('node:module');
+const { Worker, isMainThread, parentPort, workerData } = require('node:worker_threads');
 
 const positional = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
 const options = Object.fromEntries(process.argv.slice(2).filter(arg => arg.startsWith('--')).map(arg => {
@@ -16,18 +17,19 @@ const options = Object.fromEntries(process.argv.slice(2).filter(arg => arg.start
   if (index < 3) throw new Error('Options must use --name=value');
   return [arg.slice(2, index), arg.slice(index + 1)];
 }));
-if (positional.length !== 3 || Object.keys(options).some(key => !['mode', 'limit', 'min-comparable', 'min-actions'].includes(key))) {
-  throw new Error('Usage: compare-puzzle-actions.cjs BASE_SOURCE CANDIDATE_SOURCE WEB_SOURCE [--mode=all|both|trainers|attacks|abilities] [--limit=N] [--min-comparable=N] [--min-actions=N]');
+if (positional.length !== 3 || Object.keys(options).some(key => !['mode', 'limit', 'min-comparable', 'min-actions', 'workers'].includes(key))) {
+  throw new Error('Usage: compare-puzzle-actions.cjs BASE_SOURCE CANDIDATE_SOURCE WEB_SOURCE [--mode=all|both|trainers|attacks|abilities] [--limit=N] [--min-comparable=N] [--min-actions=N] [--workers=N]');
 }
 const [base, candidate, web] = positional.map(value => path.resolve(value));
 const mode = options.mode || 'both';
 const limit = options.limit === undefined ? undefined : Number(options.limit);
 const minComparable = options['min-comparable'] === undefined ? 1 : Number(options['min-comparable']);
 const minActions = options['min-actions'] === undefined ? 1 : Number(options['min-actions']);
+const workers = options.workers === undefined ? 1 : Number(options.workers);
 if (!['all', 'both', 'trainers', 'attacks', 'abilities'].includes(mode) ||
     (limit !== undefined && (!Number.isSafeInteger(limit) || limit <= 0)) ||
-    !Number.isSafeInteger(minComparable) || minComparable <= 0 || !Number.isSafeInteger(minActions) || minActions <= 0) {
-  throw new Error('Invalid mode, limit or minimum coverage');
+    !Number.isSafeInteger(minComparable) || minComparable <= 0 || !Number.isSafeInteger(minActions) || minActions <= 0 || !Number.isSafeInteger(workers) || workers < 1) {
+  throw new Error('Invalid mode, limit, minimum coverage or worker count');
 }
 
 function entry(root) {
@@ -194,6 +196,42 @@ function compare(summary, before, after) {
   }
 }
 
+function compareRows({ rows, runnerPaths, kinds }) {
+  const makeModes = () => Object.fromEntries(kinds.map(kind => [kind, counter()]));
+  const result = { modes: makeModes(), active: makeModes() };
+  const originalLog = console.log;
+  console.log = () => {};
+  try {
+    const [baseline, candidate] = runnerPaths.map(file => require(file));
+    for (const { json, active } of rows) {
+      for (const kind of kinds) {
+        let before, after;
+        try { before = baseline.signature(json, kind); } catch { /* counted below */ }
+        try { after = candidate.signature(json, kind); } catch { /* counted below */ }
+        compare(result.modes[kind], before, after);
+        if (active) compare(result.active[kind], before, after);
+      }
+    }
+    return result;
+  } finally { console.log = originalLog; }
+}
+
+function addCounts(target, source) {
+  for (const [key, value] of Object.entries(source)) {
+    if (typeof value === 'number') target[key] = (target[key] || 0) + value;
+    else addCounts(target[key], value);
+  }
+}
+
+function compareInWorker(task) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(__filename, { argv: process.argv.slice(2), workerData: task });
+    worker.once('message', resolve);
+    worker.once('error', reject);
+    worker.once('exit', code => reject(new Error(`Action comparison worker exited without a result (${code})`)));
+  });
+}
+
 async function main() {
   const requireWeb = createRequire(path.join(web, 'package.json'));
   const dotenvFile = path.join(web, '.env');
@@ -214,11 +252,11 @@ async function main() {
   summary.active = totals();
   summary.minimumCoverage = {comparable:minComparable, actions:minActions};
   try {
-    const runners = [base, candidate].map((root, index) => {
+    const runnerPaths = [base, candidate].map((root, index) => {
       const output = path.join(temporary, `source-${index}.cjs`);
       esbuild.buildSync({stdin:{contents:entry(root), resolveDir:root, sourcefile:'puzzle-action-comparison.ts', loader:'ts'},
         bundle:true, platform:'node', format:'cjs', target:'node20', outfile:output, logLevel:'silent'});
-      return require(output);
+      return output;
     });
     await db.connect();
     await db.query('BEGIN READ ONLY');
@@ -228,34 +266,41 @@ async function main() {
     await db.query('ROLLBACK');
     const rows = [...puzzles.map(p => ({url:p.updated || p.old, active:p.active})),
       ...created.map(p => ({url:p.board, active:p.active}))];
-    const originalLog = console.log;
-    console.log = () => {};
-    try {
-      for (const {url, active} of limit === undefined ? rows : rows.slice(0, limit)) {
-        summary.rows++;
-        if (active) summary.active.rows++;
-        const skip = category => {
-          summary.skipped++; summary[category]++;
-          if (active) { summary.active.skipped++; summary.active[category]++; }
-        };
-        if (typeof url !== 'string' || !url.includes('#')) { skip('missingFragment'); continue; }
-        let json;
-        try {
-          const encoded = normalizeSimulatorValidationState(decodeURIComponent(url.slice(url.indexOf('#') + 1)));
-          json = Buffer.from(encoded, 'base64').toString('utf8');
-        } catch { skip('invalidPayload'); continue; }
-        let state;
-        try { state = JSON.parse(json); } catch { skip('invalidPayload'); continue; }
-        if (!Array.isArray(state) || !Array.isArray(state[1]?.cardNames)) { skip('unsupportedFormat'); continue; }
-        for (const kind of kinds) {
-          let before, after;
-          try { before = runners[0].signature(json, kind); } catch { /* counted below */ }
-          try { after = runners[1].signature(json, kind); } catch { /* counted below */ }
-          compare(summary.modes[kind], before, after);
-          if (active) compare(summary.active.modes[kind], before, after);
-        }
+    const comparableRows = [];
+    for (const {url, active} of limit === undefined ? rows : rows.slice(0, limit)) {
+      summary.rows++;
+      if (active) summary.active.rows++;
+      const skip = category => {
+        summary.skipped++; summary[category]++;
+        if (active) { summary.active.skipped++; summary.active[category]++; }
+      };
+      if (typeof url !== 'string' || !url.includes('#')) { skip('missingFragment'); continue; }
+      let json;
+      try {
+        const encoded = normalizeSimulatorValidationState(decodeURIComponent(url.slice(url.indexOf('#') + 1)));
+        json = Buffer.from(encoded, 'base64').toString('utf8');
+      } catch { skip('invalidPayload'); continue; }
+      let state;
+      try { state = JSON.parse(json); } catch { skip('invalidPayload'); continue; }
+      if (!Array.isArray(state) || !Array.isArray(state[1]?.cardNames)) { skip('unsupportedFormat'); continue; }
+      comparableRows.push({ json, active });
+    }
+
+    const task = { rows: comparableRows, runnerPaths, kinds };
+    const tasks = [];
+    const batchSize = Math.ceil(comparableRows.length / workers);
+    if (workers === 1 || comparableRows.length < 2) {
+      tasks.push(Promise.resolve(compareRows(task)));
+    } else {
+      for (let offset = 0; offset < comparableRows.length; offset += batchSize) {
+        tasks.push(compareInWorker({ ...task, rows: comparableRows.slice(offset, offset + batchSize) }));
       }
-    } finally { console.log = originalLog; }
+    }
+    for (const result of await Promise.allSettled(tasks)) {
+      if (result.status === 'rejected') throw result.reason;
+      addCounts(summary.modes, result.value.modes);
+      addCounts(summary.active.modes, result.value.active);
+    }
     console.log(JSON.stringify(summary, null, 2));
     if (Object.values(summary.modes).some(result => result.comparable < minComparable || result.actions < minActions || result.changed ||
       result.beforeOnlyError || result.afterOnlyError || result.bothError)) process.exitCode = 1;
@@ -265,7 +310,11 @@ async function main() {
   }
 }
 
-main().catch(error => {
-  console.error(JSON.stringify({error:error.code || error.name, message:'Read-only action comparison failed'}));
-  process.exitCode = 1;
-});
+if (isMainThread) {
+  main().catch(error => {
+    console.error(JSON.stringify({error:error.code || error.name, message:'Read-only action comparison failed'}));
+    process.exitCode = 1;
+  });
+} else {
+  parentPort.postMessage(compareRows(workerData));
+}
