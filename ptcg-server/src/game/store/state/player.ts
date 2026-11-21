@@ -10,7 +10,8 @@ import { Marker } from './card-marker';
 import { getAttackDamagePosition, PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
 import { recordActiveAbilityLockSwitch } from './active-ability-lock-order';
-import { GamePhase } from './state';
+import { GamePhase, State } from './state';
+import type { StoreLike } from '../store-like';
 export class Player {
   public coinFlipCancelTrainerPlayTurnsRemaining = 0;
   public trainerCardsBlockedNextTurn = false;
@@ -277,7 +278,8 @@ export class Player {
     }
   }
 
-  switchPokemon(target: PokemonCardList, store?: any, state?: any) {
+  switchPokemon(target: PokemonCardList, store?: StoreLike, state?: State,
+    finishSwitchEffect?: (movedToBench: PokemonCardList) => void): void {
     const benchIndex = this.bench.indexOf(target);
     if (benchIndex !== -1) {
       const temp = this.active;
@@ -310,6 +312,10 @@ export class Player {
       this.active = this.bench[benchIndex];
       this.bench[benchIndex] = temp;
       recordActiveAbilityLockSwitch(this, state);
+
+      // Resolve the rest of the switch instruction (for example, Switch
+      // Cart's healing) before anything reacts to the completed movement.
+      finishSwitchEffect?.(temp);
 
       if (store && state && pokemonLeavingActive) {
         store.reduceEffect(state, new MovedFromActiveToBenchEffect(this, pokemonLeavingActive));

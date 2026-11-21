@@ -26,7 +26,7 @@ function* useSwirlingPetals(next: Function, store: StoreLike, state: State, effe
         return;
       }
       opponent.active.clearEffects();
-      opponent.switchPokemon(targets[0]);
+      opponent.switchPokemon(targets[0], store, state);
       next();
 
       const hasBench = player.bench.some(b => b.cards.length > 0);
@@ -52,7 +52,7 @@ function* useSwirlingPetals(next: Function, store: StoreLike, state: State, effe
 
         // Discard trainer only when user selected a Pokemon
         player.active.clearEffects();
-        player.switchPokemon(target[0]);
+        player.switchPokemon(target[0], store, state);
         return state;
       });
     });

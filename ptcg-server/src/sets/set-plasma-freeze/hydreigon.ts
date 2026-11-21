@@ -66,7 +66,7 @@ export class Hydreigon extends PokemonCard {
         }
 
         // Switch the selected benched Pokemon with opponent's active
-        opponent.switchPokemon(targets[0]);
+        opponent.switchPokemon(targets[0], store, state);
 
         // Do 40 damage to the new active
         const dealDamage = new DealDamageEffect(effect, 40);

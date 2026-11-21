@@ -121,7 +121,7 @@ export class Pyroar extends PokemonCard {
         ), result => {
           const cardList = result[0];
 
-          opponent.switchPokemon(cardList);
+          opponent.switchPokemon(cardList, store, state);
           return state;
         });
       });

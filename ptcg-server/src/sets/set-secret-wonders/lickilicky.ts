@@ -52,7 +52,7 @@ export class Lickilicky extends PokemonCard {
         }
 
         if (target !== opponent.active) {
-          opponent.switchPokemon(target);
+          opponent.switchPokemon(target, store, state);
         }
 
         const dealDamage = new DealDamageEffect(effect, 20);

@@ -54,7 +54,7 @@ export class ArvensToedscruel extends PokemonCard {
         [SlotType.BENCH],
         { allowCancel: false }
       ), result => {
-        opponent.switchPokemon(result[0]);
+        opponent.switchPokemon(result[0], store, state);
       });
     }
 

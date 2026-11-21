@@ -67,7 +67,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   cards.forEach((card, index) => {
     opponent.hand.moveCardTo(card, slots[index]);
     slots[index].pokemonPlayedTurn = state.turn;
-    opponent.switchPokemon(slots[index]);
+    opponent.switchPokemon(slots[index], store, state);
   });
 
 

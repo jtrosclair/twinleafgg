@@ -106,7 +106,7 @@ export class MawileVstar extends PokemonCard {
         if (!result || result.length === 0) {
           return;
         }
-        opponent.switchPokemon(result[0]);
+        opponent.switchPokemon(result[0], store, state);
       });
     }
 

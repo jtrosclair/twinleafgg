@@ -49,7 +49,7 @@ export class Murkrow extends PokemonCard {
       ), result => {
         const cardList = result[0];
 
-        opponent.switchPokemon(cardList);
+        opponent.switchPokemon(cardList, store, state);
         YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
       });
     }

@@ -72,7 +72,7 @@ export class RegielekiV extends PokemonCard {
           return state;
         }
         const target = selected[0];
-        player.switchPokemon(target);
+        player.switchPokemon(target, store, state);
       });
     }
 

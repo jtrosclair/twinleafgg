@@ -52,7 +52,7 @@ export class Cascoon extends PokemonCard {
           { allowCancel: false }
         ), result => {
           if (result && result.length > 0) {
-            opponent.switchPokemon(result[0]);
+            opponent.switchPokemon(result[0], store, state);
           }
         });
       }

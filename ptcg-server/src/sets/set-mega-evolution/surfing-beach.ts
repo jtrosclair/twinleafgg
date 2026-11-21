@@ -54,7 +54,7 @@ export class SurfingBeach extends TrainerCard {
         if (!selected || selected.length === 0)
           return state;
         const target = selected[0];
-        player.switchPokemon(target);
+        player.switchPokemon(target, store, state);
       });
     }
     return state;

@@ -88,7 +88,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     if (!targets || targets.length === 0) {
       return;
     }
-    opponent.switchPokemon(targets[0]);
+    opponent.switchPokemon(targets[0], store, state);
 
   });
 }

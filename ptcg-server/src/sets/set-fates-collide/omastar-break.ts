@@ -78,7 +78,7 @@ export class OmastarBreak extends PokemonCard {
         }
 
         // Switch opponent's active with selected benched Pokemon
-        opponent.switchPokemon(target);
+        opponent.switchPokemon(target, store, state);
       });
     }
 

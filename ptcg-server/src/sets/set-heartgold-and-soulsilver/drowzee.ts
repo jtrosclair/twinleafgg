@@ -65,7 +65,7 @@ export class Drowzee extends PokemonCard {
         if (!targets || targets.length === 0) {
           return;
         }
-        opponent.switchPokemon(targets[0]);
+        opponent.switchPokemon(targets[0], store, state);
         const specialCondition = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
         specialCondition.target = targets[0];
         store.reduceEffect(state, specialCondition);

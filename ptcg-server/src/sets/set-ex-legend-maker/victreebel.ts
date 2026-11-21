@@ -91,7 +91,7 @@ export class Victreebel extends PokemonCard {
         const cardList = result[0];
 
         if (cardList) {
-          opponent.switchPokemon(cardList);
+          opponent.switchPokemon(cardList, store, state);
         }
       });
     }

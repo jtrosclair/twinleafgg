@@ -79,7 +79,7 @@ export class Donphan extends PokemonCard {
         }
         this.hitAndRun = false;
         const target = selected[0];
-        player.switchPokemon(target);
+        player.switchPokemon(target, store, state);
       });
     }
 

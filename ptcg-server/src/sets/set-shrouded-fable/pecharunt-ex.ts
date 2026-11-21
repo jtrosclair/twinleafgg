@@ -63,7 +63,7 @@ function* useChainsOfControl(next: Function, store: StoreLike, state: State,
 
   if (target.length > 0) {
     player.active.clearEffects();
-    player.switchPokemon(target[0]);
+    player.switchPokemon(target[0], store, state);
     APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
       store, state, player, effect.power, effect.card, player.active, [SpecialCondition.POISONED]
     );

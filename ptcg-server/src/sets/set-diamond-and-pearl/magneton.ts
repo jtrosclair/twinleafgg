@@ -71,7 +71,7 @@ export class Magneton extends PokemonCard {
             { allowCancel: false, blocked }
           ), chosen => {
             const cardList = chosen[0];
-            opponent.switchPokemon(cardList);
+            opponent.switchPokemon(cardList, store, state);
           });
         }
       }, GameMessage.WANT_TO_SWITCH_POKEMON);

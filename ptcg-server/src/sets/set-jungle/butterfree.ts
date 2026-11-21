@@ -69,7 +69,7 @@ export class Butterfree extends PokemonCard {
       ), targets => {
         if (targets && targets.length > 0) {
           opponent.active.clearEffects();
-          opponent.switchPokemon(targets[0]);
+          opponent.switchPokemon(targets[0], store, state);
           return state;
         }
       });

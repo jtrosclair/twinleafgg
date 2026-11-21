@@ -41,11 +41,10 @@ export class AzsTranquility extends TrainerCard {
         { allowCancel: false }
       ), selected => {
         if (!selected || selected.length === 0) return state;
-        const previousActive = player.active;
-        player.switchPokemon(selected[0], store, state);
-
-        const healEffect = new HealEffect(player, previousActive, 80);
-        return store.reduceEffect(state, healEffect);
+        player.switchPokemon(selected[0], store, state, movedToBench => {
+          store.reduceEffect(state, new HealEffect(player, movedToBench, 80));
+        });
+        return state;
       });
     }
     return state;

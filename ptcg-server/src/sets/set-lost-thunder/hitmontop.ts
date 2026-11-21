@@ -53,7 +53,7 @@ export class Hitmontop extends PokemonCard {
         if (!selected || selected.length === 0)
           return state;
         const target = selected[0];
-        player.switchPokemon(target);
+        player.switchPokemon(target, store, state);
         SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
       });
     }

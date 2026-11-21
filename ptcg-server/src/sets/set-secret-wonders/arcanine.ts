@@ -46,7 +46,7 @@ export class Arcanine extends PokemonCard {
 
         const benchSlot = effect.target;
         const previousActive = player.active;
-        player.switchPokemon(benchSlot);
+        player.switchPokemon(benchSlot, store, state);
 
         const hasEnergy = previousActive.cards.some(c => c.superType === SuperType.ENERGY);
         if (!hasEnergy) {

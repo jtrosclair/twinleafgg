@@ -88,7 +88,7 @@ export class DawnWingsNecrozmaGX extends PokemonCard {
       }
 
       player.marker.addMarker(this.INVASION_MARKER, this);
-      player.switchPokemon(bench);
+      player.switchPokemon(bench, store, state);
       return state;
     }
 

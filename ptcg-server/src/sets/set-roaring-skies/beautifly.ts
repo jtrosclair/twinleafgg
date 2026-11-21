@@ -47,7 +47,7 @@ function* useWhirlwind(next: Function, store: StoreLike, state: State, effect: A
     }
 
     const target = selected[0];
-    opponent.switchPokemon(target);
+    opponent.switchPokemon(target, store, state);
     next();
   });
 

@@ -56,15 +56,10 @@ export class AzsTranquilityBatch172 extends TrainerCard {
         ),
         (selected) => {
           if (!selected || selected.length === 0) return state;
-          const previousActive = player.active;
-          player.switchPokemon(selected[0], store, state);
-
-          if (previousActive.exPokemon()) {
-            const healEffect = new HealEffect(player, previousActive, 80);
-            return store.reduceEffect(state, healEffect);
-          } else {
-            return state;
-          }
+          player.switchPokemon(selected[0], store, state, movedToBench => {
+            if (movedToBench.exPokemon()) store.reduceEffect(state, new HealEffect(player, movedToBench, 80));
+          });
+          return state;
         },
       );
     }

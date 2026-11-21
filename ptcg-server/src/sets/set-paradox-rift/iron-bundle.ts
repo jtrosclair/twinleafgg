@@ -95,7 +95,7 @@ export class IronBundle extends PokemonCard {
         if (targets?.[0]?.getPokemonCard() && opponent.active.getPokemonCard() === defendingCard
           && source.getPokemonCard() === this) {
           opponent.active.clearEffects();
-          opponent.switchPokemon(targets[0]);
+          opponent.switchPokemon(targets[0], store, state);
           return MOVE_POKEMON_OFF_BOARD(store, state, source, { pokemonDestination: player.discard, sourceCard: this });
         }
       });

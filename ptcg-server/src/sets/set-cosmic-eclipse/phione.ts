@@ -72,7 +72,7 @@ export class Phione extends PokemonCard {
           }
 
           opponent.active.clearEffects();
-          opponent.switchPokemon(targets[0]);
+          opponent.switchPokemon(targets[0], store, state);
 
           // Get attached cards (energy, tools, etc.)
           const otherCards = phioneList.cards.filter(card =>

@@ -58,7 +58,7 @@ export class ArmorFossil extends TrainerCard {
       });
       const cardList = StateUtils.findCardList(state, this);
       if (cardList instanceof PokemonCardList && player.active === cardList && player.bench.some(b => b.cards.length > 0)) {
-        player.switchPokemon(cardList);
+        player.switchPokemon(cardList, store, state);
       }
       MOVE_CARDS(store, state, cardList, player.discard, { sourceCard: this });
     }

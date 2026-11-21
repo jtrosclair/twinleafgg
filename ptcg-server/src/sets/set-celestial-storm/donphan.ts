@@ -76,7 +76,7 @@ export class Donphan extends PokemonCard {
           return state;
         }
         const target = selected[0];
-        player.switchPokemon(target);
+        player.switchPokemon(target, store, state);
         SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
       });
     }

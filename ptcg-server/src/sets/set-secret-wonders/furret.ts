@@ -84,10 +84,10 @@ export class Furret extends PokemonCard {
             ), cards => {
               const energy = cards || [];
               MOVE_CARDS(store, state, player.active, target, { cards: energy, sourceCard: this });
-              player.switchPokemon(target);
+              player.switchPokemon(target, store, state);
             });
           } else {
-            player.switchPokemon(target);
+            player.switchPokemon(target, store, state);
           }
         });
       });

@@ -65,7 +65,7 @@ export class MysteriousFossil extends TrainerCard {
         // technical implementation does not matter exactly because this ends the game
         effect.player.active.moveCardsTo(effect.player.active.cards, player.deck);
       } else {
-        player.switchPokemon(cardList);
+        player.switchPokemon(cardList, store, state);
         const mysteriousFossilCardList = StateUtils.findCardList(state, this);
         mysteriousFossilCardList.moveCardsTo(mysteriousFossilCardList.cards.filter(c => c === this), effect.player.discard);
         mysteriousFossilCardList.moveCardsTo(mysteriousFossilCardList.cards.filter(c => c !== this), effect.player.discard);

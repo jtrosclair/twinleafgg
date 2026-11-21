@@ -61,7 +61,7 @@ export class Oricorio extends PokemonCard {
         const gustOpponentBenchEffect = new GustOpponentBenchEffect(effect, cardList);
         store.reduceEffect(state, gustOpponentBenchEffect);
 
-        opponent.switchPokemon(cardList);
+        opponent.switchPokemon(cardList, store, state);
 
         const active = opponent.active;
         active.addSpecialCondition(SpecialCondition.BURNED);

@@ -64,7 +64,7 @@ export class Pidgeot extends PokemonCard {
           return;
         }
         // Use switchPokemon method for switching
-        opponent.switchPokemon(targets[0]);
+        opponent.switchPokemon(targets[0], store, state);
       });
       return state;
     }

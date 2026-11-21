@@ -52,7 +52,7 @@ export class Clefairy extends PokemonCard {
         const targets = selected || [];
         if (targets.length > 0) {
           opponent.active.clearEffects();
-          opponent.switchPokemon(targets[0]);
+          opponent.switchPokemon(targets[0], store, state);
         }
       });
     }

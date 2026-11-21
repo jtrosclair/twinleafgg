@@ -127,7 +127,7 @@ export class UnownE extends PokemonCard {
           opponent.hand.moveCardTo(card, slots[index]);
           slots[index].pokemonPlayedTurn = state.turn;
 
-          opponent.switchPokemon(slots[index]);
+          opponent.switchPokemon(slots[index], store, state);
         });
       });
     }

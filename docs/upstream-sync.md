@@ -4919,3 +4919,43 @@ and 5,225 sampled opening actions match. All seven recorded solutions
 win. The attested package passes ten board scenarios and 209 client
 checks. Packaged mouse and touch runs play Hoppip to the Bench from hand
 and verify 20 damage from Gapejaw Bog without New Moon and zero with it.
+
+## Gameplay re-audit, batch 75
+
+Spikemuth follows the completed Active-to-Bench movement instead of
+remembering Active Pokémon IDs on the Stadium card. Its counters apply
+only to a Pokémon moved to the Bench during its owner's turn. The
+official rulings cover retreat, Switch, Decidueye ex's Total Freedom,
+Dawn Wings Necrozma-GX's Invasion, Golisopod's Smash Turn and immunity
+from New Moon. With Switch Cart and Switch Raft, the heal resolves on
+the former Active on the Bench before Spikemuth places counters.
+Olympia and AZ's Tranquility also finish their switch effects before
+movement reactions. Legacy card handlers now pass the game context
+through all 160 previously context-free switch calls.
+[Official Spikemuth print](https://www.pokemon-card.com/card-search/details.php/card/38235/regu/XY)
+[Official Spikemuth rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B9%E3%83%91%E3%82%A4%E3%82%AF%E3%82%BF%E3%82%A6%E3%83%B3)
+
+Team Rocket's Dugtrio now supplies the upstream Ability source for
+Holes, so Lustrous Body can prevent its counters. Hide n Sneak already
+blocked the counter effect on paths that emitted the movement event.
+Battle Cage checks the former Active on the Bench. Two Dugtrio stack
+their counters, and switches during Checkup fall outside the Ability.
+[Upstream ASC Leftovers fix](https://github.com/the-epsd/twinleafgg/commit/857a5678d93e37d307313ea27967c8da5be86660)
+[Official Holes rulings](https://professorprogram.pokemon.com/news/11464646)
+[Official Lustrous Body print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/110/)
+
+All 559 comparable saved boards (401 active) validate with identical
+serialized state and card identities. Two validation response objects
+omit only Spikemuth's former internal Active-ID field. All 3,633 sampled
+opening attempts match, as do 175 targeted Trainer switch attempts
+including 174 completed sequences and one action-in-progress rejection.
+Gapejaw Bog's forced placements and on-play Ability ordering remain open.
+
+The full engine suite passed 11,181 tests across 322 spec files.
+All 26 focused cases pass with the additional Lustrous Body test;
+eight failures reproduce against the previous engine. The combined
+worktree passes 167 targeted checks. All seven recorded puzzle
+solutions still win. The package passes build attestation, ten board
+scenarios and 209 client checks. Packaged mouse and touch runs use
+Switch Cart to heal the former Active and see two counters without
+New Moon or zero with it. All 32 simulator API checks pass.

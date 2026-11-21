@@ -72,7 +72,7 @@ export class Eelektross extends PokemonCard {
         { allowCancel: false }
       ), result => {
         const cardList = result[0];
-        opponent.switchPokemon(cardList);
+        opponent.switchPokemon(cardList, store, state);
 
         const damageEffect = new DealDamageEffect(effect as unknown as AttackEffect, 60);
         damageEffect.target = opponent.active;

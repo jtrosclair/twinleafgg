@@ -65,7 +65,7 @@ export class MagnezoneV extends PokemonCard {
         { allowCancel: false }
       ), result => {
         const cardList = result[0];
-        opponent.switchPokemon(cardList);
+        opponent.switchPokemon(cardList, store, state);
         const damageEffect = new PutDamageEffect(effect, 40);
         damageEffect.target = opponent.active;
         store.reduceEffect(state, damageEffect);

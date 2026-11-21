@@ -70,7 +70,7 @@ export class GardevoirLVX extends PokemonCard {
 
         player.marker.addMarker(this.TELEPORTATION_MARKER, this);
         ABILITY_USED(player, this);
-        player.switchPokemon(bench);
+        player.switchPokemon(bench, store, state);
       }
     }
 

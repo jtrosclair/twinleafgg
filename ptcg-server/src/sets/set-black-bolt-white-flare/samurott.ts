@@ -33,7 +33,7 @@ function* useNightGate(next: Function, store: StoreLike, state: State,
     ), results => {
       if (results && results.length > 0) {
         player.active.clearEffects();
-        player.switchPokemon(results[0]);
+        player.switchPokemon(results[0], store, state);
 
         // Then player switches
         return store.prompt(state, new ChoosePokemonPrompt(
@@ -45,7 +45,7 @@ function* useNightGate(next: Function, store: StoreLike, state: State,
         ), playerResults => {
           if (playerResults && playerResults.length > 0) {
             opponent.active.clearEffects();
-            opponent.switchPokemon(playerResults[0]);
+            opponent.switchPokemon(playerResults[0], store, state);
           }
           return state;
         });

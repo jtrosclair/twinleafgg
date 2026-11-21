@@ -67,7 +67,7 @@ export class Victreebel extends PokemonCard {
           { allowCancel: true },
         ), selected => {
           if (selected && selected.length > 0) {
-            opponent.switchPokemon(selected[0]);
+            opponent.switchPokemon(selected[0], store, state);
           }
           applyStatuses();
         });

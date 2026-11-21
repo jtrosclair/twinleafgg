@@ -73,7 +73,7 @@ export class Whimsicott2 extends PokemonCard {
           { allowCancel: false }
         ), targets => {
           const target = targets[0];
-          player.switchPokemon(target);
+          player.switchPokemon(target, store, state);
         });
       }
     }

@@ -86,7 +86,7 @@ export class Ninetales extends PokemonCard {
           store.reduceEffect(state, gustEffect);
 
           if (gustEffect.target) {
-            opponent.switchPokemon(gustEffect.target);
+            opponent.switchPokemon(gustEffect.target, store, state);
           }
         });
 

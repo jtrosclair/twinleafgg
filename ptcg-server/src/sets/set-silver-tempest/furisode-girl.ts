@@ -67,7 +67,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
         if (index === 0 && player.active.cards.length > 0) {
           const activePokemon = player.active;
           activePokemon.clearEffects();
-          player.switchPokemon(slots[index]);
+          player.switchPokemon(slots[index], store, state);
         }
       }
     });

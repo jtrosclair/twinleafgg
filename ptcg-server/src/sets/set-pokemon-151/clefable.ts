@@ -79,7 +79,7 @@ export class Clefable extends PokemonCard {
         { allowCancel: false }
       ), targets => {
         opponent.active.clearEffects();
-        opponent.switchPokemon(targets[0]);
+        opponent.switchPokemon(targets[0], store, state);
         return state;
       });
     }

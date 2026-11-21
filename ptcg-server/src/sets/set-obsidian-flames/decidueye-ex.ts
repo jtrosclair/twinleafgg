@@ -79,7 +79,7 @@ export class Decidueyeex extends PokemonCard {
           { allowCancel: false }
         ), result => {
           const cardList = result[0];
-          player.switchPokemon(cardList);
+          player.switchPokemon(cardList, store, state);
         });
       }
 
@@ -95,7 +95,7 @@ export class Decidueyeex extends PokemonCard {
       }
 
       player.marker.addMarker(this.TOTAL_FREEDOM_MARKER, this);
-      player.switchPokemon(bench);
+      player.switchPokemon(bench, store, state);
       return state;
     }
 

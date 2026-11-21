@@ -83,7 +83,7 @@ export class Gallade extends PokemonCard {
           return state;
         }
         const target = selected[0];
-        opponent.switchPokemon(target);
+        opponent.switchPokemon(target, store, state);
       });
     }
 

@@ -52,7 +52,7 @@ export class Grimer extends PokemonCard {
             { allowCancel: false }
           ), targets => {
             if (targets && targets.length > 0) {
-              opponent.switchPokemon(targets[0]);
+              opponent.switchPokemon(targets[0], store, state);
               opponent.active.addSpecialCondition(SpecialCondition.POISONED);
             }
           });

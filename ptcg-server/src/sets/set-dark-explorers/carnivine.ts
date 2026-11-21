@@ -83,7 +83,7 @@ export class Carnivine extends PokemonCard {
           return state;
         }
         const target = selected[0];
-        opponent.switchPokemon(target);
+        opponent.switchPokemon(target, store, state);
         // Poison the new active Pokémon
         ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
       });

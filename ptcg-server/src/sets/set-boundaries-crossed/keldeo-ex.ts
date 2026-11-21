@@ -67,7 +67,7 @@ export class KeldeoEx extends PokemonCard {
       }
 
       player.marker.addMarker(this.RUSH_IN_MARKER, this);
-      player.switchPokemon(bench);
+      player.switchPokemon(bench, store, state);
       return state;
     }
 

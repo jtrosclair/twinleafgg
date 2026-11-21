@@ -111,7 +111,7 @@ export class DragoniteEx extends PokemonCard {
                   source.moveCardTo(transfer.card, player.bench[benchIndex]);
                 }
                 // Switch this Pokemon with Active
-                player.switchPokemon(player.bench[benchIndex]);
+                player.switchPokemon(player.bench[benchIndex], store, state);
               }
             });
           }

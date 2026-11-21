@@ -63,7 +63,7 @@ export class Heatmor extends PokemonCard {
           { allowCancel: false }
         ), result => {
           if (result && result.length > 0) {
-            opponent.switchPokemon(result[0]);
+            opponent.switchPokemon(result[0], store, state);
             // Burn the new active (after switch completes)
             opponent.active.addSpecialCondition(SpecialCondition.BURNED);
           }

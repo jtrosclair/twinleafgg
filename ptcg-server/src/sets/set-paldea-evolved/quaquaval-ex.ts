@@ -60,7 +60,7 @@ export class Quaquavalex extends PokemonCard {
 
         if (targets.length > 0) {
           player.active.clearEffects();
-          player.switchPokemon(targets[0]);
+          player.switchPokemon(targets[0], store, state);
         }
 
         const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -81,7 +81,7 @@ export class Quaquavalex extends PokemonCard {
 
           if (targets2.length > 0) {
             opponent.active.clearEffects();
-            opponent.switchPokemon(targets2[0]);
+            opponent.switchPokemon(targets2[0], store, state);
           }
         });
       });

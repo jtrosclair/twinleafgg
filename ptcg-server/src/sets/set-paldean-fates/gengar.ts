@@ -33,7 +33,7 @@ function* useNightGate(next: Function, store: StoreLike, state: State,
 
   if (targets.length > 0) {
     player.active.clearEffects();
-    player.switchPokemon(targets[0]);
+    player.switchPokemon(targets[0], store, state);
 
   }
 }

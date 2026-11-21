@@ -49,7 +49,7 @@ export class MovedToActiveEffect implements Effect {
   }
 }
 
-/** Emitted after an Active Pokémon moves to the Bench so its Poké-Body can react. */
+/** Emitted after an Active Pokémon moves to the Bench and the switch effect finishes. */
 export class MovedFromActiveToBenchEffect implements Effect {
   readonly type = 'MOVED_FROM_ACTIVE_TO_BENCH_EFFECT';
   public preventDefault = false;

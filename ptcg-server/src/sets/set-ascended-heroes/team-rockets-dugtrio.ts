@@ -1,6 +1,6 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
-import { PowerType, State, StateUtils, StoreLike } from '../../game';
+import { GamePhase, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import {
   MovedFromActiveToBenchEffect,
@@ -42,7 +42,8 @@ export class TeamRocketsDugtrio extends PokemonCard {
     // Holes
     if (effect instanceof MovedFromActiveToBenchEffect) {
       const movingPlayer = effect.player;
-      if (state.players[state.activePlayer] !== movingPlayer) {
+      if (state.players[state.activePlayer] !== movingPlayer
+        || ![GamePhase.PLAYER_TURN, GamePhase.ATTACK, GamePhase.AFTER_ATTACK].includes(state.phase)) {
         return state;
       }
 
@@ -56,13 +57,13 @@ export class TeamRocketsDugtrio extends PokemonCard {
       }
 
       const target = StateUtils.findCardList(state, effect.pokemonCard);
-      if (!(target instanceof PokemonCardList)) {
+      if (!(target instanceof PokemonCardList) || !movingPlayer.bench.includes(target)) {
         return state;
       }
 
       store.reduceEffect(
         state,
-        new PlaceDamageCountersEffect(abilityOwner, target, 20, this),
+        new PlaceDamageCountersEffect(abilityOwner, target, 20, this, this.powers[0]),
       );
     }
 

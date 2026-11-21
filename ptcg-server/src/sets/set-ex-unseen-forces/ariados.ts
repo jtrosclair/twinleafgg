@@ -76,7 +76,7 @@ export class Ariados extends PokemonCard {
             { allowCancel: false }
           ), result => {
             const cardList = result[0];
-            opponent.switchPokemon(cardList);
+            opponent.switchPokemon(cardList, store, state);
             ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
             ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
             this.usedSpiderTrap = false;

@@ -77,7 +77,7 @@ export class Solgaleo extends PokemonCard {
       USE_ABILITY_ONCE_PER_TURN(player, this.RUSH_IN_MARKER, this);
       ABILITY_USED(player, this);
 
-      player.switchPokemon(bench);
+      player.switchPokemon(bench, store, state);
       return state;
     }
 

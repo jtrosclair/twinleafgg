@@ -58,7 +58,7 @@ export class Hariyama extends PokemonCard {
             const switchEffect = new EffectOfAbilityEffect(player, this.powers[0], this, cardList);
             store.reduceEffect(state, switchEffect);
             if (switchEffect.target) {
-              opponent.switchPokemon(cardList);
+              opponent.switchPokemon(cardList, store, state);
             }
           });
         }

@@ -66,7 +66,7 @@ export class TapuFiniGX extends PokemonCard {
 
         if (targets.length > 0) {
           player.active.clearEffects();
-          player.switchPokemon(targets[0]);
+          player.switchPokemon(targets[0], store, state);
         }
       });
     }

@@ -51,7 +51,7 @@ export class Dragonite extends PokemonCard {
       const benchIndex = player.bench.indexOf(cardList as PokemonCardList);
 
       player.active.clearEffects();
-      player.switchPokemon(player.bench[benchIndex]); // Switching this Dragonite with Active
+      player.switchPokemon(player.bench[benchIndex], store, state); // Switching this Dragonite with Active
 
       player.marker.addMarker(this.STEP_IN_MARKER, this);
 

@@ -71,7 +71,7 @@ export class Ferrothorn extends PokemonCard {
           { allowCancel: false }
         ), playerResult => {
           const playerTarget = playerResult[0];
-          player.switchPokemon(playerTarget);
+          player.switchPokemon(playerTarget, store, state);
 
           if (opponentHasBench) {
             return store.prompt(state, new ChoosePokemonPrompt(
@@ -82,7 +82,7 @@ export class Ferrothorn extends PokemonCard {
               { allowCancel: false }
             ), opponentResult => {
               const opponentTarget = opponentResult[0];
-              opponent.switchPokemon(opponentTarget);
+              opponent.switchPokemon(opponentTarget, store, state);
             });
           }
         });
@@ -95,7 +95,7 @@ export class Ferrothorn extends PokemonCard {
           { allowCancel: false }
         ), opponentResult => {
           const opponentTarget = opponentResult[0];
-          opponent.switchPokemon(opponentTarget);
+          opponent.switchPokemon(opponentTarget, store, state);
         });
       }
     }

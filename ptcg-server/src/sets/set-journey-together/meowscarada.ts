@@ -56,7 +56,7 @@ export class Meowscarada extends PokemonCard {
       }
 
       player.marker.addMarker(this.SHOWTIME_MARKER, this);
-      player.switchPokemon(bench);
+      player.switchPokemon(bench, store, state);
       return state;
     }
 

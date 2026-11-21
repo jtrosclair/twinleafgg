@@ -77,7 +77,7 @@ export class Machamp extends PokemonCard {
         source.moveCardTo(transfer, machampBenchSlot);
       });
 
-      player.switchPokemon(player.bench[machampBenchIndex]);
+      player.switchPokemon(player.bench[machampBenchIndex], store, state);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

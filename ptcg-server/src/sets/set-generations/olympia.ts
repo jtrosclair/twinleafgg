@@ -42,7 +42,6 @@ export class Olympia extends TrainerCard {
         sourceCard: this,
       });
 
-      const movedToBench = player.active;
 
       return store.prompt(
         state,
@@ -58,10 +57,9 @@ export class Olympia extends TrainerCard {
             return;
           }
 
-          player.switchPokemon(targets[0], store, state);
-
-          // Heal 30 damage from the Pokémon moved to the Bench (old Active).
-          store.reduceEffect(state, new HealEffect(player, movedToBench, 30));
+          player.switchPokemon(targets[0], store, state, moved => {
+            store.reduceEffect(state, new HealEffect(player, moved, 30));
+          });
         },
       );
     }

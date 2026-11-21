@@ -56,7 +56,7 @@ export class Cradily extends PokemonCard {
           { allowCancel: false },
         ), chosen => {
           if (chosen && chosen.length > 0) {
-            opponent.switchPokemon(chosen[0]);
+            opponent.switchPokemon(chosen[0], store, state);
           }
         });
       }, GameMessage.WANT_TO_SWITCH_POKEMON);

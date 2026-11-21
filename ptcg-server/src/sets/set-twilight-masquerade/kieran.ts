@@ -79,7 +79,7 @@ export class Kieran extends TrainerCard {
               { allowCancel: false }
             ), result => {
               const cardList = result[0];
-              player.switchPokemon(cardList);
+              player.switchPokemon(cardList, store, state);
 
               return state;
             });

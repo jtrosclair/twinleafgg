@@ -58,7 +58,7 @@ export class RocketsSneaselex extends PokemonCard {
             { allowCancel: false }
           ), result => {
             const cardList = result[0];
-            opponent.switchPokemon(cardList);
+            opponent.switchPokemon(cardList, store, state);
           });
         }
       }, GameMessage.WANT_TO_SWITCH_POKEMON);

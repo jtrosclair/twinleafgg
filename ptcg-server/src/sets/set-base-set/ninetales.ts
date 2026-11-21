@@ -58,7 +58,7 @@ export class Ninetales extends PokemonCard {
           PlayerType.TOP_PLAYER,
           [SlotType.BENCH],
         ), ([bench]) => {
-          opponent.switchPokemon(bench);
+          opponent.switchPokemon(bench, store, state);
         });
       }
 

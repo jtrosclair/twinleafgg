@@ -77,7 +77,7 @@ export class PalkiaLVX extends PokemonCard {
           { allowCancel: false }
         ), chosen => {
           if (chosen && chosen.length > 0) {
-            opponent.switchPokemon(chosen[0]);
+            opponent.switchPokemon(chosen[0], store, state);
           }
         });
       };
@@ -91,7 +91,7 @@ export class PalkiaLVX extends PokemonCard {
           { allowCancel: false }
         ), chosen => {
           if (chosen && chosen.length > 0) {
-            player.switchPokemon(chosen[0]);
+            player.switchPokemon(chosen[0], store, state);
           }
           switchOpponent();
         });

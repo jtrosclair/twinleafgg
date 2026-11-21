@@ -68,7 +68,7 @@ export class ArticunoGX extends PokemonCard {
             }
           });
           if (bench) {
-            player.switchPokemon(bench);
+            player.switchPokemon(bench, store, state);
           }
 
           const blockedFrom: CardTarget[] = [];

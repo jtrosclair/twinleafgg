@@ -101,7 +101,7 @@ export class TapuKokoGX extends PokemonCard {
               }
             });
             if (bench) {
-              player.switchPokemon(bench);
+              player.switchPokemon(bench, store, state);
             }
           });
         }

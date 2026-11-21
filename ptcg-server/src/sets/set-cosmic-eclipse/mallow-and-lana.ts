@@ -63,7 +63,7 @@ When you play this card, you may discard 2 other cards from your hand. If you do
         const cardList = result[0];
         const previousActiveCardList = player.active;
 
-        player.switchPokemon(cardList);
+        player.switchPokemon(cardList, store, state);
 
         if (player.hand.cards.length < 2 || !activeHasDamage) {
           return state;

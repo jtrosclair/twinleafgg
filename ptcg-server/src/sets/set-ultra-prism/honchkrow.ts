@@ -81,7 +81,7 @@ export class Honchkrow extends PokemonCard {
         { allowCancel: false }
       ), result => {
         const cardList = result[0];
-        player.switchPokemon(cardList);
+        player.switchPokemon(cardList, store, state);
       });
     }
 

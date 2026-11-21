@@ -73,7 +73,7 @@ export class Politoed extends PokemonCard {
         { min: 1, max: 1, allowCancel: false, blocked }
       ), targets => {
         if (targets && targets.length > 0) {
-          player.switchPokemon(targets[0]);
+          player.switchPokemon(targets[0], store, state);
         }
       });
     }

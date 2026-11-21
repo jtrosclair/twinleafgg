@@ -96,7 +96,7 @@ export class Ariados extends PokemonCard {
               }
             });
 
-            opponent.switchPokemon(result[0]);
+            opponent.switchPokemon(result[0], store, state);
           });
         }
       });

@@ -89,7 +89,7 @@ export class LycanrocGX extends PokemonCard {
               }
             });
 
-            opponent.switchPokemon(cardList);
+            opponent.switchPokemon(cardList, store, state);
           });
         }
       });

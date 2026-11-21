@@ -104,7 +104,7 @@ export class Meowstic extends PokemonCard {
           { allowCancel: false }
         ), result => {
           const cardList = result[0];
-          opponent.switchPokemon(cardList);
+          opponent.switchPokemon(cardList, store, state);
         });
       });
     }

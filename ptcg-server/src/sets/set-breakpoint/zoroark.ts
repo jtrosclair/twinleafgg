@@ -48,7 +48,7 @@ export class Zoroark extends PokemonCard {
       const benchIndex = player.bench.indexOf(cardList as PokemonCardList);
 
       player.active.clearEffects();
-      player.switchPokemon(player.bench[benchIndex]); // Switching this Zoroark with Active
+      player.switchPokemon(player.bench[benchIndex], store, state); // Switching this Zoroark with Active
 
       return state;
 

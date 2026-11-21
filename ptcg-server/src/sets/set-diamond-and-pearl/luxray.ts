@@ -74,7 +74,7 @@ export class Luxray extends PokemonCard {
 
           MOVE_CARDS(store, state, opponent.hand, slots[0], { cards, sourceCard: this });
           slots[0].pokemonPlayedTurn = state.turn;
-          opponent.switchPokemon(slots[0]);
+          opponent.switchPokemon(slots[0], store, state);
         });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }

@@ -98,7 +98,7 @@ export class Honchkrow extends PokemonCard {
             if (!selected || selected.length === 0) {
               return;
             }
-            player.switchPokemon(selected[0]);
+            player.switchPokemon(selected[0], store, state);
           });
         }
       });
