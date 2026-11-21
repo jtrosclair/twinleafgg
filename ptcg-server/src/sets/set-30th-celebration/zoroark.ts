@@ -44,12 +44,7 @@ export class Zoroark extends PokemonCard {
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
-      for (let i = 0; i < 2; i++) {
-        const index = effect.cost.indexOf(CardType.COLORLESS);
-        if (index !== -1) {
-          effect.cost.splice(index, 1);
-        }
-      }
+      effect.colorlessAdjustment -= 2;
     }
 
     return state;

@@ -30,6 +30,7 @@ import { Glimmet } from './glimmet';
 import { Glimmoraex } from './glimmora-ex';
 import { Greavard } from './greavard';
 import { Houndstoneex } from './houndstone-ex';
+import { Klawfex } from './klawf-ex';
 import { Larvitar } from './larvitar';
 import { LetterOfEncouragement } from './letter-of-encouragement';
 import { Lunatone } from './lunatone';
@@ -119,6 +120,7 @@ export const setObsidianFlames: Card[] = [
   new Varoom(),
   new Whiscash(),
   new Decidueyeex(),
+  new Klawfex(),
   new Larvitar(),
   new Pupitar(),
   new Tyranitarex(),

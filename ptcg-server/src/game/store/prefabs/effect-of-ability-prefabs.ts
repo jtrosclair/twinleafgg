@@ -3,6 +3,9 @@ import { GameMessage } from '../../game-message';
 import { SpecialCondition } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power } from '../card/pokemon-types';
+import { ApplyWeaknessEffect, PutDamageEffect } from '../effects/attack-effects';
+import { Effect } from '../effects/effect';
+import { IS_ABILITY_BLOCKED } from './prefabs';
 import { AddSpecialConditionsPowerEffect } from '../effects/check-effects';
 import { EffectOfAbilityEffect } from '../effects/game-effects';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
@@ -47,6 +50,26 @@ export function GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(
       opponent.switchPokemon(target, store, state);
     }
   });
+}
+
+/** Apply an attacker-side Ability reduction at the pre-Weakness stage. */
+export function REDUCE_ATTACK_DAMAGE_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  effect: Effect,
+  owner: Player,
+  card: PokemonCard,
+  amount: number,
+): void {
+  if (!(effect instanceof ApplyWeaknessEffect)
+    && !(effect instanceof PutDamageEffect && !effect.weaknessApplied && effect.target !== effect.opponent.active)) {
+    return;
+  }
+  if (effect.damage > 0 && effect.source === effect.player.active && owner !== effect.player
+    && !IS_ABILITY_BLOCKED(store, state, owner, card)
+    && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, card.powers[0], card, effect.source)) {
+    effect.attackDamageReductionBeforeWeakness += amount;
+  }
 }
 
 export function APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(

@@ -42,7 +42,7 @@ export class MagnetMetalEnergy extends EnergyCard {
       const checkType = new CheckPokemonTypeEffect(player.active);
       store.reduceEffect(state, checkType);
       if (checkType.cardTypes.includes(CardType.METAL)) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
 

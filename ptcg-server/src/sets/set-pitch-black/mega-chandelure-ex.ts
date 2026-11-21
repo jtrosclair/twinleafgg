@@ -1,7 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import {
   IS_ABILITY_BLOCKED,
@@ -40,28 +41,15 @@ export class MegaChandelureex extends PokemonCard {
   public fullName: string = 'Mega Chandelure ex M5';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Cursed Flame — Ref: set-roaring-skies/hydreigon-ex.ts (CheckRetreatCostEffect); inverted for opponent Active cost increase
+    // Ref: set-scarlet-and-violet/spidops-ex.ts (apply one extra Retreat Energy to the opposing Active).
     if (effect instanceof CheckRetreatCostEffect) {
-      const retreatingPlayer = effect.player;
-      const abilityOwnerSide = StateUtils.getOpponent(state, retreatingPlayer);
-
-      let chandelureInPlay = false;
-      abilityOwnerSide.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_cardList, card) => {
-        if (card === this) {
-          chandelureInPlay = true;
-        }
-      });
-
-      if (!chandelureInPlay) {
-        return state;
+      const { player } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      if (player.active.getPokemonCard()
+        && StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, player.active)) {
+        effect.colorlessAdjustment++;
       }
-
-      if (IS_ABILITY_BLOCKED(store, state, abilityOwnerSide, this)) {
-        return state;
-      }
-
-      effect.cost.push(CardType.COLORLESS);
-      return state;
     }
 
     // Phantom Maze — Ref: set-brilliant-stars/flygon.ts (Desert Pillar — Colorless in opponent Active Retreat Cost)

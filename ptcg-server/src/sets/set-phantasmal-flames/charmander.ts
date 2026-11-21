@@ -53,7 +53,7 @@ export class Charmander extends PokemonCard {
       state = store.reduceEffect(state, checkProvidedEnergy);
 
       if (checkProvidedEnergy.energyMap.length === 0) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
     return state;

@@ -3,8 +3,9 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { NEXT_TURN_ATTACK_BONUS } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, NEXT_TURN_ATTACK_BONUS } from '../../game/store/prefabs/prefabs';
+
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 
 export class Seismitoad extends PokemonCard {
 
@@ -50,31 +51,13 @@ export class Seismitoad extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckAttackCostEffect &&
-      StateUtils.getOpponent(state, effect.player).active.cards.includes(this)) {
-
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      try {
-        const stub = new PowerEffect(opponent, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
-        return state;
-      }
-
-      const pokemonCard = player.active.getPokemonCard();
-
-      if (pokemonCard) {
+    // Ref: set-black-bolt-white-flare/samurott.ts (probe the opposing Pokémon as the Ability target).
+    if (effect instanceof CheckAttackCostEffect && effect.player.active.getPokemonCard()) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.player.active)) {
         effect.cost.push(CardType.COLORLESS);
-        return state;
       }
-
-      return state;
     }
 
     // Refs: set-boundaries-crossed/meloetta.ts (Echoed Voice), prefabs/prefabs.ts (NEXT_TURN_ATTACK_BONUS)

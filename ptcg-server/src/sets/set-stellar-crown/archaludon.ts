@@ -61,7 +61,7 @@ export class Archaludon extends PokemonCard {
       const activeHasMetalEnergy = checkProvidedEnergyEffect.energyMap.some(p => p.provides.includes(M));
 
       if (inPlay && activeHasMetalEnergy) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
 

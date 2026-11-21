@@ -59,7 +59,7 @@ export class FutureBoosterEnergyCapsule extends TrainerCard {
       }
 
       if (effect.player.active.futurePokemon()) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
       return state;
     }

@@ -35,12 +35,9 @@ export class EmergencyBoard extends TrainerCard {
       if (pokemonCard) {
         const remainingHp = pokemonCard.hp - player.active.damage;
         if (remainingHp <= 30) {
-          effect.cost = [];
+          effect.hasNoRetreatCost = true;
         } else {
-          const index = effect.cost.indexOf(CardType.COLORLESS);
-          if (index !== -1) {
-            effect.cost.splice(index, 1);
-          }
+          effect.colorlessAdjustment -= 1;
         }
       }
       return state;

@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, StateUtils, GamePhase } from '../../game';
+import { StoreLike, State, PowerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ApplyWeaknessEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { REDUCE_ATTACK_DAMAGE_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Entei extends PokemonCard {
 
@@ -29,7 +30,7 @@ export class Entei extends PokemonCard {
       name: 'Blaze Ball',
       cost: [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS],
       damage: 60,
-      damageCalculation: 'x',
+      damageCalculation: '+',
       text: 'This attack does 20 more damage for each [R] Energy ' +
         'attached to this Pokémon.'
     }
@@ -52,7 +53,7 @@ export class Entei extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
-      const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(player);
+      const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(player, effect.source);
       store.reduceEffect(state, checkProvidedEnergyEffect);
 
       let energyCount = 0;
@@ -64,21 +65,12 @@ export class Entei extends PokemonCard {
       effect.damage += energyCount * 20;
     }
 
-    // Reduce damage by 20
-    if (effect instanceof PutDamageEffect && StateUtils.getOpponent(state, effect.player).active.cards.includes(this)) {
-      // It's not an attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
+    // Ref: the Pressure ruling on Tough Hammer (reduction applies to the attack’s damage).
+    if (effect instanceof ApplyWeaknessEffect || effect instanceof PutDamageEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this) {
+        REDUCE_ATTACK_DAMAGE_FROM_ABILITY(store, state, effect, owner, this, 20);
       }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      effect.damage = Math.max(0, effect.damage - 20);
     }
 
     return state;

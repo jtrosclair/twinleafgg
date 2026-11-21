@@ -46,18 +46,9 @@ export class Rillaboom extends PokemonCard {
       opponent.active.marker.addMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
     }
 
-    if (effect instanceof CheckRetreatCostEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this)) {
-      const player = effect.player;
-      const pokemonCard = player.active.getPokemonCard();
-
-      if (pokemonCard) {
-        const index = effect.cost.indexOf(CardType.COLORLESS);
-        if (index > -1) {
-          effect.cost.splice(index, 0, CardType.COLORLESS);
-        } else {
-          effect.cost.push(CardType.COLORLESS);
-        }
-      }
+    if (effect instanceof CheckRetreatCostEffect && effect.player.active.getPokemonCard()
+      && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this)) {
+      effect.colorlessAdjustment++;
     }
 
     if (effect instanceof CheckAttackCostEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this)) {

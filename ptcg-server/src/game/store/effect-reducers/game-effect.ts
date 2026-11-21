@@ -12,6 +12,7 @@ import { ApplyWeaknessEffect, DealDamageEffect } from '../effects/attack-effects
 import {
   AddSpecialConditionsPowerEffect,
   CheckAttackCostEffect,
+  CheckRetreatCostEffect,
   CheckPokemonStatsEffect,
   CheckPokemonTypeEffect,
   CheckSpecialConditionRemovalEffect,
@@ -154,7 +155,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
   } else {
     checkAttackCost = new CheckAttackCostEffect(player, attack);
     state = store.reduceEffect(state, checkAttackCost);
-    if (attackingPokemon.attackCostIncreaseDuringNextTurn > 0) {
+    if (!checkAttackCost.fixedCost && attackingPokemon.attackCostIncreaseDuringNextTurn > 0) {
       checkAttackCost.cost.push(...Array(attackingPokemon.attackCostIncreaseDuringNextTurn).fill(CardType.COLORLESS));
     }
   }
@@ -353,6 +354,14 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 }
 
 export function gameReducer(store: StoreLike, state: State, effect: Effect): State {
+  if (effect instanceof CheckRetreatCostEffect) {
+    effect.applyModifiers();
+  }
+
+  if (effect instanceof CheckAttackCostEffect && effect.fixedCost) {
+    effect.cost = effect.fixedCost.slice();
+  }
+
   if (effect instanceof EndTurnEffect) {
     effect.player.marker.removeMarker(DARK_ENGAGE_MARKER);
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {

@@ -1,7 +1,9 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, PlayerType } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 
 export class Ariados extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,44 +36,21 @@ export class Ariados extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-black-bolt-white-flare/samurott.ts (probe the opposing Pokémon as the Ability target).
     if (effect instanceof CheckRetreatCostEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      let isAriadosInPlay = false;
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isAriadosInPlay = true;
-        }
-      });
-
-      if (!isAriadosInPlay) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      const targetCard = player.active.getPokemonCard();
-
-      if (targetCard && targetCard.stage !== Stage.BASIC) {
-        effect.cost.push(CardType.COLORLESS);
-        return state;
+      const { player } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      if (player.active.getPokemonCard() && StateUtils.isEvolutionPokemon(player.active)
+        && StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, player.active)) {
+        effect.colorlessAdjustment++;
       }
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const opponentActiveCard = opponent.active.getPokemonCard();
-      if (opponentActiveCard) {
-        const retreatCost = opponentActiveCard.retreat.filter(c => c === CardType.COLORLESS).length;
-
-        effect.damage += retreatCost * 30;
-      }
-      return state;
+      const cost = new CheckRetreatCostEffect(effect.opponent);
+      store.reduceEffect(state, cost);
+      effect.damage += 30 * cost.cost.filter(type => type === CardType.COLORLESS).length;
     }
 
     return state;

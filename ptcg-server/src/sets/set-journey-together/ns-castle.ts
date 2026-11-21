@@ -24,7 +24,7 @@ export class NsCastle extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckRetreatCostEffect && StateUtils.getStadiumCard(state) === this) {
       if (effect.player.active.getPokemonCard()?.tags.includes(CardTag.NS)) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
 

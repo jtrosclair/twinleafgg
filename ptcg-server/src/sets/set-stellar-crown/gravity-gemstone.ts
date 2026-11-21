@@ -34,7 +34,7 @@ export class GravityGemstone extends TrainerCard {
       const owner = player.active.tools.includes(this) ? player
         : opponent.active.tools.includes(this) ? opponent : undefined;
       if (owner && APPLY_ONCE_PER_CARD(effect, this) && !IS_TOOL_BLOCKED(store, state, owner, this)) {
-        effect.cost.push(CardType.COLORLESS);
+        effect.colorlessAdjustment++;
       }
     }
 

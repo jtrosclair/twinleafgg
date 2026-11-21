@@ -1,6 +1,6 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PlayerType } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 
@@ -34,20 +34,10 @@ export class Crawdaunt extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckAttackCostEffect && effect.attack === this.attacks[1]) {
-      const player = effect.player;
-
-
-      let hasDamageCounters = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList.damage > 0) {
-          hasDamageCounters = true;
-        }
-      });
-
-      if (hasDamageCounters) {
-        this.attacks[1].cost = [D];
-      }
+    // Ref: the Advanced Player’s Rulebook, E-32 (a specified attack cost overrides modifiers).
+    if (effect instanceof CheckAttackCostEffect && effect.attack === this.attacks[1]
+      && effect.player.active.getPokemonCard() === this && effect.player.active.damage > 0) {
+      effect.fixedCost = [CardType.DARK];
     }
 
     return state;

@@ -5826,3 +5826,50 @@ Of 3,636 opening actions, 3,622 matched exactly. The other 14 were
 the verified Sinister Surge prompts with Active targets removed.
 The final package and all 211 client checks pass. Exact. Change. and
 the seven previously recorded solutions each won on both replays.
+
+## Gameplay re-audit, batch 95
+
+Trap Territory, Big Net and Binding Flame check protection on the
+opposing Active. Wire Hang, String Bind and Phantom Maze use the
+effective Retreat Cost for damage. Modern increases and reductions
+stack before clamping to zero. Effects that grant no Retreat Cost
+take precedence, including Skyline, Melt Away and Voltaic Float.
+[Spidops ex print](https://asia.pokemon-card.com/ph/card-search/detail/12737/)
+[Wire Hang and Trap Territory rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AF%E3%83%8A%E3%82%A4%E3%83%80%E3%83%BCex&regulation_faq_main_item1=all)
+[Mega Chandelure ex print](https://asia.pokemon-card.com/sg/card-search/detail/25789/)
+[Phantom Maze and Skyline ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%86%E3%82%A3%E3%82%A2%E3%82%B9&regulation_faq_main_item1=all)
+[Official rules on stacked and waived costs](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Quaking Zone and Dazzling Gaze check the source’s suppression and
+the opposing attacker’s Ability protection. Crawdaunt pays the fixed
+one-Darkness cost when it has damage counters and retains its printed
+cost when it heals.
+[Seismitoad print](https://asia.pokemon-card.com/sg/card-search/detail/8993/)
+[Espathra ex print](https://asia.pokemon-card.com/sg/card-search/detail/11096/)
+[Official Vengeful Scissors cost example, section E-32](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Pressure and Gloomy Garbage reduce damage from the opposing Active
+before Weakness and Resistance, including its Bench damage and recoil.
+A disabled Tool remains attached for Gloomy Garbage. The Chaos Rising
+Garbodor entries use the official Stage 1 and three-Energy Retreat Cost.
+[Entei print](https://www.pokemon-card.com/card-search/details.php/card/44999/regu/all)
+[Pressure recoil ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%96%E3%83%AA%E3%82%AC%E3%83%AD%E3%83%B3)
+[Garbodor print](https://asia.pokemon-card.com/my/card-search/detail/25248/)
+[Gloomy Garbage and Jamming Tower ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%80%E3%82%B9%E3%83%88%E3%83%80%E3%82%B9&regulation_faq_main_item1=all)
+
+Klawf ex is playable as Obsidian Flames 120. After opposing attack
+damage to Active Klawf ex, its owner selects an attached Energy on the
+original attacker to discard if Ability protection permits it. Falling
+Press resolves the printed coin flip.
+[Official Obsidian Flames card list](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/checklist/obf_web_cardlist_en.pdf)
+[Klawf ex print](https://www.pokemon-card.com/card-search/details.php/card/42918)
+
+All 26 focused checks pass, including 18 that failed on the preceding
+engine. The full suite passes 11,575 checks, all 33 API checks pass,
+and the combined worktree passes 143 focused checks. The API accepts
+both Klawf ex OBF 120 and Dratini OBF 157. All 559 comparable saved
+boards and all 5,484 opening actions match the preceding engine.
+Opening actions include all 1,848 available retreat-target attempts.
+The production simulator package builds and passes all 211 browser checks.
+All eight recorded PrizeMap solutions win on both replays, including
+Exact. Change.

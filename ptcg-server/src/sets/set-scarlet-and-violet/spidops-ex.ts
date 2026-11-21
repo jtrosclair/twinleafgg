@@ -1,7 +1,9 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, PlayerType, CardTag } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, CardTag } from '../../game';
 import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 
 export class Spidopsex extends PokemonCard {
 
@@ -46,102 +48,23 @@ export class Spidopsex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-black-bolt-white-flare/samurott.ts (probe the opposing Pokémon as the Ability target).
     if (effect instanceof CheckRetreatCostEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      let isSpidopsexInPlay = false;
-      /*player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpidopsexInPlay = true;
-        }
-      });*/
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpidopsexInPlay = true;
-        }
-      });
-
-      if (!isSpidopsexInPlay) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      const pokemonCard = opponent.active.getPokemonCard();
-
-      /*opponent.forEachPokemon(PlayerType.TOP_PLAYER, () => {
-        // Add 1 more Colorless energy to the opponent's Active Pokemon's retreat cost
-        effect.cost.push(CardType.COLORLESS);
-      });*/
-
-      if (pokemonCard) {
-        effect.cost.push(CardType.COLORLESS);
-        return state;
+      const { player } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      if (player.active.getPokemonCard()
+        && StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, player.active)) {
+        effect.colorlessAdjustment++;
       }
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const opponentActiveCard = opponent.active.getPokemonCard();
-      if (opponentActiveCard) {
-        const retreatCost = opponentActiveCard.retreat.filter(c => c === CardType.COLORLESS).length;
-
-        effect.damage += retreatCost * 30;
-      }
-      return state;
+      const cost = new CheckRetreatCostEffect(effect.opponent);
+      store.reduceEffect(state, cost);
+      effect.damage += 30 * cost.cost.filter(type => type === CardType.COLORLESS).length;
     }
 
     return state;
   }
 }
-
-// if (effect instanceof CheckRetreatCostEffect) {
-//   const player = effect.player;
-//   const opponent = StateUtils.getOpponent(state, player);
-
-//   let playerSpidopsExCount = 0;
-//   let opponentSpidopsExCount = 0;
-
-//   player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-//     if (card === this) {
-//       playerSpidopsExCount++;
-//     }
-//   });
-
-//   opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-//     if (card === this) {
-//       opponentSpidopsExCount++;
-//     }
-//   });
-
-//   // Try to reduce PowerEffect, to check if something is blocking our ability
-//   try {
-//     const stub = new PowerEffect(player, {
-//   name: 'test',
-//   powerType: PowerType.ABILITY,
-//   text: ''
-// }, this);
-// store.reduceEffect(state, stub);
-//     store.reduceEffect(state, powerEffect);
-//   } catch {
-//     return state;
-//   }
-
-//   // Add Colorless energy to the opponent's Active Pokemon's retreat cost
-//   if (player.active === this) {
-//     for (let i = 0; i < playerSpidopsExCount; i++) {
-//       effect.cost.push(CardType.COLORLESS);
-//     }
-//   } else {
-//     for (let i = 0; i < opponentSpidopsExCount; i++) {
-//       effect.cost.push(CardType.COLORLESS);
-//     }
-//   }
-// }
-
-// return state;

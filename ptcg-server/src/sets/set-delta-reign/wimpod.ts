@@ -51,7 +51,7 @@ export class Wimpod extends PokemonCard {
       });
 
       if (hasPokemonEx) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
 

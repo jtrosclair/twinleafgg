@@ -50,7 +50,7 @@ export class Altaria extends PokemonCard {
 
       const activePokemon = player.active.getPokemonCard();
       if (activePokemon && activePokemon.stage === Stage.BASIC) {
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
     }
 

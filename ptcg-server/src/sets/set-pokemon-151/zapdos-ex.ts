@@ -51,14 +51,10 @@ export class Zapdosex extends PokemonCard {
       const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, player.active);
       state = store.reduceEffect(state, checkProvidedEnergy);
 
-      checkProvidedEnergy.energyMap.forEach(energy => {
-        if (energy.provides.includes(CardType.LIGHTNING) || energy.provides.includes(CardType.ANY)) {
-          const index = effect.cost.indexOf(CardType.COLORLESS);
-          if (index !== -1) {
-            effect.cost.splice(index, 2);
-          }
-        }
-      });
+      if (checkProvidedEnergy.energyMap.some(energy =>
+        energy.provides.includes(CardType.LIGHTNING) || energy.provides.includes(CardType.ANY))) {
+        effect.hasNoRetreatCost = true;
+      }
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

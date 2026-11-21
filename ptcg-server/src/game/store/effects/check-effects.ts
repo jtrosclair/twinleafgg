@@ -173,6 +173,8 @@ export class CheckRetreatCostEffect implements Effect {
   public preventDefault = false;
   public player: Player;
   public cost: CardType[];
+  public colorlessAdjustment = 0;
+  public hasNoRetreatCost = false;
 
   constructor(player: Player) {
     this.player = player;
@@ -180,6 +182,20 @@ export class CheckRetreatCostEffect implements Effect {
     this.cost = pokemonCard !== undefined
       ? [...pokemonCard.retreat, ...Array(pokemonCard.retreatCostIncreaseNextTurn ?? 0).fill(CardType.COLORLESS)]
       : [];
+  }
+
+  public applyModifiers(): void {
+    if (this.hasNoRetreatCost) {
+      this.cost = [];
+    } else if (this.colorlessAdjustment > 0) {
+      this.cost.push(...Array<CardType>(this.colorlessAdjustment).fill(CardType.COLORLESS));
+    } else {
+      for (let reduction = 0; reduction < -this.colorlessAdjustment; reduction++) {
+        const index = this.cost.indexOf(CardType.COLORLESS);
+        if (index === -1) break;
+        this.cost.splice(index, 1);
+      }
+    }
   }
 }
 
@@ -189,6 +205,7 @@ export class CheckAttackCostEffect implements Effect {
   public player: Player;
   public attack: Attack;
   public cost: CardType[];
+  public fixedCost?: CardType[];
 
   constructor(player: Player, attack: Attack) {
     this.player = player;

@@ -32,7 +32,7 @@ export class CalamitousWasteland extends TrainerCard {
         store.reduceEffect(state, checkPokemonTypeEffect);
 
         if (!checkPokemonTypeEffect.cardTypes.includes(CardType.FIGHTING)) {
-          effect.cost.push(CardType.COLORLESS);
+          effect.colorlessAdjustment++;
         }
       }
     }

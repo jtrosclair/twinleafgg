@@ -41,7 +41,7 @@ export class BigAirBalloon extends TrainerCard {
       }
 
       if (card instanceof PokemonCard && card.stage === Stage.STAGE_2)
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
     }
 
     return state;

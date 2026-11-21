@@ -77,7 +77,7 @@ export class Dragonite extends PokemonCard {
         } catch {
           return state;
         }
-        effect.cost = [];
+        effect.hasNoRetreatCost = true;
       }
       return state;
     }

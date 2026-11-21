@@ -51,12 +51,12 @@ export class Moltres extends PokemonCard {
 
           checkProvidedEnergy.energyMap.forEach(energy => {
             if (energy.provides.includes(CardType.FIRE)) {
-              effect.cost = [];
+              effect.hasNoRetreatCost = true;
               return state;
             }
 
             if (energy.provides.includes(CardType.ANY)) {
-              effect.cost = [];
+              effect.hasNoRetreatCost = true;
               return state;
             }
           });
