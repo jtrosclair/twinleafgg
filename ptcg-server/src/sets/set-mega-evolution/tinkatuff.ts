@@ -7,8 +7,9 @@ import { CAN_APPLY_LOCK_TO_TARGET } from '../../game/store/prefabs/ability-lock'
 import {
   ABILITY_USED,
   COIN_FLIP_PROMPT,
+  CONFIRMATION_PROMPT,
   IS_ABILITY_BLOCKED,
-  JUST_EVOLVED,
+  JUST_EVOLVED_FROM_HAND,
   MOVE_CARDS,
 } from '../../game/store/prefabs/prefabs';
 
@@ -44,7 +45,7 @@ export class Tinkatuff extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Haphazard Hammer
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -56,34 +57,31 @@ export class Tinkatuff extends PokemonCard {
         return state;
       }
 
-      return COIN_FLIP_PROMPT(store, state, player, (result) => {
-        if (!result) {
-          return state;
-        }
-
-        if (!CAN_APPLY_LOCK_TO_TARGET(store, state, player, this, this.powers[0], opponent.active)) {
-          return state;
-        }
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (!accepted) return;
 
         ABILITY_USED(player, this);
-
-        store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_CARD_TO_DISCARD,
-          opponent.active,
-          { superType: SuperType.ENERGY },
-          { min: 1, max: 1, allowCancel: false },
-        ), selected => {
-          if (selected && selected.length > 0) {
-            MOVE_CARDS(store, state, opponent.active, opponent.discard, {
-              cards: selected,
-              sourceCard: this,
-              sourceEffect: this.powers[0],
-            });
+        COIN_FLIP_PROMPT(store, state, player, heads => {
+          if (!heads || !CAN_APPLY_LOCK_TO_TARGET(store, state, player, this, this.powers[0], opponent.active)) {
+            return;
           }
-        });
 
-        return state;
+          store.prompt(state, new ChooseCardsPrompt(
+            player,
+            GameMessage.CHOOSE_CARD_TO_DISCARD,
+            opponent.active,
+            { superType: SuperType.ENERGY },
+            { min: 1, max: 1, allowCancel: false },
+          ), selected => {
+            if (selected && selected.length > 0) {
+              MOVE_CARDS(store, state, opponent.active, opponent.discard, {
+                cards: selected,
+                sourceCard: this,
+                sourceEffect: this.powers[0],
+              });
+            }
+          });
+        });
       });
     }
 

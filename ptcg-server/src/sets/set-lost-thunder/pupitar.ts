@@ -8,7 +8,7 @@ import { PowerType, StoreLike, State, StateUtils, PokemonCardList, GameMessage }
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Pupitar extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -44,7 +44,7 @@ export class Pupitar extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Hard Shell Evolution
     // Ref: set-burning-shadows/lucario.ts (Stance - on-evolve prevent damage)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

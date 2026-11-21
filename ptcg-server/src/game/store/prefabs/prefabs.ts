@@ -10,7 +10,7 @@ import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, Ap
 import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import { afterAttackDamage, resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
-import { AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
+import { AfterEvolveEffect, AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { preventRetreatEffect, preventDamageEffect } from '../effects/effect-of-attack-effects';
@@ -55,6 +55,12 @@ export const AFTER_ATTACK = (effect: Effect, index: number, user: PokemonCard): 
  */
 export function JUST_EVOLVED(effect: Effect, card: PokemonCard): effect is EvolveEffect {
   return effect instanceof EvolveEffect && effect.pokemonCard === card;
+}
+
+/** A completed evolution from the current player's hand during their turn. */
+export function JUST_EVOLVED_FROM_HAND(effect: Effect, state: State, card: PokemonCard): effect is AfterEvolveEffect {
+  return effect instanceof AfterEvolveEffect && effect.pokemonCard === card && effect.playedFromHand
+    && state.players[state.activePlayer] === effect.player;
 }
 
 /**

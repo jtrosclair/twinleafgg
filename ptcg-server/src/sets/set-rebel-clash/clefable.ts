@@ -8,7 +8,7 @@ import { Card, ConfirmPrompt, GameMessage, PowerType, StoreLike, State, StateUti
 import { Effect } from '../../game/store/effects/effect';
 import { ChooseEnergyPrompt } from '../../game/store/prompts/choose-energy-prompt';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Clefable extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -43,8 +43,7 @@ export class Clefable extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Prankish (on-evolve - put energy from opponent's active on top of deck)
     // Ref: set-team-up/nita.ts (ChooseEnergyPrompt + put on top of deck pattern)
-    // Ref: set-cosmic-eclipse/florges.ts (JUST_EVOLVED + IS_ABILITY_BLOCKED pattern)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

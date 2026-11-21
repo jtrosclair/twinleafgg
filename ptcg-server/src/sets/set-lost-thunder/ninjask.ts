@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, ConfirmPrompt, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED, MOVE_CARD_TO } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARD_TO } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
 
 export class Ninjask extends PokemonCard {
@@ -41,8 +41,7 @@ export class Ninjask extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Molting (on-evolve - put Shedinja from discard onto bench)
-    // Ref: set-forbidden-light/abomasnow.ts (Blessings of the Frost - JUST_EVOLVED)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

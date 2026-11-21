@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, HEAL_X_DAMAGE_FROM_THIS_POKEMON } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, HEAL_X_DAMAGE_FROM_THIS_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class Ninjask extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,15 +40,18 @@ export class Ninjask extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Cast-off Shell
-    // Ref: set-vivid-voltage/alcremie.ts (JUST_EVOLVED + IS_ABILITY_BLOCKED), set-celestial-storm/scyther.ts (SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+      if (player.deck.cards.length === 0 || GET_PLAYER_BENCH_SLOTS(player).length === 0
+        || IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
-
-      SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { name: 'Shedinja' }, { min: 0, max: 1, allowCancel: true });
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) {
+          SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player,
+            { name: 'Shedinja' }, { min: 0, max: 1, allowCancel: false });
+        }
+      });
     }
 
     return Ninjask.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);

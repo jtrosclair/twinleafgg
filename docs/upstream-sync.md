@@ -3451,3 +3451,33 @@ A packaged Chromium test moved a cards-only Energy with the mouse and
 an energies-only attachment with touch, then read back both changes.
 All 559 supported saved states and 3,633 sampled opening actions matched
 batch 42. All seven recorded solutions reached a win.
+
+## Gameplay re-audit, batch 44
+
+Thirteen hand-evolution Abilities now run after the evolved Pokémon is in
+play. The check uses the actual source zone and the current player's turn.
+Manectric's High Speed offers the optional draw, and Clefable's Moonlit
+Miracle can evolve the same Manectric from the top of the deck without
+drawing it into the hand. Feraligatr's Rowdy still flips automatically.
+Haphazard Hammer asks before flipping. Cast-Off Shell on both Ninjask
+prints can be declined without shuffling, and a full Bench or empty deck
+no longer prevents evolution. Fumbling Hands and Cast-Off Shell respect
+Ability suppression after the evolution.
+
+The print review covers Manectric, Banette VIV, Ninjask VIV, Clefable RCL,
+Granbull FST, Feraligatr FST, Thievul EVS, Ninjask LOT, Pupitar LOT, Blissey GRI,
+Hariyama MEG, Tinkatuff MEG and Ninjask MEG.
+[High Speed](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh4/52/)
+[Rowdy](https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH8/SWSH8_EN_57.png)
+[Haphazard Hammer](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_097_R_EN.png)
+[Cast-Off Shell](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_017_R_EN.png)
+
+The focused suite passes 54 cases. Fifty fail on the previous implementation.
+All 559 comparable saved states matched, including 401 active states. All
+3,633 sampled Trainer, attack and Ability opening actions matched. A separate
+comparison verified 242 matching opening evolutions in the same corpus.
+Seven recorded solutions reached a win. The packaged build, API suite and
+Angular service and board checks passed. Upstream main remains at
+`d3d7a0031`. There are 52 remaining card definitions using the legacy
+evolution helper. The next pass still needs to check their printed trigger
+wording and resolve each case individually.

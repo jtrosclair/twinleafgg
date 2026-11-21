@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, JUST_EVOLVED, IS_ABILITY_BLOCKED, COIN_FLIP_PROMPT, DISCARD_TOP_X_CARDS_FROM_YOUR_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, COIN_FLIP_PROMPT, DISCARD_TOP_X_CARDS_FROM_YOUR_DECK } from '../../game/store/prefabs/prefabs';
 import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
 
 export class Feraligatr extends PokemonCard {
@@ -41,8 +41,7 @@ export class Feraligatr extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Rowdy (on-evolve - coin flip, discard 5 from opponent's or own deck)
-    // Ref: set-lost-thunder/ninjask.ts (JUST_EVOLVED + IS_ABILITY_BLOCKED), set-unbroken-bonds/malamar.ts (DISCARD_TOP_X_CARDS_FROM_YOUR_DECK on opponent)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

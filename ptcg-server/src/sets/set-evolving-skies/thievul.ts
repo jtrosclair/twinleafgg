@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, PowerType, CardList, Player, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, DRAW_CARDS, JUST_EVOLVED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, DRAW_CARDS, JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Thievul extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,7 +33,7 @@ export class Thievul extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

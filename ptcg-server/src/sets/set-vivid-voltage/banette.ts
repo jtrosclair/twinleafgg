@@ -7,7 +7,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { CardTarget } from '../../game/store/actions/play-card-action';
 import { Effect } from '../../game/store/effects/effect';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Banette extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,9 +42,8 @@ export class Banette extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Curse of Devolution
-    // Ref: set-vivid-voltage/alcremie.ts (JUST_EVOLVED + CONFIRMATION_PROMPT pattern)
     // Ref: set-rebel-clash/morpeko.ts (ChoosePokemonPrompt for bench)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

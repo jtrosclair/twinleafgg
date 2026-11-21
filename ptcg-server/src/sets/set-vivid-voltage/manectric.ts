@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED, DRAW_CARDS } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED, DRAW_CARDS, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Manectric extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,15 +40,18 @@ export class Manectric extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: High Speed
-    // Ref: set-vivid-voltage/alcremie.ts (Sharing Sweets - JUST_EVOLVED + draw cards pattern)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
-      DRAW_CARDS(player, 3);
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) {
+          DRAW_CARDS(player, 3);
+        }
+      });
     }
 
     return state;

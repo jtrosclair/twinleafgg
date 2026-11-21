@@ -2,7 +2,7 @@ import { PowerType, State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AFTER_ATTACK, JUST_EVOLVED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
+import { AFTER_ATTACK, JUST_EVOLVED_FROM_HAND, CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
 
 export class Ninjask extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -15,7 +15,7 @@ export class Ninjask extends PokemonCard {
   public powers = [{
     name: 'Cast-Off Shell',
     powerType: PowerType.ABILITY,
-    text: 'When you play this Pokémon from your hand to evolve 1 of your Pokémon, you may search your deck for Shedinja and put it onto your Bench. Shuffle your deck afterward.'
+    text: 'Once during your turn, when you play this Pokémon from your hand to evolve 1 of your Pokémon, you may use this Ability. Search your deck for a Shedinja and put it onto your Bench. Then, shuffle your deck.'
   }];
 
   public attacks = [{
@@ -34,8 +34,18 @@ export class Ninjask extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
-      SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { name: 'Shedinja' }, { min: 0, max: 1 });
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
+      const player = effect.player;
+      if (player.deck.cards.length === 0 || GET_PLAYER_BENCH_SLOTS(player).length === 0
+        || IS_ABILITY_BLOCKED(store, state, player, this)) {
+        return state;
+      }
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) {
+          SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player,
+            { name: 'Shedinja' }, { min: 0, max: 1, allowCancel: false });
+        }
+      });
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {

@@ -7,7 +7,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { JUST_EVOLVED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { JUST_EVOLVED_FROM_HAND, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 
 export class Granbull extends PokemonCard {
@@ -42,9 +42,8 @@ export class Granbull extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Dig Up
-    // Ref: set-vivid-voltage/ninjask.ts (JUST_EVOLVED + IS_ABILITY_BLOCKED pattern)
     // Ref: set-unbroken-bonds/wigglytuff.ts (retrieve cards from discard to hand with ChooseCardsPrompt)
-    if (JUST_EVOLVED(effect, this)) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
