@@ -245,6 +245,14 @@ interface CopyAttackSession {
 // Each State identity is owned by one game; unrelated Stores cannot prune it.
 let copyAttackSessions = new WeakMap<State, CopyAttackSession[]>();
 
+export function checkpointCopyAttackSessions(state: State): () => void {
+  const saved = copyAttackSessions.get(state)?.map(session => ({ ...session }));
+  return () => {
+    if (saved) copyAttackSessions.set(state, saved.map(session => ({ ...session })));
+    else copyAttackSessions.delete(state);
+  };
+}
+
 const DEFAULT_END_TURN_BUDGET = 4;
 
 /** Serialize only the information needed to rebuild live handler sessions. */

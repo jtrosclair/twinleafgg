@@ -2,9 +2,10 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameMessage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { COPY_ATTACK_FROM_POKEMON_LIST } from '../../game/store/prefabs/copy-attack-prefabs';
-import { COIN_FLIP_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+
+import { flipToCopyAttack } from '../../game/store/prefabs/attack-coin-reflip';
 
 export class Smeargle extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -56,21 +57,12 @@ export class Smeargle extends PokemonCard {
 
     // Trace
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      return COIN_FLIP_PROMPT(store, state, player, result => {
-        if (!result) {
-          return;
-        }
-        const opponent = StateUtils.getOpponent(state, player);
-        const benchCards = opponent.bench
-          .map(b => b.getPokemonCard())
-          .filter((card): card is PokemonCard => card !== undefined && card.attacks.length > 0);
-        if (benchCards.length === 0) {
-          return;
-        }
-        COPY_ATTACK_FROM_POKEMON_LIST(store, state, effect as AttackEffect, benchCards, {
-          allowCancel: false,
+      return flipToCopyAttack(store, state, effect, () => {
+        const benchCards = effect.opponent.bench.flatMap(slot => {
+          const card = slot.getPokemonCard();
+          return card?.attacks.length ? [card] : [];
         });
+        return COPY_ATTACK_FROM_POKEMON_LIST(store, state, effect, benchCards, { allowCancel: false });
       });
     }
 

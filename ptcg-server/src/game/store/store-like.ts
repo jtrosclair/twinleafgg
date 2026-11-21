@@ -10,6 +10,8 @@ export interface StoreLike {
 
   reduceEffect(state: State, effect: Effect): State;
 
+  runReflippableCopy?(state: State, copy: () => State, restart: () => void): State;
+
   log(state: State, message: GameLog, params?: StateLogParam, client?: number): void;
 
   waitPrompt(state: State, callback: () => void): State;

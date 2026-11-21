@@ -2,10 +2,11 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { COPY_OPPONENT_ACTIVE_ATTACK } from '../../game/store/prefabs/prefabs';
 import { BLOCK_RETREAT } from '../../game/store/prefabs/prefabs';
+
+import { flipToCopyAttack } from '../../game/store/prefabs/attack-coin-reflip';
 
 export class EthansSudowoodo extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -43,11 +44,7 @@ export class EthansSudowoodo extends PokemonCard {
 
     // Try to Imitate
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      return COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          COPY_OPPONENT_ACTIVE_ATTACK(store, state, effect as AttackEffect);
-        }
-      });
+      return flipToCopyAttack(store, state, effect, () => COPY_OPPONENT_ACTIVE_ATTACK(store, state, effect));
     }
 
     return state;

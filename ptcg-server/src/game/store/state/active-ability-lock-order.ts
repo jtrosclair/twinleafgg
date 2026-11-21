@@ -9,6 +9,14 @@ export interface ActiveAbilityLockEntry {
 const observedOrders = new WeakMap<State, ActiveAbilityLockEntry[]>();
 const playerStates = new WeakMap<Player, State>();
 
+export function checkpointActiveAbilityLockOrder(state: State): () => void {
+  const saved = observedOrders.get(state);
+  return () => {
+    if (saved) observedOrders.set(state, saved);
+    else observedOrders.delete(state);
+  };
+}
+
 function sameEntry(left: ActiveAbilityLockEntry, right: ActiveAbilityLockEntry): boolean {
   return left.playerId === right.playerId && left.cardId === right.cardId;
 }

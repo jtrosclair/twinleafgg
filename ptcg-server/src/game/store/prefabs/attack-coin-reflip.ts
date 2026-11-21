@@ -2,7 +2,7 @@ import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { Card } from '../card/card';
 import { AttackEffect } from '../effects/game-effects';
-import { CheckAttackCoinReflipEffect } from '../effects/play-card-effects';
+import { CheckAttackCoinReflipEffect, CoinFlipEffect } from '../effects/play-card-effects';
 import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { Prompt } from '../prompts/prompt';
@@ -11,6 +11,7 @@ import { Player } from '../state/player';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { getAttackPayment } from './attack-after-damage';
+import { currentCopiedAttackReflipBranch } from './copied-attack-reflip-branch';
 
 export const COIN_REFLIP_AGAIN_USED = 'COIN_REFLIP_AGAIN_USED';
 export const LEGACY_GLIMWOOD_REFLIP_USED = 'GLIMWOOD_REFLIP_USED';
@@ -41,24 +42,31 @@ function getReflipPlayer(state: State): Player | undefined {
   return player;
 }
 
+function getReflipSources(store: StoreLike, state: State, flipperIds: readonly number[]) {
+  const player = getReflipPlayer(state);
+  const attack = player && getAttackPayment(state, player);
+  if (!player || (!attack && !flipperIds.includes(player.id))) return;
+  const check = new CheckAttackCoinReflipEffect(player, attack?.source ?? player.active, flipperIds.includes(player.id));
+  store.reduceEffect(state, check);
+  if (check.sources.size) return { player, options: [...check.sources] };
+}
+
 /** Offer one replacement for the whole set before any outcomes are applied. */
 export function offerAttackCoinReflip(
   store: StoreLike, state: State, keep: () => void, repeat: () => void, flipperIds: readonly number[],
 ): void {
-  const player = getReflipPlayer(state);
-  const attack = player && getAttackPayment(state, player);
-  if (!player || (!attack && !flipperIds.includes(player.id))) {
-    keep();
+  const branch = !suppressesAttackReflips(state) && currentCopiedAttackReflipBranch(state);
+  if (branch) {
+    // The outer coin was flipped by the attacker even when the copied
+    // attack asks the defender to flip (for example with Retry Badge).
+    const attacker = state.players[state.activePlayer];
+    branch.offer(keep, (accept, restart) => offerAttackCoinReflip(store, state, accept, restart,
+      attacker ? [...flipperIds, attacker.id] : flipperIds));
     return;
   }
-
-  const check = new CheckAttackCoinReflipEffect(player, attack?.source ?? player.active, flipperIds.includes(player.id));
-  store.reduceEffect(state, check);
-  const options = [...check.sources];
-  if (!options.length) {
-    keep();
-    return;
-  }
+  const sources = getReflipSources(store, state, flipperIds);
+  if (!sources) return keep();
+  const { player, options } = sources;
 
   const use = ([label, card]: [string, Card]) => {
     player.marker.addMarkerToState(COIN_REFLIP_AGAIN_USED);
@@ -77,6 +85,24 @@ export function offerAttackCoinReflip(
     if (!Number.isInteger(selection) || !options[selection]) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     use(options[selection]);
   });
+}
+
+/** A copy made on heads belongs to the same sequence as its first coin. */
+export function flipToCopyAttack(
+  store: StoreLike, state: State, effect: AttackEffect, copy: () => State, legacyPrompt = false,
+): State {
+  const resolve = (heads: boolean) => {
+    if (!heads) return;
+    if (store.runReflippableCopy && getReflipSources(store, state, [effect.player.id])) {
+      store.runReflippableCopy(state, copy, flip);
+    } else {
+      copy();
+    }
+  };
+  const flip = () => legacyPrompt
+    ? store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), resolve)
+    : store.reduceEffect(state, new CoinFlipEffect(effect.player, resolve));
+  return flip();
 }
 
 /** Legacy attack handlers submit one prompt or a single batch of coin prompts. */

@@ -1,7 +1,9 @@
-import { CoinFlipPrompt, GameMessage, PokemonCard, State, StoreLike } from '../../game';
+import { PokemonCard, State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
 import { COPY_OPPONENT_ACTIVE_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+
+import { flipToCopyAttack } from '../../game/store/prefabs/attack-coin-reflip';
 
 export class Clefairy extends PokemonCard {
 
@@ -45,9 +47,7 @@ export class Clefairy extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      return store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), heads => {
-        if (heads) return COPY_OPPONENT_ACTIVE_ATTACK(store, state, effect, false);
-      });
+      return flipToCopyAttack(store, state, effect, () => COPY_OPPONENT_ACTIVE_ATTACK(store, state, effect, false), true);
     }
 
     return state;

@@ -9,7 +9,7 @@
       "date": "2026-09-04",
       "subject": "refactor(cards, engine): Copycat Attacks",
       "status": "partial",
-      "notes": "Historical pre-base path record. Batch 68 adapts the common copied-attack lifecycle for copies from a Benched Pokémon or the opposing Active, Mini-Metronome and Trace. It preserves the declared attack and its payment, avoids a second Confusion or Smokescreen check, and retains handling for legacy in-play sources. Linked replacement coins and other individually implemented copy paths remain open."
+      "notes": "Historical pre-base path record. Batch 68 adapts the common copied-attack lifecycle for copies from a Benched Pokémon or the opposing Active, Mini-Metronome and Trace. It preserves the declared attack and its payment, avoids a second Confusion or Smokescreen check, and retains handling for legacy in-play sources. Linked replacement coins and other individually implemented copy paths remain open. Batch 69 links the coin-gated common copy paths so Victory Star and the equivalent sources restart at the declared gate and release the original board effects only when kept. Water Vein and other paths exposing unrevealed cards before another coin still need review."
     },
     {
       "sha": "a9060761e77dced7d3bcf02f6792a73c4d5851ea",

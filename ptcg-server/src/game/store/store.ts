@@ -5,6 +5,7 @@ import { StateUtils } from './state-utils';
 import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails, rollCoin } from './prefabs/coin-flip-results';
 import { COIN_REFLIP_AGAIN_USED, LEGACY_GLIMWOOD_REFLIP_USED, legacyAttackCoinGroup, offerAttackCoinReflip,
   suppressesAttackReflips, withoutAttackReflips } from './prefabs/attack-coin-reflip';
+import { CopiedAttackReflipBranch, currentCopiedAttackReflipBranch } from './prefabs/copied-attack-reflip-branch';
 import { CoinFlipPrompt } from './prompts/coin-flip-prompt';
 import { SelectPrompt } from './prompts/select-prompt';
 import { getWillCoinChoicePlayer, readChosenCoinSide, suppressesWillCoinChoice, takeWillCoinChoice,
@@ -68,6 +69,7 @@ import { SandboxModifyPokemonAction } from './actions/sandbox-modify-pokemon-act
 interface PromptItem {
   ids: number[],
   then: (results: any) => void;
+  copyBranch?: CopiedAttackReflipBranch;
 }
 
 export class Store implements StoreLike {
@@ -78,6 +80,7 @@ export class Store implements StoreLike {
   private promptItems: PromptItem[] = [];
   private waitItems: (() => void)[] = [];
   private logId: number = 0;
+  private pendingCopyReflip?: CopiedAttackReflipBranch;
   // Flag to prevent nested playability calculations
   private calculatingPlayability: boolean = false;
 
@@ -85,6 +88,7 @@ export class Store implements StoreLike {
 
   /** Restore a stable snapshot without retaining callbacks from the previous game. */
   public restoreState(state: State): void {
+    this.pendingCopyReflip?.cancel();
     clearAttackDamageScopes(this.state);
     if (this.state !== state) clearAttackDamageScopes(state);
     this.promptItems = [];
@@ -104,6 +108,14 @@ export class Store implements StoreLike {
 
   public dispatch(action: Action, clientRoleId?: number): State {
     let state = this.state;
+    if (this.pendingCopyReflip) {
+      if (action instanceof AbortGameAction || action instanceof ConcedeAction) this.pendingCopyReflip.cancel();
+      if (action instanceof ReorderHandAction || action instanceof ReorderBenchAction || action instanceof ChangeAvatarAction
+        || action instanceof SandboxModifyPlayerAction || action instanceof SandboxModifyGameStateAction
+        || action instanceof SandboxModifyCardAction || action instanceof SandboxModifyPokemonAction) {
+        throw new GameError(GameMessage.ACTION_IN_PROGRESS);
+      }
+    }
 
     // Handle sandbox actions
     if (action instanceof SandboxModifyPlayerAction
@@ -354,8 +366,24 @@ export class Store implements StoreLike {
       effect1CardPlayerId === effect2CardPlayerId;
   }
 
+  public runReflippableCopy(state: State, copy: () => State, restart: () => void): State {
+    if (this.pendingCopyReflip) return copy();
+    const branch = new CopiedAttackReflipBranch(state, restart, () => {
+      this.pendingCopyReflip = undefined;
+      const prompts = this.promptItems.filter(item => item.copyBranch === branch);
+      if (prompts.length) {
+        const unresolved = new Set(prompts.flatMap(item => item.ids));
+        state.prompts = state.prompts.filter(prompt => prompt.result !== undefined || !unresolved.has(prompt.id));
+        this.promptItems = this.promptItems.filter(item => item.copyBranch !== branch);
+      }
+    });
+    this.pendingCopyReflip = branch;
+    return branch.run(copy);
+  }
+
   public prompt(state: State, prompts: Prompt<any>[] | Prompt<any>, then: (results: any) => void): State {
     const group = Array.isArray(prompts) ? prompts : [prompts];
+    currentCopiedAttackReflipBranch(state)?.beforePrompts(group);
     const complete = then;
     const attackCoins = legacyAttackCoinGroup(state, group);
     if (attackCoins) {
@@ -405,9 +433,11 @@ export class Store implements StoreLike {
       state.prompts.push(prompts[i]);
     }
 
+    const copyBranch = currentCopiedAttackReflipBranch(state);
     const promptItem: PromptItem = {
       ids: prompts.map(prompt => prompt.id),
-      then: then
+      then: copyBranch ? copyBranch.track(then) : then,
+      copyBranch,
     };
 
     this.promptItems.push(promptItem);
@@ -415,11 +445,20 @@ export class Store implements StoreLike {
   }
 
   public waitPrompt(state: State, callback: () => void): State {
-    this.waitItems.push(suppressesWillCoinChoice(state) ? () => withoutWillCoinChoice(state, callback) : callback);
+    const resume = suppressesWillCoinChoice(state) ? () => withoutWillCoinChoice(state, callback) : callback;
+    const copyBranch = currentCopiedAttackReflipBranch(state);
+    this.waitItems.push(copyBranch ? copyBranch.track(resume) : resume);
     return state;
   }
 
   public log(state: State, message: GameLog, params?: StateLogParam, client?: number): void {
+    const branch = currentCopiedAttackReflipBranch(state);
+    const write = () => this.writeLog(state, message, params, client);
+    if (branch) branch.log(message, write);
+    else write();
+  }
+
+  private writeLog(state: State, message: GameLog, params?: StateLogParam, client?: number): void {
     const timestamp = new Date().toLocaleTimeString('en-US', {
       hour12: true,
       hour: '2-digit',
@@ -450,9 +489,11 @@ export class Store implements StoreLike {
       if (prompt instanceof SelectPrompt && prompt.message === GameMessage.CHOOSE_HEADS_OR_TAILS) {
         readChosenCoinSide(action.result);
       }
-      const player = state.players[state.activePlayer];
-      const forcedTails = prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId
-        && isCoinForcedTails(this, state, player);
+      const checkForcedTails = () => {
+        const player = state.players[state.activePlayer];
+        return prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId && isCoinForcedTails(this, state, player);
+      };
+      const forcedTails = promptItem.copyBranch?.inspect(checkForcedTails) ?? checkForcedTails();
       prompt.result = forcedTails ? false : action.result;
 
       const results = promptItem.ids.map(id => {
@@ -467,9 +508,9 @@ export class Store implements StoreLike {
       }
 
       if (results.every(result => result !== undefined)) {
-        const itemIndex = this.promptItems.indexOf(promptItem);
         promptItem.then(results.length === 1 ? results[0] : results);
-        this.promptItems.splice(itemIndex, 1);
+        const itemIndex = this.promptItems.indexOf(promptItem);
+        if (itemIndex !== -1) this.promptItems.splice(itemIndex, 1);
       }
 
       this.resolveWaitItems();
@@ -496,6 +537,7 @@ export class Store implements StoreLike {
   }
 
   public cleanup(): void {
+    this.pendingCopyReflip?.cancel();
     clearAttackDamageScopes(this.state);
     this.promptItems = [];
     this.waitItems = [];

@@ -2,12 +2,13 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, COPY_BENCH_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, COPY_BENCH_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { State, StoreLike } from '../../game';
+import { flipToCopyAttack } from '../../game/store/prefabs/attack-coin-reflip';
+
 export class Liepard extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Purrloin';
@@ -49,12 +50,8 @@ export class Liepard extends PokemonCard {
     // Attack 2: Assist
     // Refs: set-black-and-white/liepard.ts (Assist), set-vivid-voltage/clefairy.ts (coin-gated copied attack), prefabs/prefabs.ts (COPY_BENCH_ATTACK)
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (!result) {
-          return;
-        }
-        state = COPY_BENCH_ATTACK(store, state, effect as AttackEffect, { throwIfNoBenchedPokemon: false });
-      });
+      return flipToCopyAttack(store, state, effect, () =>
+        COPY_BENCH_ATTACK(store, state, effect, { throwIfNoBenchedPokemon: false }));
     }
 
     return state;

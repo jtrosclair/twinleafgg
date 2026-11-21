@@ -4672,3 +4672,35 @@ changed copy choices as an opening action. Dedicated engine cases exercise
 those choices, and mouse and touch tests drive Mini-Metronome through the
 packaged board to verify both damage and Confusion. The 2.51 MiB gzip
 package also passes attestation, board-prompt checks and 209 client checks.
+
+## Gameplay re-audit, batch 69
+
+Assist BCR, Mini-Metronome, Try to Imitate, and Trace now share the
+first coin with eligible coins in the chosen attack. A replacement starts
+at the declared attack’s first coin. On heads the player can make a new
+copy choice. On tails the copied attack ends. One chosen reroll source
+spends the turn’s use. A choice already spent by Will stays spent.
+[Official Assist reflip ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8A%E3%83%83%E3%82%AF%E3%83%A9%E3%83%BC&regulation_faq_main_item1=all)
+[Official Victory Star print](https://www.pokemon-card.com/card-search/details.php/card/27369)
+[Official Mini-Metronome print](https://www.pokemon-card.com/card-search/details.php/card/38429/regu/XY)
+[Official Try to Imitate print](https://www.pokemon-card.com/card-search/details.php/card/47336)
+[Official Trace print](https://www.pokemon-card.com/card-search/details.php/card/3106/regu/DP)
+
+The copied branch holds board changes and non-coin logs while the reroll
+is available. This includes lethal Thunder Fang damage and conditions
+applied after damage. Keeping the branch applies its changes once.
+Replacing it restores the original board before the new gate and never
+awards Prizes for an abandoned Knock Out. The simulator accepts the
+branch before showing a prompt that would reveal private card choices.
+The rare path that explicitly reveals cards before a later coin, such as
+Water Vein, still needs a separate timing review.
+[Official Water Vein print](https://www.pokemon-card.com/card-search/details.php/card/21129/regu/all)
+
+All 11 focused cases pass and seven reproduce failures on the previous
+engine. The full engine suite passes 11,019 tests and the worktree carrying
+the existing local edits passes 131 targeted checks. The API passes 32 tests.
+All 559 comparable saved boards and 5,225 sampled opening actions match.
+All seven recorded solutions still win. Packaged mouse and touch tests
+reroll Smithereen Smash, choose Thunder Fang instead, and finish with
+30 damage and Paralysis. The original Energy stays attached. The 2.51 MiB
+gzip package passes attestation, 10 board scenarios and 209 client checks.

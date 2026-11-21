@@ -23,6 +23,23 @@ interface AttackPayment {
 interface AttackDamageScope { state: State; effects: AttackEffect[]; payment?: AttackPayment; }
 const scopes = new WeakMap<State, AttackDamageScope[]>();
 
+export function checkpointAttackDamageScopes(state: State): () => void {
+  const stack = scopes.get(state)?.slice();
+  const entries = stack?.map(scope => ({ scope, effects: scope.effects.slice(),
+    callbacks: scope.effects.map(effect => pending.get(effect)?.slice()) }));
+  return () => {
+    clearAttackDamageScopes(state);
+    if (stack) scopes.set(state, stack.slice());
+    for (const { scope, effects, callbacks } of entries ?? []) {
+      scope.effects = effects.slice();
+      effects.forEach((effect, index) => {
+        const saved = callbacks[index];
+        if (saved) pending.set(effect, saved.slice());
+      });
+    }
+  };
+}
+
 /** Track nested legacy copy effects until the parent attack has dealt damage. */
 export function beginAttackDamageScope(state: State, payment?: AttackPayment): AttackDamageScope {
   const scope: AttackDamageScope = { state, effects: [], payment };

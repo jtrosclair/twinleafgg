@@ -38,6 +38,15 @@ interface PrizeGroup {
 // normal Knock Out check and never carried into a reset or a rolled-back action.
 const pendingEffectKnockOuts = new WeakMap<State, Map<PokemonCard, EffectKnockOutOptions | undefined>>();
 
+export function checkpointPendingEffectKnockOuts(state: State): () => void {
+  const existing = pendingEffectKnockOuts.get(state);
+  const saved = existing && new Map(existing);
+  return () => {
+    if (saved) pendingEffectKnockOuts.set(state, new Map(saved));
+    else pendingEffectKnockOuts.delete(state);
+  };
+}
+
 export function scheduleEffectKnockOut(state: State, pokemon: PokemonCard, options?: EffectKnockOutOptions): void {
   const pending = pendingEffectKnockOuts.get(state) ?? new Map();
   if (!pending.has(pokemon) || options) pending.set(pokemon, options);
