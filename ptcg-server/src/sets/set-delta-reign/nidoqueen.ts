@@ -1,6 +1,6 @@
-import { CardType, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StateUtils, StoreLike } from "../../game";
+import { CardType, GameError, GameMessage, PokemonCard, PowerType, Stage, State, StoreLike } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
-import { EffectOfAbilityEffect } from "../../game/store/effects/game-effects";
+import { GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, COIN_FLIP_PROMPT, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from "../../game/store/prefabs/prefabs";
 
 export class Nidoqueen extends PokemonCard {
@@ -46,19 +46,9 @@ export class Nidoqueen extends PokemonCard {
       USE_ABILITY_ONCE_PER_TURN(player, this.MOTHERLY_SUMMON_MARKER, this);
       ABILITY_USED(player, this);
 
-      COIN_FLIP_PROMPT(store, state, player, result => {
-        if (result) {
-          const opponent = StateUtils.getOpponent(state, player);
-          if (!opponent.bench.some(slot => slot.cards.length)) return;
-          store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-            PlayerType.TOP_PLAYER, [SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), targets => {
-              const target = targets && targets[0];
-              if (!target) return;
-              const gust = new EffectOfAbilityEffect(player, this.powers[0], this, target);
-              store.reduceEffect(state, gust);
-              if (!gust.preventDefault && gust.target) opponent.switchPokemon(gust.target, store, state);
-            });
-        }
+      // Ref: set-mega-evolution/hariyama.ts (protection applies to the chosen Benched Pokémon).
+      COIN_FLIP_PROMPT(store, state, player, heads => {
+        if (heads) GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(store, state, player, this.powers[0], this);
       });
     }
 

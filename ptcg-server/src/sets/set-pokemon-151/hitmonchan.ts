@@ -6,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, NEXT_TURN_ATTACK_BONUS } from '../../game/store/prefabs/prefabs';
 import { PowerType, StateUtils } from '../../game';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 
 export class Hitmonchan extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -40,7 +40,9 @@ export class Hitmonchan extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AfterDamageEffect && effect.target.getPokemonCard() === this && state.phase === GamePhase.ATTACK) {
+    // Ref: set-shrouded-fable/dusknoir.ts (place counters with the Ability as their source).
+    if (effect instanceof AfterDamageEffect && effect.damage > 0
+      && effect.target.getPokemonCard() === this && state.phase === GamePhase.ATTACK) {
       const player = StateUtils.findOwner(state, effect.target);
       const opponent = effect.player;
       if (player === opponent || player.active !== effect.target)
@@ -50,11 +52,8 @@ export class Hitmonchan extends PokemonCard {
         return state;
       }
 
-      const damageEffect = new EffectOfAbilityEffect(player, this.powers[0], this, effect.source);
-      store.reduceEffect(state, damageEffect);
-      if (damageEffect.target) {
-        damageEffect.target.damage += 30;
-      }
+      state = store.reduceEffect(state,
+        new PlaceDamageCountersEffect(player, effect.source, 30, this, this.powers[0]));
     }
 
     // Refs: set-boundaries-crossed/watchog.ts (Psych Up), prefabs/prefabs.ts (NEXT_TURN_ATTACK_BONUS)

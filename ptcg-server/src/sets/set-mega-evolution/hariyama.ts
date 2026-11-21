@@ -1,8 +1,6 @@
-import { PokemonCard, Stage, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType } from '../../game';
-import { PowerType } from '../../game';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import { PokemonCard, PowerType, Stage, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
+import { GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Hariyama extends PokemonCard {
@@ -35,33 +33,15 @@ export class Hariyama extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-      const player = effect.player;
+    // Ref: set-evolving-skies/umbreon-vmax.ts (Dark Signal after hand evolution).
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
+      const { player } = effect;
       const opponent = StateUtils.getOpponent(state, player);
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-      if (!hasBench) {
+      if (!opponent.bench.some(slot => slot.getPokemonCard()) || IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
-
-      CONFIRMATION_PROMPT(store, state, player, (result) => {
-        if (result) {
-          return store.prompt(state, new ChoosePokemonPrompt(
-            player.id,
-            GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-            PlayerType.TOP_PLAYER,
-            [SlotType.BENCH],
-            { allowCancel: false }
-          ), result => {
-            const cardList = result[0];
-
-            const switchEffect = new EffectOfAbilityEffect(player, this.powers[0], this, cardList);
-            store.reduceEffect(state, switchEffect);
-            if (switchEffect.target) {
-              opponent.switchPokemon(cardList, store, state);
-            }
-          });
-        }
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(store, state, player, this.powers[0], this);
       });
     }
 

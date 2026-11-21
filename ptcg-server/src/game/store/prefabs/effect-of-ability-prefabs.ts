@@ -1,10 +1,13 @@
+import { PlayerType, SlotType } from '../actions/play-card-action';
 import { GameMessage } from '../../game-message';
 import { SpecialCondition } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power } from '../card/pokemon-types';
 import { AddSpecialConditionsPowerEffect } from '../effects/check-effects';
 import { EffectOfAbilityEffect } from '../effects/game-effects';
+import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
+import { StateUtils } from '../state-utils';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { Player } from '../state/player';
 import { State } from '../state/state';
@@ -22,6 +25,28 @@ export function CAN_APPLY_ABILITY_TO_TARGET(
   const effect = new EffectOfAbilityEffect(abilityOwner, power, card, target);
   store.reduceEffect(state, effect);
   return !effect.preventDefault && !!effect.target;
+}
+
+/** Choose an opposing Benched Pokémon, then apply Ability protection to that choice. */
+export function GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  player: Player,
+  power: Power,
+  card: PokemonCard,
+): State {
+  const opponent = StateUtils.getOpponent(state, player);
+  if (!opponent.bench.some(slot => slot.getPokemonCard())) return state;
+
+  return store.prompt(state, new ChoosePokemonPrompt(
+    player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH, PlayerType.TOP_PLAYER,
+    [SlotType.BENCH], { allowCancel: false },
+  ), ([target]) => {
+    if (target?.getPokemonCard() && opponent.bench.includes(target)
+      && CAN_APPLY_ABILITY_TO_TARGET(store, state, player, power, card, target)) {
+      opponent.switchPokemon(target, store, state);
+    }
+  });
 }
 
 export function APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(

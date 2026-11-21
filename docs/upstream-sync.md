@@ -5744,3 +5744,44 @@ activations without a legal attachment were refused, and one suppressed
 activation kept its rejection with a different error message.
 The production package verifies successfully, all 211 client checks pass,
 and all seven saved solutions reach the same win on two replays each.
+
+## Gameplay re-audit, batch 93
+
+This batch adapts seven card paths from the two Ability-effect commits
+`3348ebdc8` and `db4eebfcf`. Defiant Horn and Sumo Catcher offer the
+choice after a completed hand evolution when the opponent has a Bench.
+Beckoning Tail discards a Chill Teaser Toy and records the once-per-turn
+use. Maternal Call offers the switch only on heads. These Abilities
+check protection on the chosen Benched Pokémon after selection.
+[Hop’s Dubwool print](https://asia.pokemon-card.com/sg/card-search/detail/17983/)
+[Hariyama print](https://www.pokemon-card.com/card-search/details.php/card/47758/regu/all)
+[Sumo Catcher and Wings of Light ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=944)
+[Meowstic print](https://asia.pokemon-card.com/sg/card-search/detail/16650/)
+[Nidoqueen print](https://www.pokemon-card.com/card-search/details.php/card/50381/regu/all)
+
+Big Roar applies to the opponent’s current Active. If that Pokémon can
+be affected, the opponent selects the replacement, including a Benched
+Pokémon with its own protection. Hyper Blower’s prior tests cover the
+same distinction and its conditional discard.
+[Shinx print](https://asia.pokemon-card.com/sg/card-search/detail/6880/)
+[Official Hyper Blower protection rulings](https://www.pokemon-card.com/rules/faq/search.php?page=7&regulation=all&sc_group_id=902)
+
+Tachyon Bits triggers on completed movement during its owner’s turn.
+It remembers a use through later switches and leaves a later switch
+available if the player declines the earlier chance. Pokémon Checkup
+does not give an activation. Both Tachyon Bits and Hitmonchan’s
+Counterattack place counters with their Ability source, so protection
+applies to the recipient. The expanded board keeps the existing Iron
+Valiant field for clients.
+[Iron Valiant ex print](https://www.pokemon-card.com/card-search/details.php/card/44350)
+[Tachyon Bits rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%BF%E3%82%AD%E3%82%AA%E3%83%B3%E3%83%93%E3%83%83%E3%83%88&regulation_header_search_item1=all)
+[Hitmonchan print](https://www.pokemon-card.com/card-search/details.php/card/43585)
+
+The 27 focused tests pass, including 15 that failed on the preceding
+engine. The full suite passes 11,531 checks. The combined worktree with
+the pending client changes passes 208 focused checks, and all 33 API
+checks pass. All 559 comparable saved boards and 3,636 opening actions
+match the preceding engine. All seven saved solutions reached the same
+win twice.
+The production package verifies against the final source, and all 211
+client checks pass.

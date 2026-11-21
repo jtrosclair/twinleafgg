@@ -1,12 +1,13 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameMessage, PlayerType, SlotType, ChoosePokemonPrompt, GameError, ChooseCardsPrompt } from '../../game';
+import { PowerType, StoreLike, State, GameMessage, GameError, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { StateUtils } from '../../game/store/state-utils';
 
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { hasUsedPokemonAbility, recordPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
+import { ABILITY_USED, IS_ABILITY_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Meowstic extends PokemonCard {
 
@@ -60,57 +61,34 @@ export class Meowstic extends PokemonCard {
       player.marker.removeMarker(this.BECKONING_TAIL_MARKER, this);
     }
 
-    // Beckoning Tail
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.BECKONING_TAIL_MARKER, this);
+
+    // Ref: set-mega-evolution/hariyama.ts (protection applies to the chosen Benched Pokémon).
     if (WAS_POWER_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      if (player.hand.cards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      let chillToyInHand = false;
-      player.hand.cards.forEach(c => {
-        if (c.name === 'Chill Teaser Toy') {
-          chillToyInHand = true;
-        }
-      });
-      if (!chillToyInHand) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      if (player.marker.hasMarker(this.BECKONING_TAIL_MARKER, this)) {
+      const { player, power } = effect;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (hasUsedPokemonAbility(player, this.BECKONING_TAIL_MARKER, this, power.name)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        player.hand,
-        { name: 'Chill Teaser Toy', superType: SuperType.TRAINER },
-        { allowCancel: false, min: 1, max: 1 }
-      ), cards => {
-        player.hand.moveCardsTo(cards, player.discard);
-        return store.prompt(state, new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-          PlayerType.TOP_PLAYER,
-          [SlotType.BENCH],
-          { allowCancel: false }
-        ), result => {
-          const cardList = result[0];
-          opponent.switchPokemon(cardList, store, state);
-        });
-      });
-    }
+      const opponent = StateUtils.getOpponent(state, player);
+      if (!opponent.bench.some(slot => slot.getPokemonCard())
+        || !player.hand.cards.some(card => card.name === 'Chill Teaser Toy')) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
 
-    if (effect instanceof EndTurnEffect) {
-      effect.player.marker.removeMarker(this.BECKONING_TAIL_MARKER, this);
+      return store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand,
+        { name: 'Chill Teaser Toy', superType: SuperType.TRAINER },
+        { allowCancel: false, min: 1, max: 1 },
+      ), ([toy]) => {
+        if (!toy || !player.hand.cards.includes(toy)) return;
+        state = MOVE_CARDS(store, state, player.hand, player.discard, { cards: [toy], sourceCard: this });
+        if (!player.discard.cards.includes(toy)) return;
+        recordPokemonAbilityUse(player, this.BECKONING_TAIL_MARKER, this, power.name);
+        ABILITY_USED(player, this);
+        return GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(store, state, player, power, this);
+      });
     }
 
     return state;
