@@ -1,7 +1,8 @@
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, IS_POKEBODY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
+import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, State, StoreLike } from '../../game';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 export class PokeParksCelebi extends PokemonCard {
@@ -33,7 +34,7 @@ export class PokeParksCelebi extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.cards.includes(this)) {
       const player = effect.player;
 
       if (effect.target.specialConditions.length === 0) {
@@ -53,18 +54,11 @@ export class PokeParksCelebi extends PokemonCard {
         return state;
       }
 
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => {
-        effect.target.removeSpecialCondition(condition);
-      });
+      effect.target.clearAllSpecialConditions();
     }
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.PARALYZED);
     }
 
     return state;

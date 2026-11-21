@@ -4,7 +4,6 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { ADD_CONFUSION_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 
 export class RotasMimeJr extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -29,13 +28,9 @@ export class RotasMimeJr extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, (result: boolean) => {
-        if (result) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
-        } else {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-        }
+      return COIN_FLIP_PROMPT(store, state, effect.player, heads => {
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        if (!heads) ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
       });
     }
 

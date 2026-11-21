@@ -1,5 +1,6 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
+import { WAS_ATTACK_USED, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
+import { CardType, Stage, SpecialCondition } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { State, StoreLike } from '../../game';
@@ -26,12 +27,8 @@ export class Oshawott extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Water Pulse
-    if (AFTER_ATTACK(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.ASLEEP);
     }
 
     return state;

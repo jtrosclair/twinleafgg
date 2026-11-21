@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { PokemonCard, Stage, CardType, StoreLike, State } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND } from "../../game/store/prefabs/attack-effects";
@@ -26,8 +27,8 @@ export class Pikachu43 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Tropical Vibes
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-      DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(6, effect, state);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
+      afterAttackDamage(state, effect, (_store, next) => DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(6, effect, next) ?? next);
     }
     return state;
   }

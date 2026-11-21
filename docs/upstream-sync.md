@@ -3403,3 +3403,51 @@ the attack cost through effect protection. Its self-Sleep is independent.
 [Energy Antics source ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AB&regulation_faq_main_item1=all)
 [Energy Antics destination ruling](https://www.pokemon-card.com/rules/faq/details.php?id=8063)
 [HeartGold & SoulSilver Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/heartgoldsoulsilver.pdf)
+
+## Gameplay re-audit, batch 43
+
+Smoochum's Energy Antics moves one attachment between two opposing
+Pokémon before applying its own Sleep. An effect-protected source keeps
+its Energy. Choosing an effect-protected destination sends the Energy
+to the opponent's discard. The same prompt handles both saved attachment
+layouts and rejects empty, wrong-side and repeated selections. Graffiti
+applies self-Sleep independently and increases the original defender's
+attack cost only if that Pokémon accepts the effect.
+[HeartGold & SoulSilver Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/heartgoldsoulsilver.pdf)
+[Energy Antics source ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AB&regulation_faq_main_item1=all)
+[Energy Antics destination ruling](https://www.pokemon-card.com/rules/faq/details.php?id=8063)
+
+The remaining 27 Special Condition calls use their actual attack as
+the source and resolve in printed order. The checked prints include
+30th Celebration, Ascended Heroes, Delta Reign, Chaos Rising, Japanese
+PCG promos, Gym Heroes, POP Series, Southern Islands, Nintendo promos,
+HeartGold & SoulSilver and Black & White promos. Both Chaos Rising
+Mareep aliases now use Thunder Wave's printed 20 damage. Tropical Vibes
+applies Sleep before drawing. Voltaic Hammer counts Basic Energy that
+actually leaves Electivire for discard.
+[Erika's Tangela](https://asia.pokemon-card.com/sg/card-search/detail/24799/)
+[Chaos Rising Mareep](https://asia.pokemon-card.com/sg/card-search/detail/25218/)
+[Delta Reign Electivire scan](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_031_R_EN.png)
+[Pikachu scan](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/30C/30C_043_R_EN.png)
+[Pichu Bros. scan](https://images.pokemontcg.io/pop3/16.png)
+[Forretress scan](https://images.pokemontcg.io/pop3/9.png)
+
+LaRousse's Munchlax damages only the Pokémon chosen for Bass Control.
+PokéPark's Munchlax uses the shared next-turn damage protection for
+Defense Curl. Miraculous Light heals and cures the actual attacker.
+Natural Cure on PokéPark's Celebi and Sea's Manaphy requires a successful
+Energy attachment from hand.
+[LaRousse's Munchlax scan](https://www.serebii.net/card/pcgpromos/20.jpg)
+[PokéPark's Munchlax scan](https://www.serebii.net/card/pcgpromos/40.jpg)
+[PokéPark's Celebi scan](https://www.serebii.net/card/pcgpromos/44.jpg)
+[Sea's Manaphy 139 scan](https://www.serebii.net/card/pcgpromos/139.jpg)
+[Sea's Manaphy 154 scan](https://www.serebii.net/card/pcgpromos/154.jpg)
+
+All 106 focused cases passed. Eighty-five failed on the preceding engine.
+All 10,032 engine tests, 443 checks with the existing working edits, 209
+frontend specs and 32 simulator API tests passed. The 2.46 MiB package
+passed attestation, the mobile size budget and ten packaged board checks.
+A packaged Chromium test moved a cards-only Energy with the mouse and
+an energies-only attachment with touch, then read back both changes.
+All 559 supported saved states and 3,633 sampled opening actions matched
+batch 42. All seven recorded solutions reached a win.

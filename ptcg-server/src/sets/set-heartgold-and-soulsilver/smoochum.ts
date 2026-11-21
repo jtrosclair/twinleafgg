@@ -1,9 +1,29 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, SpecialCondition, Stage, SuperType } from '../../game/store/card/card-types';
-import { GameMessage, MoveEnergyPrompt, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
+import { CardTarget, GameMessage, MoveEnergyPrompt, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { EffectOfAttackEffect } from '../../game/store/effects/effect-of-attack-effects';
+import { AttackEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+
+class EnergyAnticsProtectionCheck extends EffectOfAttackEffect {
+  readonly type = 'ENERGY_ANTICS_PROTECTION_CHECK';
+  constructor(attack: AttackEffect, target: PokemonCardList) {
+    super(attack);
+    this.target = target;
+    const attacker = attack.source.getPokemonCard();
+    if (attacker) this.markerSource = attacker;
+  }
+  applyEffect(): void {}
+}
+
+function preventsEnergyAntics(store: StoreLike, state: State, attack: AttackEffect, target: PokemonCardList): boolean {
+  const check = new EnergyAnticsProtectionCheck(attack, target);
+  store.reduceEffect(state, check);
+  return check.preventDefault;
+}
 
 export class Smoochum extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -45,34 +65,41 @@ export class Smoochum extends PokemonCard {
 
     // Energy Antics
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
-
-      const hasEnergy = opponent.active.cards.some(c => c.superType === SuperType.ENERGY)
-        || opponent.bench.some(b => b.cards.some(c => c.superType === SuperType.ENERGY));
-      const pokemonCount = [opponent.active, ...opponent.bench].filter(b => b.cards.length > 0).length;
-      if (!hasEnergy || pokemonCount < 2) {
-        return state;
-      }
-
-      return store.prompt(state, new MoveEnergyPrompt(
-        player.id,
-        GameMessage.MOVE_ENERGY_CARDS,
-        PlayerType.TOP_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 1, max: 1 }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const source = StateUtils.getTarget(state, player, transfer.from);
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          if (source !== target) {
-            MOVE_CARDS(store, state, source, target, { cards: [transfer.card], sourceCard: this });
+      afterAttackDamage(state, effect, (currentStore, currentState) => {
+        const { player, opponent } = effect;
+        let pokemonCount = 0;
+        let eligibleSources = 0;
+        const blockedFrom: CardTarget[] = [];
+        const blockedTo = opponent.bench.flatMap((slot, index) => slot.getPokemonCard() ? []
+          : [{ player: PlayerType.TOP_PLAYER, slot: SlotType.BENCH, index }]);
+        opponent.forEachPokemon(PlayerType.TOP_PLAYER, (slot, _card, target) => {
+          pokemonCount++;
+          const hasEnergy = MoveEnergyPrompt.sourceCards(slot).some(card => MoveEnergyPrompt.isAttachedEnergy(slot, card));
+          if (hasEnergy && !preventsEnergyAntics(currentStore, currentState, effect, slot)) {
+            eligibleSources++;
+          } else {
+            blockedFrom.push(target);
           }
-        }
+        });
+        if (pokemonCount < 2 || eligibleSources === 0) return currentState;
+
+        return currentStore.prompt(currentState, new MoveEnergyPrompt(
+          player.id, GameMessage.MOVE_ENERGY_CARDS, PlayerType.TOP_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], {},
+          { allowCancel: false, min: 1, max: 1, blockedFrom, blockedTo, validateTransfers: true }
+        ), transfers => {
+          if (transfers?.length !== 1) return;
+          const [{ from, to, card }] = transfers;
+          const source = StateUtils.getTarget(currentState, player, from);
+          const target = StateUtils.getTarget(currentState, player, to);
+          if (preventsEnergyAntics(currentStore, currentState, effect, source)) return;
+
+          // A protected destination refuses the Energy once it has left its source.
+          const destination = preventsEnergyAntics(currentStore, currentState, effect, target) ? opponent.discard : target;
+          MOVE_CARDS(currentStore, currentState, source, destination,
+            { cards: [card], sourceCard: effect.source.getPokemonCard(), sourceEffect: effect });
+        });
       });
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

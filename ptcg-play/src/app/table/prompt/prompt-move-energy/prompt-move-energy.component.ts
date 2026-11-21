@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Card, MoveEnergyPrompt, CardTarget, FilterType, PokemonCardList } from 'ptcg-server';
+import { Card, MoveEnergyPrompt, CardTarget, FilterType, PokemonCardList, StateUtils } from 'ptcg-server';
 
 import { GameService } from '../../../api/services/game.service';
 import { LocalGameState } from '../../../shared/session/session.interface';
@@ -62,9 +62,18 @@ export class PromptMoveEnergyComponent implements OnChanges {
     const results = this.results.map(r => ({
       from: r.from.target,
       to: r.to.target,
-      index: this.pokemonData.getCardIndex(r.card)
+      index: this.getOriginalCardIndex(r)
     }));
     this.gameService.resolvePrompt(gameId, id, results);
+  }
+
+  private getOriginalCardIndex(result: MoveEnergyResult): number {
+    if (!this.prompt.options.validateTransfers) return this.pokemonData.getCardIndex(result.card);
+    const state = this.gameState.state;
+    const player = state.players.find(owner => owner.id === this.prompt.playerId);
+    if (!player) return -1;
+    const source = StateUtils.getTarget(state, player, result.from.target);
+    return MoveEnergyPrompt.sourceCards(source).indexOf(result.card);
   }
 
   public dropSpec = {
@@ -103,6 +112,9 @@ export class PromptMoveEnergyComponent implements OnChanges {
     }
     // PokemonItem.cardList is always PokemonCardList
     const cardList = this.selectedItem.cardList as PokemonCardList;
+    if (this.prompt.options.validateTransfers) {
+      return MoveEnergyPrompt.sourceCards(cardList).filter(card => MoveEnergyPrompt.isAttachedEnergy(cardList, card));
+    }
     return cardList.energies.cards;
   }
 
@@ -181,6 +193,9 @@ export class PromptMoveEnergyComponent implements OnChanges {
         if (cardIndex !== -1) {
           fromPkm.cards.splice(cardIndex, 1);
         }
+      } else if (this.prompt.options.validateTransfers) {
+        const cardIndex = fromPkm.cards.indexOf(card);
+        if (cardIndex !== -1) fromPkm.cards.splice(cardIndex, 1);
       }
     } else {
       const index = from.cardList.cards.indexOf(card);

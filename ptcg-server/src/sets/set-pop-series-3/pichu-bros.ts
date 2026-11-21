@@ -31,7 +31,7 @@ export class PichuBros extends PokemonCard {
         const heads = results.filter(r => r).length;
         effect.damage = 20 * heads;
         if (heads > 0) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

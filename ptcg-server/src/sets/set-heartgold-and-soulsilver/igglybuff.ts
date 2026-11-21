@@ -46,7 +46,7 @@ export class Igglybuff extends PokemonCard {
 
     // Graffiti
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
       return DEFENDING_POKEMON_ATTACKS_COST_MORE(store, state, effect, 1);
     }
 

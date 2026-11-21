@@ -1,9 +1,11 @@
-import { ADD_MARKER, ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, HAS_MARKER, REMOVE_MARKER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { HAS_MARKER, REMOVE_MARKER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
+import { FLIP_COIN_TO_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { GamePhase, State, StateUtils, StoreLike } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 export class PokeParksMunchlax extends PokemonCard {
@@ -37,12 +39,7 @@ export class PokeParksMunchlax extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          this.marker.addMarker(this.DEFENSE_CURL_MARKER, this);
-          ADD_MARKER(this.DEFENSE_CURL_MARKER, effect.opponent, this);
-        }
-      });
+      return FLIP_COIN_TO_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
 
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && HAS_MARKER(this.DEFENSE_CURL_MARKER, effect.target, this)) {
@@ -60,12 +57,8 @@ export class PokeParksMunchlax extends PokemonCard {
       effect.preventDefault = true;
     }
 
-    if (AFTER_ATTACK(effect, 1, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.PARALYZED);
     }
 
     if (effect instanceof EndTurnEffect && HAS_MARKER(this.DEFENSE_CURL_MARKER, effect.player, this)) {

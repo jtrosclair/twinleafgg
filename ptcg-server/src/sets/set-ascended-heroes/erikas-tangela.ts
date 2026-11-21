@@ -1,8 +1,10 @@
+import { SpecialCondition } from '../../game/store/card/card-types';
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard, Stage, CardTag, CardType, PowerType, StoreLike, State, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND, ABILITY_USED, WAS_ATTACK_USED, COIN_FLIP_PROMPT, ADD_PARALYZED_TO_PLAYER_ACTIVE, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND, ABILITY_USED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class ErikasTangela extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -64,11 +66,7 @@ export class ErikasTangela extends PokemonCard {
 
     // Bind attack - coin flip for Paralyzed
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
-        if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.PARALYZED);
     }
 
     // Reset marker at end of turn

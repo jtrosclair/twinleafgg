@@ -33,7 +33,7 @@ export class Forretress extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Toxic
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 20);
     }
     return state;
   }

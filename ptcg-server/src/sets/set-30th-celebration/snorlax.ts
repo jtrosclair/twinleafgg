@@ -55,7 +55,7 @@ export class Snorlax extends PokemonCard {
 
     // Collapse
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

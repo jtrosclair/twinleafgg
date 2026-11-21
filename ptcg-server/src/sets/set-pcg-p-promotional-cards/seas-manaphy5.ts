@@ -1,5 +1,5 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, WAS_ATTACK_USED, IS_POKEBODY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -33,7 +33,7 @@ export class SeasManaphy5 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.cards.includes(this)) {
       const player = effect.player;
 
       if (effect.target.specialConditions.length === 0) {
@@ -53,14 +53,11 @@ export class SeasManaphy5 extends PokemonCard {
         return state;
       }
 
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => {
-        effect.target.removeSpecialCondition(condition);
-      });
+      effect.target.clearAllSpecialConditions();
     }
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

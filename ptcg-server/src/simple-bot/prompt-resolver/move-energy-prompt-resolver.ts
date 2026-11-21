@@ -1,5 +1,5 @@
 import { Player, State, Action, ResolvePromptAction, Prompt, StateUtils,
-  PlayerType, CardList, Card, CardTarget, MoveEnergyPrompt, CardTransfer } from '../../game';
+  PlayerType, CardList, Card, CardTarget, MoveEnergyPrompt, CardTransfer, PokemonCardList } from '../../game';
 import { PromptResolver } from './prompt-resolver';
 import { deepClone } from '../../utils/utils';
 
@@ -11,7 +11,7 @@ interface TransferItem {
 }
 
 interface TargetList {
-  cardList: CardList;
+  cardList: PokemonCardList;
   target: CardTarget;
 }
 
@@ -100,7 +100,8 @@ export class MoveEnergyPromptResolver extends PromptResolver {
 
     return items.map(item => {
       const cardList = StateUtils.getTarget(state, player, item.fromItem.from);
-      const card = cardList.cards[item.fromItem.cardIndex];
+      const cards = prompt.options.validateTransfers ? MoveEnergyPrompt.sourceCards(cardList) : cardList.cards;
+      const card = cards[item.fromItem.cardIndex];
       return {
         from: item.fromItem.from,
         to: item.to,
@@ -144,8 +145,11 @@ export class MoveEnergyPromptResolver extends PromptResolver {
       });
       const blocked = blockedMap ? blockedMap.blocked : [];
       const cardList = new CardList();
-      fromTarget.cardList.cards.forEach((card, index) => {
-        if (!blocked.includes(index)) {
+      const cards = prompt.options.validateTransfers
+        ? MoveEnergyPrompt.sourceCards(fromTarget.cardList) : fromTarget.cardList.cards;
+      cards.forEach((card, index) => {
+        if (!blocked.includes(index)
+          && (!prompt.options.validateTransfers || MoveEnergyPrompt.isAttachedEnergy(fromTarget.cardList, card))) {
           cardList.cards.push(card);
         }
       });
@@ -155,7 +159,7 @@ export class MoveEnergyPromptResolver extends PromptResolver {
           fromCardList: fromTarget.cardList,
           from: fromTarget.target,
           card: card,
-          cardIndex: fromTarget.cardList.cards.indexOf(card)
+          cardIndex: cards.indexOf(card)
         });
       });
     });

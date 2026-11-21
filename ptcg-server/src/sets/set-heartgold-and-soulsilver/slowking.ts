@@ -1,9 +1,10 @@
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { CardList, GameError, GameMessage, OrderCardsPrompt, PowerType, SelectPrompt, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, BLOCK_IF_HAS_SPECIAL_CONDITION, COIN_FLIP_PROMPT, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Slowking extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -118,13 +119,8 @@ export class Slowking extends PokemonCard {
       });
     }
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-      COIN_FLIP_PROMPT(store, state, player, result => {
-        if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.PARALYZED);
     }
 
     return state;

@@ -1,4 +1,4 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -20,7 +20,7 @@ export class LaRoussesMunchlax extends PokemonCard {
   {
     name: 'Bass Control',
     cost: [C, C],
-    damage: 20,
+    damage: 0,
     text: 'Choose 1 of your opponent\'s Pokémon. This attack does 20 damage to that Pokémon.'
   }];
 
@@ -32,12 +32,12 @@ export class LaRoussesMunchlax extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(20, effect, store, state);
+      return THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(20, effect, store, state);
     }
 
     return state;

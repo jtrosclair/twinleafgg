@@ -1,7 +1,9 @@
+import { SpecialCondition } from '../../game/store/card/card-types';
+import { FLIP_COIN_TO_APPLY_ATTACK_CONDITION } from '../../game/store/prefabs/attack-effects';
 import { CardType, EnergyType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DISCARD_UP_TO_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Electivire extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -35,14 +37,10 @@ export class Electivire extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Body Slam
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-      });
+      FLIP_COIN_TO_APPLY_ATTACK_CONDITION(state, effect, SpecialCondition.PARALYZED);
     }
 
-    // Voltage Hammer
+    // Voltaic Hammer
     if (WAS_ATTACK_USED(effect, 1, this)) {
       effect.damage = 0;
 
@@ -54,7 +52,9 @@ export class Electivire extends PokemonCard {
         { energyType: EnergyType.BASIC },
         0,
         transfers => {
-          effect.damage = transfers.length * 60;
+          const { discard, lostzone } = effect.player;
+          effect.damage = 60 * transfers.filter(({ card }) =>
+            discard.cards.includes(card) || lostzone.cards.includes(card)).length;
         },
       );
     }

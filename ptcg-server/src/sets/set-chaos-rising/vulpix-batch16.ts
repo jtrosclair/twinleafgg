@@ -1,7 +1,7 @@
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard, StoreLike, State } from '../../game';
-import { ADD_BURN_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
+import { ADD_BURN_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class VulpixBatch172 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -27,8 +27,8 @@ export class VulpixBatch172 extends PokemonCard {
   public fullName: string = "Vulpix M4 8";
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     return state;
   }

@@ -141,10 +141,22 @@ export function ARM_NEXT_TURN_ATTACK_BONUS_ALL_ATTACKS(
 }
 
 /** Add Colorless costs to the Defending Pokémon's attacks for its next turn. */
+class AttackCostIncreaseEffect extends EffectOfAttackEffect {
+  readonly type = 'ATTACK_COST_INCREASE_EFFECT';
+  constructor(base: AttackEffect, private readonly amount: number) { super(base); }
+  applyEffect(): void {
+    this.target.attackCostIncreaseDuringNextTurn = this.amount;
+  }
+}
+
 export function DEFENDING_POKEMON_ATTACKS_COST_MORE(
   _store: StoreLike, state: State, effect: AttackEffect, amount: number,
 ): State {
-  effect.opponent.active.attackCostIncreaseDuringNextTurn = Math.max(0, amount);
+  afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+    const increase = new AttackCostIncreaseEffect(effect, Math.max(0, amount));
+    increase.target = target;
+    return store.reduceEffect(next, increase);
+  });
   return state;
 }
 

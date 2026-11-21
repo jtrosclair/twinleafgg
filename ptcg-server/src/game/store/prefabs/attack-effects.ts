@@ -9,7 +9,8 @@ import { AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, Car
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
 import { AttackEffect } from '../effects/game-effects';
 import { AfterAttackEffect } from '../effects/game-phase-effects';
-import { FLIP_UNTIL_TAILS_AND_COUNT_HEADS, MOVE_CARDS } from './prefabs';
+import { COIN_FLIP_PROMPT, FLIP_UNTIL_TAILS_AND_COUNT_HEADS, MOVE_CARDS } from './prefabs';
+import { afterAttackDamageForOriginalDefender } from './post-damage-identity';
 import { CoinFlipEffect } from '../effects/play-card-effects';
 
 
@@ -412,6 +413,20 @@ export function THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON
     const damageEffect = new PutDamageEffect(effect, damage);
     damageEffect.target = target;
     store.reduceEffect(state, damageEffect);
+  });
+}
+
+export function FLIP_COIN_TO_APPLY_ATTACK_CONDITION(
+  state: State, effect: AttackEffect, condition: SpecialCondition,
+): void {
+  afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+    const defender = target.getPokemonCard();
+    return COIN_FLIP_PROMPT(store, next, effect.player, heads => {
+      if (!heads || target !== effect.opponent.active || target.getPokemonCard() !== defender) return;
+      const apply = new AddSpecialConditionsEffect(effect, [condition]);
+      apply.target = target;
+      store.reduceEffect(next, apply);
+    });
   });
 }
 

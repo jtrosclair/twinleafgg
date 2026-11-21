@@ -1,4 +1,6 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, HEAL_X_DAMAGE_FROM_THIS_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { HealTargetEffect, RemoveSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CardType, Stage } from '../../game/store/card/card-types';
@@ -31,15 +33,18 @@ export class SeasManaphy extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 10);
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach((condition: any) => {
-        effect.target.removeSpecialCondition(condition);
+      afterAttackDamage(state, effect, (currentStore, next) => {
+        const heal = new HealTargetEffect(effect, 10);
+        heal.target = effect.source;
+        next = currentStore.reduceEffect(next, heal);
+        const cure = new RemoveSpecialConditionsEffect(effect, undefined);
+        cure.target = effect.source;
+        return currentStore.reduceEffect(next, cure);
       });
     }
 
