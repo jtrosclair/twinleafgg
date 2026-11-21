@@ -52,6 +52,7 @@ export class PrintCompatibility {
   private readonly canonicalAliases = new Map<string, PrintContract>();
   private readonly numberedAliases = new Map<string, PrintContract>();
   private readonly identifierPattern: RegExp;
+  private readonly antiqueArmorFossil?: Card;
   constructor(cards: readonly Card[], private readonly contracts: readonly PrintContract[] = printContracts,
     internal?: InternalIndex) {
     if (internal && internal.token !== internalToken) throw new Error('Untrusted print catalogue index');
@@ -62,7 +63,7 @@ export class PrintCompatibility {
       this.identifierPattern = /$a/;
       return;
     }
-    const sets = [...new Set(contracts.flatMap(c => [c.set, ...(c.setAliases || [])]))]
+    const sets = [...new Set(['PBL', ...contracts.flatMap(c => [c.set, ...(c.setAliases || [])])])]
       .sort((a, b) => b.length - a.length).map(set => set.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
     this.identifierPattern = new RegExp(`^(.*?)\\s+(${sets})(?:\\s+(\\w+))?$`, 'i');
     for (const c of contracts) {
@@ -83,6 +84,10 @@ export class PrintCompatibility {
     }
     // StateSerializer's factory supplies the index built from this snapshot.
     const candidates = internal?.index || buildPrintCatalogueIndex(this.sourceCards, contracts);
+    const shieldFossil = candidates.get('Antique Shield Fossil M5');
+    if (shieldFossil?.set === 'PBL' && shieldFossil.setNumber === '72') {
+      this.antiqueArmorFossil = shieldFossil;
+    }
     for (const c of contracts) {
       const match = candidates.get(c.fullName);
       if (match && (match as any).printCompatibilityIdentity === c.fullName) this.excludedCards.add(match);
@@ -101,7 +106,14 @@ export class PrintCompatibility {
   }
   /** Recognized missing prints never fall through to a different card. */
   resolve(name: string, set: string, number?: string): { recognized: boolean; card?: Card } {
-    const prefix = `${fold(name)}\0${fold(set)}`;
+    const normalizedName = fold(name);
+    const normalizedSet = fold(set);
+    if (normalizedName === 'antique armor fossil' && normalizedSet === 'pbl') {
+      // Accept the English name for the existing card without changing saved
+      // identities or Shieldon's evolution chain.
+      return { recognized: true, card: number === undefined || num(number) === '72' ? this.antiqueArmorFossil : undefined };
+    }
+    const prefix = `${normalizedName}\0${normalizedSet}`;
     const contract = number === undefined ? this.canonicalAliases.get(prefix)
       : this.numberedAliases.get(`${prefix}\0${num(number)}`);
     if (!contract) return { recognized: false };

@@ -10,7 +10,7 @@ import {
   StoreLike,
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { DirectKnockOutAttackEffect } from '../../game/store/effects/attack-effects';
 import {
   MULTIPLE_COIN_FLIPS_PROMPT,
   THIS_POKEMON_DOES_DAMAGE_TO_ITSELF,
@@ -48,7 +48,7 @@ export class TeamRocketsExeggutor extends PokemonCard {
   public fullName: string = 'Team Rocket\'s Exeggutor ASC';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Tri Kinesis
+    // Ref: set-vivid-voltage/forretress.ts (Knock Out as an attack effect).
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -65,7 +65,9 @@ export class TeamRocketsExeggutor extends PokemonCard {
             ),
             targets => {
               if (targets && targets.length > 0) {
-                store.reduceEffect(state, new KnockOutEffect(opponent, targets[0]));
+                const knockOut = new DirectKnockOutAttackEffect(effect);
+                knockOut.target = targets[0];
+                store.reduceEffect(state, knockOut);
               }
             },
           );

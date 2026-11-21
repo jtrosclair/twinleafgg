@@ -531,6 +531,22 @@ test('Sword & Shield numbered imports use their printed moves and artwork', asyn
   }
 });
 
+test('the English Antique Armor Fossil imports as the existing fossil', async () => {
+  const engine = await mod;
+  const cards = ['Antique Armor Fossil PBL 072', 'Antique Armor Fossil PBL 73'];
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', {
+    deckList: cards.map(card => `1 ${card}`).join('\n'),
+  }))).json();
+  const lookup = await (await engine.handle(post('/v1/deck-import/get-cards', {
+    cards: [...cards, 'Antique Shield Fossil M5'],
+  }))).json();
+
+  assert.deepEqual(parsed.knownCards.map(card => card.fullName), ['Antique Shield Fossil M5']);
+  assert.deepEqual(parsed.unknownCards.map(card => card.setNumber), ['73']);
+  assert.deepEqual(lookup.cards.map(card => card.fullName), ['Antique Shield Fossil M5', 'Antique Shield Fossil M5']);
+  assert.match(lookup.cards[0].cardImage, /PBL_072_R_EN\.png$/);
+});
+
 test('existing attack marker names remain available to puzzle builders', async () => {
   const engine = await mod;
   const response = await (await engine.handle(post('/v1/deck-import/get-cards', {

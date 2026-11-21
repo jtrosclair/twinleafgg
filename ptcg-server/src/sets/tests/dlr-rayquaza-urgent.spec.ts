@@ -45,6 +45,14 @@ describe('Mega Rayquaza ex DLR 84 urgent audit',()=>{
   g.player2.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.weakness=[];g.player2.active.getPokemonCard()!.resistance=[];
   useAttack(g.store,g.state,0,'Storm Emerald');expect(g.player2.active.damage).toBe(200);
  });
+ it('counts three Prism Energy as three units, matching the official 150-damage ruling', () => {
+  const game = setupGame({ turn: 5,
+   player1: { active: { card: 'Mega Rayquaza ex DLR', energy: Array(3).fill('Prism Energy NXD') }, deck: padDeck(10) },
+   player2: { active: { card: 'Arceus VSTAR BRS' }, deck: padDeck(10) }
+  });
+  useAttack(game.store, game.state, 0, 'Storm Emerald');
+  expect(game.player2.active.damage).toBe(150);
+ });
  it('copying Storm Emerald counts the attacking player’s Energy',()=>{
   const g=setupGame({turn:3,player1:{active:{card:'Mew ex 30C',energy:['Fire Energy SVE','Lightning Energy SVE','Water Energy SVE']},bench:[{card:'Mega Rayquaza ex DLR',energy:['Fire Energy SVE']}],deck:padDeck(10)},player2:{active:{card:'Mew ex MEW'},deck:padDeck(10)}});
   g.player2.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.weakness=[];g.player2.active.getPokemonCard()!.resistance=[];

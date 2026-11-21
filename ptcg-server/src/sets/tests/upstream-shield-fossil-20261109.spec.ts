@@ -129,4 +129,11 @@ describe('Antique Shield Fossil M5', () => {
     expect(serializer.serialize(restored)).toBe(before);
     expect(restored.players[0].active.getPokemonCard()?.fullName).toBe('Antique Shield Fossil M5');
   });
+
+  it('resolves the English collector identity to the same executable card', () => {
+    StateSerializer.setKnownCards([new AntiqueShieldFossil()]);
+    expect(StateSerializer.normalizeCardName('Antique Armor Fossil PBL 072')).toBe('Antique Shield Fossil M5');
+    expect(StateSerializer.normalizeCardName('Antique Armor Fossil PBL 73')).toBe('');
+    expect(StateSerializer.normalizeCardName('Antique Shield Fossil M5')).toBe('Antique Shield Fossil M5');
+  });
 });

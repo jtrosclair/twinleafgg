@@ -2,12 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import {
-  IS_ABILITY_BLOCKED,
-  NEXT_TURN_ATTACK_BONUS,
-  SEARCH_DECK_FOR_CARDS_TO_HAND,
-} from '../../game/store/prefabs/prefabs';
+import { registerKnockOutDeckSearch } from '../../game/store/prefabs/knock-out-effects';
+import { NEXT_TURN_ATTACK_BONUS } from '../../game/store/prefabs/prefabs';
 
 export class Pecharunt extends PokemonCard {
   private readonly MOCHI_RUSH_BONUS_MARKER = 'PECHARUNT_MOCHI_RUSH_BONUS';
@@ -39,26 +35,8 @@ export class Pecharunt extends PokemonCard {
   public fullName: string = 'Pecharunt ASC';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Final Chain
-    if (
-      effect instanceof KnockOutEffect &&
-      effect.target.cards.includes(this) &&
-      effect.target.getPokemonCard() === this &&
-      effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)
-    ) {
-      const player = effect.player;
-      if (!IS_ABILITY_BLOCKED(store, state, player, this)) {
-        SEARCH_DECK_FOR_CARDS_TO_HAND(
-          store,
-          state,
-          player,
-          this,
-          {},
-          { min: 1, max: 1, allowCancel: false },
-          this.powers[0],
-        );
-      }
-    }
+    // Ref: set-paradox-rift/cofagrigus-ex.ts (Knock Out from opposing attack damage).
+    registerKnockOutDeckSearch(store, state, effect, this, 1);
 
     // Mochi Rush
     NEXT_TURN_ATTACK_BONUS(effect, {

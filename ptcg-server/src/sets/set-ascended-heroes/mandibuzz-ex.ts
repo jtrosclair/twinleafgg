@@ -1,7 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
-import { State, StateUtils, StoreLike } from '../../game';
+import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -41,14 +42,15 @@ export class MandibuzzEx extends PokemonCard {
       THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(50, effect, store, state);
     }
 
-    // Vulture Claw
+    // Ref: set-astral-radiance/luxray-v.ts (complete damage before other effects).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      if (opponent.hand.cards.length > 0) {
-        const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
-        const card = opponent.hand.cards[randomIndex];
-        MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: [card], sourceCard: this });
-      }
+      const attacker = effect.source.getPokemonCard() ?? this;
+      afterAttackDamage(state, effect, (store, state) => {
+        const { hand, discard } = effect.opponent;
+        if (hand.cards.length === 0) return state;
+        const card = hand.cards[Math.floor(Math.random() * hand.cards.length)];
+        return MOVE_CARDS(store, state, hand, discard, { cards: [card], sourceCard: attacker, sourceEffect: effect });
+      });
     }
 
     return state;

@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { COIN_FLIP_PROMPT, NEXT_TURN_ATTACK_BONUS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED } from '../../game/store/prefabs/attack-effects';
 
 export class TogedemaruEx extends PokemonCard {
@@ -45,17 +45,14 @@ export class TogedemaruEx extends PokemonCard {
       });
     }
 
-    // Spiky Rolling
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const lastAttack = state.playerLastAttack?.[effect.player.id];
-      if (
-        lastAttack &&
-        lastAttack.sourceCard === this &&
-        lastAttack.attack.name === 'Spiky Rolling'
-      ) {
-        effect.damage += 80;
-      }
-    }
+    // Ref: set-guardians-rising/swellow.ts (last-turn history survives switching).
+    NEXT_TURN_ATTACK_BONUS(effect, {
+      attack: this.attacks[1],
+      source: this,
+      bonusDamage: 80,
+      bonusMarker: 'SPIKY_ROLLING_USED',
+      clearMarker: 'SPIKY_ROLLING_EXPIRES'
+    });
 
     return state;
   }

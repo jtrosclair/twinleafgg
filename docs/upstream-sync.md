@@ -5388,3 +5388,50 @@ prompt checks pass.
 A packaged browser replay also plays Turo, returns a Pokémon,
 then drags Nest Ball from hand and benches a new Pokémon using
 both mouse and touch input.
+
+## Gameplay re-audit, batch 85
+
+Reviewed the four remaining commits titled as fixes in the current
+upstream range. The 21 ChooseCards paths now have coverage for when the
+printed card requires a reveal, how many cards can be selected, and
+when to shuffle. The existing simulator changes already cover those
+search and recovery paths.
+[Fearow print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/ex14/18)
+[Holon Transceiver print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/ex11/98)
+[Proton print](https://www.pokemon-card.com/card-search/details.php/card/49451)
+
+The 17 Ascended Heroes paths were reviewed together. Final Chain now
+checks the cause of Pecharunt's own Knock Out. Tri Kinesis queues the
+selected Pokémon's Knock Out as an attack effect, so Mist Energy
+protects its holder. Vulture Claw discards after damage. Spiky Rolling
+checks the immediately preceding turn of the same player and retains
+the bonus through a trip to the Bench and back.
+[Final Chain print](https://www.pokemon-card.com/card-search/details.php/card/49811)
+[Tri Kinesis print](https://www.pokemon-card.com/card-search/details.php/card/49768)
+[Mist Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9F%E3%82%B9%E3%83%88%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+[Vulture Claw print](https://www.pokemon-card.com/card-search/details.php/card/49191)
+[Spiky Rolling rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%88%E3%82%B2%E3%83%87%E3%83%9E%E3%83%AB&regulation_faq_main_item1=all)
+
+Mega Rayquaza ex keeps its optional Ability activation, attaches a
+Basic Energy after acceptance when one is found, and shuffles only the
+other looked-at cards to the bottom. Storm Emerald passes the official
+150-damage case with three Prism Energy. Antique Armor Fossil PBL 72
+now resolves to the existing saved card in the snapshot parser and both
+puzzle-builder lookups, so the English deck import and Shieldon's
+existing evolution chain refer to the same card.
+[Mega Rayquaza ex print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me06/84/)
+[Mega Rayquaza ex rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%83%83%E3%82%AF%E3%82%A6%E3%82%B6)
+[Antique Armor Fossil print](https://www.pokemon-card.com/card-search/details.php/card/50291/regu/all)
+
+Five of the seven new Ascended Heroes gameplay cases fail on the
+previous engine and pass with the changes. All 559 comparable saved
+boards and all 3,636 sampled opening actions match. The seven recorded
+solutions still win twice each. The API passes 33 checks, the client
+passes 209, and all ten packaged mouse and touch checks pass. The
+combined checkout with in-progress client work passes 93 checks.
+
+There are 43 open card and engine commits in this upstream range.
+They include several shared effect refactors and card-catalog
+additions. The next gameplay review covers the unfinished shared
+Knock Out rules in `bc849aeed` and `b8fad7fa2`, and outstanding
+port behavior in the requested-card additions.
