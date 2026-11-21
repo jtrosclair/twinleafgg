@@ -1,12 +1,13 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, GameError } from '../../game';
+import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, GameError, CardTarget, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { RemoveSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { CheckHpEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Gardevoirex extends PokemonCard {
 
@@ -45,51 +46,43 @@ export class Gardevoirex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_POWER_USED(effect, 0, this)) {
-      const player = effect.player;
+      const { player, power } = effect;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const eligibleEnergy = player.discard.cards.some(card => card instanceof EnergyCard
+        && card.energyType === EnergyType.BASIC && card.provides.includes(CardType.PSYCHIC));
+      if (!eligibleEnergy) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
-      // const blocked: CardTarget[] = [];
-      // player.bench.forEach((card, index) => {
-      //   if (card instanceof PokemonCard && card.cardType !== CardType.PSYCHIC) {
-      //     blocked.push();
-      //   }
-      // });
+      const blockedTo: CardTarget[] = [];
+      const maxPerTarget: { target: CardTarget; max: number }[] = [];
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        const type = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, type);
+        const hp = new CheckHpEffect(player, slot);
+        store.reduceEffect(state, hp);
+        const max = Math.floor((hp.hp - slot.damage - 1) / 20);
+        if (!type.cardTypes.includes(CardType.PSYCHIC) || max <= 0) {
+          blockedTo.push(target);
+        } else {
+          maxPerTarget.push({ target, max });
+        }
+      });
+      if (maxPerTarget.length === 0) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
-      // player.active.cards.forEach((card, index) => {
-      //   if (card instanceof PokemonCard && card.cardType !== CardType.PSYCHIC) {
-      //     blocked.push();
-      //   }
-      // });
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Psychic Energy' },
-        { allowCancel: true, min: 0 },
+      // Ref: set-stellar-crown/lapras-ex.ts (attach selected Energy through the engine).
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { allowCancel: true, min: 0, validCardTypes: [CardType.PSYCHIC], blockedTo, maxPerTarget },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          return state;
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const checkHpEffect = new CheckHpEffect(player, target);
-          store.reduceEffect(state, checkHpEffect);
-
-          if (target.cards[0] instanceof PokemonCard && target.cards[0].cardType !== CardType.PSYCHIC) {
-            throw new GameError(GameMessage.CAN_ONLY_ATTACH_TO_PSYCHIC);
-          }
-
-          const damageAfterTransfer = target.damage + 20;
-          if (damageAfterTransfer >= checkHpEffect.hp) {
-            throw new GameError(GameMessage.CANNOT_USE_POWER);
-          }
-          player.discard.moveCardTo(transfer.card, target);
-          target.damage += 20;
-        }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', {
+          sourceCard: this,
+          onAttached: attached => {
+            for (const { to } of attached) {
+              const slot = StateUtils.getTarget(state, player, to);
+              state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, slot, 20, this, power));
+            }
+          },
+        });
       });
     }
 

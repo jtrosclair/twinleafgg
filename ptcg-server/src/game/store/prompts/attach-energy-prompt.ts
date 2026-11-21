@@ -22,6 +22,7 @@ export interface AttachEnergyOptions {
   differentTargets: boolean;
   validCardTypes?: CardType[];
   maxPerType?: number;
+  maxPerTarget?: { target: CardTarget; max: number }[];
 }
 
 export type AttachEnergyResultType = { to: CardTarget, index: number }[];
@@ -129,6 +130,14 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
     }
     if (result.some(r => this.options.blockedTo.some(target =>
       target.player === r.to.player && target.slot === r.to.slot && target.index === r.to.index))) {
+      return false;
+    }
+
+    if (this.options.maxPerTarget?.some(({ target, max }) => {
+      const assigned = result.filter(({ to }) =>
+        to.player === target.player && to.slot === target.slot && to.index === target.index);
+      return assigned.length > max;
+    })) {
       return false;
     }
 

@@ -1,10 +1,13 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, PlayerType, GameError, GameMessage } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, GameError, GameMessage } from '../../game';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { hasUsedPokemonAbility, recordPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
+import { DRAW_CARDS, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 
 export class Dodrio extends PokemonCard {
@@ -54,49 +57,33 @@ export class Dodrio extends PokemonCard {
 
   public readonly ZOOMING_DRAW_MARKER = 'ZOOMING_DRAW_MARKER';
 
-  public reduceEffect(store: StoreLike, state: State, effect: AttackEffect): State {
-
-    if (effect instanceof EndTurnEffect) {
-      const player = effect.player;
-      player.marker.removeMarker(this.ZOOMING_DRAW_MARKER, this);
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof EndTurnEffect || (effect instanceof PlayPokemonEffect && effect.pokemonCard === this)) {
+      effect.player.marker.removeMarker(this.ZOOMING_DRAW_MARKER, this);
     }
 
+    // Ref: set-twilight-masquerade/munkidori.ts (attribute counters to the Ability).
     if (WAS_POWER_USED(effect, 0, this)) {
-
-      const player = effect.player;
-      if (player.marker.hasMarker(this.ZOOMING_DRAW_MARKER, this)) {
+      const { player, power } = effect;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const slot = player.getPokemonInPlay().find(candidate => candidate.getPokemonCard() === this);
+      if (!slot) throw new GameError(GameMessage.CANNOT_USE_POWER);
+      if (hasUsedPokemonAbility(player, this.ZOOMING_DRAW_MARKER, this, power.name)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          cardList.damage += 10;
-        }
-      });
-
-      player.deck.moveTo(player.hand, 1);
-      player.marker.addMarker(this.ZOOMING_DRAW_MARKER, this);
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-        }
-      });
-
+      const placement = new PlaceDamageCountersEffect(player, slot, 10, this, power);
+      state = store.reduceEffect(state, placement);
+      if (!placement.preventDefault && placement.target === slot) {
+        DRAW_CARDS(player, 1);
+      }
+      recordPokemonAbilityUse(player, this.ZOOMING_DRAW_MARKER, this, power.name);
+      slot.addBoardEffect(BoardEffect.ABILITY_USED);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      // Get Dodrio's damage
-      const dodrioDamage = effect.player.active.damage;
-
-      // Calculate 30 damage per counter
-      const damagePerCounter = 30;
-      effect.damage += (dodrioDamage * damagePerCounter / 10);
-
-      return state;
+      effect.damage += Math.floor(effect.source.damage / 10) * 30;
     }
-
     return state;
   }
 }

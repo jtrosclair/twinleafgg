@@ -5703,3 +5703,44 @@ checks. The 559 comparable boards match in both serialized and expanded
 form. All 3,636 sampled opening actions and 35 Noctowl evolutions
 match exactly.
 The full engine passes 11,491 checks, and all 33 API checks pass.
+
+## Gameplay re-audit, batch 92
+
+This batch closes the modern gameplay review of `49205ef17`. Strong
+Currents requires a friendly Benched Pokémon and completes that switch
+first. It still works with an empty opposing Bench. The opponent chooses
+their replacement when their Active can be affected. Energy Slash counts
+the units supplied by attached Energy.
+[Samurott print](https://www.pokemon-card.com/card-search/details.php/card/48016)
+[Strong Currents rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%80%E3%82%A4%E3%82%B1%E3%83%B3%E3%82%AD&regulation_faq_main_item1=all)
+
+Psychic Embrace retains the bulk selection permitted by the official
+tournament guidelines. Each recipient must currently be Psychic, and
+its remaining HP limits how many Energy cards it may receive. The shared
+attachment validator applies the limit before any cards move. Successful
+discard attachments place two counters per Energy through the normal
+engine effects. The printed rule permits repeated legal uses.
+[Gardevoir ex print](https://www.pokemon-card.com/card-search/details.php/card/42574/regu/all)
+[Psychic Embrace rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B5%E3%83%BC%E3%83%8A%E3%82%A4%E3%83%88ex&regulation_faq_main_item1=all)
+[Official tournament guidelines on bulk declarations](https://www.pokemon-card.com/assets/document/penalty-guideline.pdf)
+
+Zooming Draw uses its own damage-counter effect before drawing. It can
+still place the counter when the deck is empty. Watchtower blocks it
+before any counters or draws. Hero’s Cape adds exactly 100 HP even when
+a saved board references the same physical Tool in both attachment
+lists. Orthworm ex already places the printed two counters per
+effective Metal Energy, including when Orthworm was hit on the Bench.
+[Hero’s Cape print](https://www.pokemon-card.com/card-search/details.php/card/49403)
+[Dodrio print](https://www.pokemon-card.com/card-search/details.php/card/45094/regu/all)
+[Zooming Draw empty-deck ruling](https://www.pokemon-card.com/rules/faq/search.php?page=176)
+[Orthworm ex ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9F%E3%83%9F%E3%82%BA%E3%82%BAex&regulation_faq_main_item1=all)
+
+The full engine passes 11,504 checks, all 33 API checks pass, and the
+combined client worktree passes the 108 focused checks. All 559 comparable
+saved boards match byte-for-byte and on expanded state. The action
+comparison matched 3,616 of 3,636 opening actions exactly. The remaining
+20 were Psychic Embrace results: 12 prompts gained target limits, seven
+activations without a legal attachment were refused, and one suppressed
+activation kept its rejection with a different error message.
+The production package verifies successfully, all 211 client checks pass,
+and all seven saved solutions reach the same win on two replays each.

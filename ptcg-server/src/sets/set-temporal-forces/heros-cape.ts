@@ -4,7 +4,7 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 
 export class HerosCape extends TrainerCard {
@@ -34,7 +34,7 @@ export class HerosCape extends TrainerCard {
 
       if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
 
-      effect.hp += 100;
+      if (APPLY_ONCE_PER_CARD(effect, this)) effect.hp += 100;
     }
     return state;
   }

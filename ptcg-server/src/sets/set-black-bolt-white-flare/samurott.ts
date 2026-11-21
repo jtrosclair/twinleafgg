@@ -1,60 +1,11 @@
-import { PokemonCard, Stage, CardType, StoreLike, State, PowerType, GameError, BoardEffect } from '../../game';
-import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { BoardEffect, CardType, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StateUtils, StoreLike } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, StateUtils } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
-
-function* useNightGate(next: Function, store: StoreLike, state: State,
-  effect: PowerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-
-  const playerHasBench = player.bench.some(b => b.cards.length > 0);
-  const opponentHasBench = opponent.bench.some(b => b.cards.length > 0);
-
-  if (playerHasBench === false) {
-    throw new GameError(GameMessage.CANNOT_USE_POWER);
-  }
-
-  if (opponentHasBench === false) {
-    return state;
-  }
-
-  if (playerHasBench && opponentHasBench) {
-    // First, opponent switches
-    return store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-      PlayerType.BOTTOM_PLAYER,
-      [SlotType.BENCH],
-      { allowCancel: false }
-    ), results => {
-      if (results && results.length > 0) {
-        player.active.clearEffects();
-        player.switchPokemon(results[0], store, state);
-
-        // Then player switches
-        return store.prompt(state, new ChoosePokemonPrompt(
-          opponent.id,
-          GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH],
-          { allowCancel: false }
-        ), playerResults => {
-          if (playerResults && playerResults.length > 0) {
-            opponent.active.clearEffects();
-            opponent.switchPokemon(playerResults[0], store, state);
-          }
-          return state;
-        });
-      }
-      return state;
-    });
-  }
-}
-
+import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { hasUsedPokemonAbility, recordPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
+import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Samurott extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -89,39 +40,47 @@ export class Samurott extends PokemonCard {
   public readonly STRONG_CURRENTS_MARKER = 'STRONG_CURRENTS_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Remove marker on end turn
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.STRONG_CURRENTS_MARKER, this)) {
+    if (effect instanceof EndTurnEffect || (effect instanceof PlayPokemonEffect && effect.pokemonCard === this)) {
       effect.player.marker.removeMarker(this.STRONG_CURRENTS_MARKER, this);
     }
 
-    // Strong Currents ability
+    // Ref: set-paldea-evolved/pelipper.ts (resolve the first action before the dependent effect).
     if (WAS_POWER_USED(effect, 0, this)) {
-      const generator = useNightGate(() => generator.next(), store, state, effect);
-      const player = effect.player;
-      if (player.marker.hasMarker(this.STRONG_CURRENTS_MARKER, this)) {
+      const { player, power } = effect;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const holder = player.getPokemonInPlay().find(slot => slot.getPokemonCard() === this);
+      if (!holder || !player.bench.some(slot => !!slot.getPokemonCard())) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
+      if (hasUsedPokemonAbility(player, this.STRONG_CURRENTS_MARKER, this, power.name)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      effect.player.marker.addMarker(this.STRONG_CURRENTS_MARKER, this);
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-        }
+      return store.prompt(state, new ChoosePokemonPrompt(
+        player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH], { allowCancel: false },
+      ), ([target]) => {
+        if (!target || !player.bench.includes(target) || !target.getPokemonCard()) return;
+        recordPokemonAbilityUse(player, this.STRONG_CURRENTS_MARKER, this, power.name);
+        player.switchPokemon(target, store, state);
+        holder.addBoardEffect(BoardEffect.ABILITY_USED);
+        const followUp = () => {
+          const opponent = StateUtils.getOpponent(state, player);
+          if (opponent.bench.some(slot => !!slot.getPokemonCard())
+            && CAN_APPLY_ABILITY_TO_TARGET(store, state, player, power, this, opponent.active)) {
+            SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player);
+          }
+        };
+        if (store.hasPrompts()) store.waitPrompt(state, followUp);
+        else followUp();
       });
-      return generator.next().value;
     }
 
-    // Energy Slash attack
+    // Ref: set-stellar-crown/lapras-ex.ts (count effective Energy units on the attacker).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const cardList = player.active;
-
-      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, cardList);
-      store.reduceEffect(state, checkProvidedEnergy);
-
-      const energyCount = checkProvidedEnergy.energyMap.length;
-      effect.damage = 30 + (50 * energyCount);
+      const provided = new CheckProvidedEnergyEffect(effect.player, effect.source);
+      state = store.reduceEffect(state, provided);
+      effect.damage += 50 * provided.energyMap.reduce((total, energy) => total + energy.provides.length, 0);
     }
     return state;
   }
