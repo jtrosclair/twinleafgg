@@ -188,6 +188,82 @@ describe('client-side snapshot GameService', () => {
     expectNoTransport();
   });
 
+  it('exposes the exact loss snapshot, freezes actions during board review, and resets the attempt', () => {
+    service.createGameFromState(snapshot, undefined, { stopAfterOpponentDraw: true }).subscribe();
+    const table = createTable();
+    const { gameId, stateData: initial } = table.gameState;
+    expect(messages('StateUpdate')[0].data.canViewBoard).toBe(true);
+
+    service.passTurnAction(gameId);
+    const loss = table.gameState.stateData;
+    expect(messages('TurnEnd')).toEqual([{ type: 'TurnEnd', data: { canViewBoard: true, stateData: loss } }]);
+    expect(table.gameState.state.players[1].hand.cards.length).toBe(3);
+    expect(table.gameState.state.players[1].deck.cards.length).toBe(2);
+    expect(table.canUndoBackend).toBe(true);
+
+    service.setBoardReadOnly(gameId);
+    expect(table.gameState.boardReadOnly).toBe(true);
+    expect(table.canUndoBackend).toBe(false);
+    expect(table.canEndTurn()).toBe(false);
+    service.reorderHandAction(gameId, [1, 0]);
+    service.pushStateChange(gameId, initial);
+    service.undo(gameId);
+    expect(table.gameState.stateData).toBe(loss);
+    expect(messages('StateUpdate').length).toBe(2);
+    expect(messages('UndoDetected').length).toBe(0);
+
+    service.resetGame(gameId);
+    expect(table.gameState.stateData).toBe(initial);
+    expect(table.gameState.boardReadOnly).toBe(false);
+    expect(table.canEndTurn()).toBe(true);
+    table.ngOnDestroy();
+  });
+
+  it('loads a review checkpoint without advancing the opponent or sending another result', () => {
+    const gameId = load();
+    service.setBoardReadOnly(gameId);
+    expect(session.session.gameStates[0].boardReadOnly).toBe(false);
+    service.passTurnAction(gameId);
+    const loss = session.session.gameStates[0].stateData;
+
+    bridge.postMessage.calls.reset();
+    service.createGameFromState(loss, undefined, { viewBoard: true }).subscribe();
+    const recovered = session.session.gameStates[0];
+    expect(recovered.boardReadOnly).toBe(true);
+    expect(recovered.stateData).toBe(loss);
+    expect(recovered.state.activePlayer).toBe(1);
+    expect(messages('TurnEnd')).toEqual([]);
+    expect(messages('GameOver')).toEqual([]);
+    expect(messages('StateUpdate')).toEqual([{ type: 'StateUpdate', data: { canViewBoard: true, stateData: loss } }]);
+    service.resetGame(recovered.gameId);
+    expect(session.session.gameStates[0]).toBe(recovered);
+  });
+
+  it('suppresses a pending gameplay prompt in a timed-out board inspection and recovery', () => {
+    service.createGameFromState(snapshot, undefined, { stopAfterOpponentDraw: true }).subscribe();
+    const table = createTable();
+    const { gameId } = table.gameState;
+    service.ability(gameId, 'Reset prompt', { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 });
+    const pending = table.gameState.state.prompts[0];
+    const checkpoint = table.gameState.stateData;
+    expect(pending).toBeDefined();
+    expect(table.hasActivePrompt()).toBe(true);
+
+    service.setBoardReadOnly(gameId);
+    service.resolvePrompt(gameId, pending.id, true);
+    expect(table.hasActivePrompt()).toBe(false);
+    expect(table.gameState.stateData).toBe(checkpoint);
+    table.ngOnDestroy();
+
+    service.createGameFromState(checkpoint, undefined, { viewBoard: true }).subscribe();
+    const recovered = session.session.gameStates[0];
+    expect(recovered.state.prompts.length).toBe(0);
+    expect(recovered.state.turn).toBe(3);
+    expect(recovered.state.activePlayer).toBe(0);
+    expect(recovered.state.players[0].marker.hasMarker('Reset prompt resolved')).toBe(false);
+    expect(messages('TurnEnd')).toEqual([]);
+  });
+
   it('publishes the initial isolated snapshot without repeating its state roundtrip', () => {
     const serialize = spyOn(StateSerializer.prototype, 'serialize').and.callThrough();
     const deserialize = spyOn(StateSerializer.prototype, 'deserialize').and.callThrough();
@@ -563,6 +639,43 @@ describe('client-side snapshot GameService', () => {
     service.resetGame(secondId);
     expect(session.session.gameStates).toEqual([]);
     expect(messages('StateUpdate').length).toBe(removedUpdates);
+    expectNoTransport();
+  });
+
+  it('reuses the catalogue and gives a switched puzzle its own clean history, prompts and Reset baseline', () => {
+    const firstId = load();
+    const first = session.session.gameStates[0];
+    const catalogue = StateSerializer.knownCards;
+    service.playCardAction(firstId, 0, { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index: 0 });
+    service.canUndo(firstId).subscribe(canUndo => expect(canUndo).toBe(true));
+    service.setPromptMinimized(first.localId, true);
+
+    const next = new StateSerializer().deserialize(new Base64().decode(snapshot));
+    next.turn = 9;
+    next.players[0].hand.cards.reverse();
+    let secondId: number;
+    service.createGameFromState(new Base64().encode(new StateSerializer().serialize(next)),
+      undefined, { closeDialogs: true }).subscribe(game => secondId = game.gameId);
+    const second = session.session.gameStates[0];
+    expect(StateSerializer.knownCards).toBe(catalogue);
+    expect(second.gameId).not.toBe(firstId);
+    expect(second.localId).not.toBe(first.localId);
+    expect(second.stateData).not.toBe(first.stateData);
+    expect(second.state.turn).toBe(9);
+    expect(second.promptMinimized).toBe(false);
+    expect(second.state.prompts).toEqual([]);
+    expect(dialog.closeAll.calls.count()).toBe(1);
+    service.canUndo(secondId).subscribe(canUndo => expect(canUndo).toBe(false));
+
+    const updates = messages('StateUpdate').length;
+    service.resetGame(firstId);
+    service.passTurnAction(firstId);
+    expect(messages('StateUpdate').length).toBe(updates);
+    service.passTurnAction(secondId);
+    service.resetGame(secondId);
+    expect(session.session.gameStates[0].stateData).toBe(second.stateData);
+    expect(session.session.gameStates[0].state.turn).toBe(9);
+    service.canUndo(secondId).subscribe(canUndo => expect(canUndo).toBe(false));
     expectNoTransport();
   });
 

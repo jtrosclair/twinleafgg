@@ -127,6 +127,81 @@ describe('ClientSimulator real card regressions', () => {
     });
   }
 
+  it('registers all 78 Aura Seeker collector numbers under their existing set and snapshot identities', () => {
+    ensureClientCards();
+    const auraSeeker = CardManager.getInstance().getAllCards().filter(card => card.set === 'M7');
+    expect(auraSeeker.map(card => Number(card.setNumber)).sort((a, b) => a - b))
+      .toEqual(Array.from({ length: 78 }, (_, index) => index + 1));
+    expect(auraSeeker.every(card => card.fullName.endsWith(' FLO'))).toBe(true);
+
+    const f = fixture('Mega Glimmora ex FLO', 'Blastoise FLO');
+    const sim = f.load();
+    expect(sim.state.players.map(player => player.active.getPokemonCard()?.fullName))
+      .toEqual(['Mega Glimmora ex FLO', 'Blastoise FLO']);
+  });
+
+  for (const [supporter, max] of [['Ball Guy SHF', 3], ['Apricorn Maker CES', 2]] as const) {
+    it(`${supporter} finds Poké Ball printings and rejects Tasty Rice Ball`, () => {
+      const f = fixture();
+      f.add(f.player.hand, supporter);
+      const eligible = ['Poké Ball SVI', 'Master Ball TEF'];
+      const excluded = 'Delicious Rice Balls M6';
+      [...eligible, excluded].forEach(name => f.add(f.player.deck, name));
+
+      const sim = f.load();
+      play(sim, supporter);
+      const prompt = pending(sim, ChooseCardsPrompt);
+      const blocked = prompt.options.blocked.map(index => prompt.cards.cards[index].fullName);
+      expect(prompt.options.max).toBe(max);
+      expect(blocked).toContain(excluded);
+      eligible.forEach(name => expect(blocked).not.toContain(name));
+      expect(() => chooseCards(sim, [excluded])).toThrow();
+      chooseCards(sim, eligible);
+      expect(sim.state.players[0].hand.cards.map(card => card.fullName).sort()).toEqual(eligible.sort());
+      expect(sim.state.players[0].deck.cards.map(card => card.fullName)).toContain(excluded);
+    });
+  }
+
+  it('Toxic Gem puts attack damage counters on two targets until they have 60 HP remaining', () => {
+    const f = fixture('Mega Glimmora ex FLO');
+    f.add(f.opponent.bench[0], 'Blastoise FLO');
+    f.opponent.active.damage = 40;
+    f.opponent.bench[0].damage = 20;
+    f.attach(f.player.active, 'Darkness Energy SVE');
+    f.attach(f.player.active, 'Darkness Energy SVE');
+
+    const sim = f.load();
+    attack(sim, 'Toxic Gem');
+    choosePokemon(sim, [opposing(), opposing(SlotType.BENCH)]);
+    expect(sim.state.players[1].active.damage)
+      .toBe(sim.state.players[1].active.getPokemonCard()!.hp - 60);
+    expect(sim.state.players[1].bench[0].damage)
+      .toBe(sim.state.players[1].bench[0].getPokemonCard()!.hp - 60);
+  });
+
+  it('Energy Leap reveals the opposing hand and attaches an Energy to a legal opposing Pokémon', () => {
+    const f = fixture('Natu FLO');
+    f.add(f.player.hand, 'Xatu FLO');
+    f.add(f.opponent.hand, 'Water Energy SVE');
+    f.add(f.opponent.hand, 'Bill BS');
+    f.add(f.opponent.bench[0], 'Charmander BS');
+
+    const sim = f.load();
+    play(sim, 'Xatu FLO', own());
+    sim.resolvePrompt(pending(sim, ConfirmPrompt).id, true);
+    const reveal = pending(sim, ShowCardsPrompt);
+    expect(reveal.sourcePlayerId).toBe(f.opponent.id);
+    expect(reveal.cards.map(card => card.fullName)).toEqual(['Water Energy SVE', 'Bill BS']);
+    sim.resolvePrompt(reveal.id, true);
+    const prompt = pending(sim, AttachEnergyPrompt);
+    expect(() => sim.resolvePrompt(prompt.id, [{ index: 1, to: opposing(SlotType.BENCH) }])).toThrow();
+    expect(() => sim.resolvePrompt(prompt.id, [{ index: 0, to: own() }])).toThrow();
+    sim.resolvePrompt(prompt.id, [{ index: 0, to: opposing(SlotType.BENCH) }]);
+    const opponent = sim.state.players[1];
+    expect(opponent.bench[0].energies.cards.map(card => card.fullName)).toEqual(['Water Energy SVE']);
+    expect(opponent.hand.cards.map(card => card.fullName)).toEqual(['Bill BS']);
+  });
+
   it('Computer Search pays a two-card discard before searching and shuffling', () => {
     const f = fixture();
     ['Computer Search BS', 'Water Energy SVE', 'Potion BS'].forEach(name => f.add(f.player.hand, name));

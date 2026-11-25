@@ -1,5 +1,5 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
@@ -59,6 +59,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 }
 
 export class PokeBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType = TrainerType.ITEM;
 

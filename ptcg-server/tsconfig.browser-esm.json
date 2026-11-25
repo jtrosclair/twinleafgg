@@ -1,5 +1,6 @@
 {
   "extends": "./tsconfig.browser.json",
+  "include": ["src/browser.ts", "src/client/index.ts", "src/client/incremental-cards.ts"],
   "compilerOptions": {
     "module": "es2020",
     "moduleResolution": "node",

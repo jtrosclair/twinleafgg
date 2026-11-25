@@ -12,6 +12,8 @@ const { inventoryHash } = require('../../tools/check-simulator-package.cjs');
 // The matching finalized HTML marker binds this declaration to immutable bytes.
 const SUPPORTED_SNAPSHOT_FORMATS = Object.freeze(['base64', 'gz1', 'gz2']);
 const SNAPSHOT_FORMATS_META = `<meta name="prizemap-supported-snapshot-formats" content="${SUPPORTED_SNAPSHOT_FORMATS.join(',')}">`;
+const PUZZLE_BOARD_REVIEW_META = '<meta name="prizemap-puzzle-board-review" content="true">';
+const PUZZLE_SESSION_REUSE_META = '<meta name="prizemap-puzzle-session-reuse" content="1">';
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
@@ -98,7 +100,9 @@ function packageClientBuild({ root = path.resolve(__dirname, '../dist/ptcg-play'
     contentType: TYPES[path.extname(name)] || 'application/octet-stream' }));
   const packageHash = inventoryHash(assets);
   const stableManifest = { schemaVersion: 1, packageHash, packageBaseUrl: `releases/${packageHash}/`,
-    entrypoint: 'index.html', supportedSnapshotFormats: [...SUPPORTED_SNAPSHOT_FORMATS], assets };
+    entrypoint: 'index.html', supportedSnapshotFormats: [...SUPPORTED_SNAPSHOT_FORMATS],
+    ...(index.includes(PUZZLE_BOARD_REVIEW_META) ? { supportsPuzzleBoardReview: true } : {}),
+    ...(index.includes(PUZZLE_SESSION_REUSE_META) ? { supportsPuzzleSessionReuse: true } : {}), assets };
   const releaseManifest = { ...stableManifest, packageBaseUrl: `/releases/${packageHash}/` };
   const archiveData = zipFiles([...files, { path: 'package-manifest.json',
     data: Buffer.from(JSON.stringify(releaseManifest, null, 2) + '\n') }]);
@@ -133,4 +137,7 @@ function packageClientBuild({ root = path.resolve(__dirname, '../dist/ptcg-play'
 }
 
 if (require.main === module) { packageClientBuild(); }
-module.exports = { packageClientBuild, zipFiles, crc32, SUPPORTED_SNAPSHOT_FORMATS, SNAPSHOT_FORMATS_META };
+module.exports = {
+  packageClientBuild, zipFiles, crc32, SUPPORTED_SNAPSHOT_FORMATS, SNAPSHOT_FORMATS_META,
+  PUZZLE_BOARD_REVIEW_META, PUZZLE_SESSION_REUSE_META
+};

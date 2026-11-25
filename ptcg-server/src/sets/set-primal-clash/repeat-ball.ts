@@ -3,7 +3,7 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { Card, GameError, PlayerType, PokemonCard, State, StateUtils, StoreLike } from '../../game';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
@@ -67,6 +67,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 }
 
 export class RepeatBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'PRC';
   public setNumber: string = '136';

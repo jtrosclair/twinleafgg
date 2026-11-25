@@ -8,6 +8,7 @@ import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH } from '../../game/stor
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
 export class GreatBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'RG';
   public cardImage: string = 'assets/cardback.png';

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Player, GamePhase } from 'ptcg-server';
+import { Player, GamePhase, GameWinner } from 'ptcg-server';
 import { combineLatest } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { GameService } from '../api/services/game.service';
@@ -22,6 +22,16 @@ export class TableComponent implements OnInit, OnDestroy {
   public isEndTurnConfirmationOpen = false;
   @ViewChild('endTurnConfirmation') public endTurnConfirmation: TemplateRef<unknown>;
   private endTurnDialog?: MatDialogRef<unknown, boolean>;
+
+  public get boardInert(): boolean {
+    return !!this.gameState?.turnComplete && !this.gameState.boardReadOnly;
+  }
+
+  public get fadeCompletedBoard(): boolean {
+    if (!this.boardInert) { return false; }
+    const { canViewBoard, state } = this.gameState;
+    return !canViewBoard || (state.phase === GamePhase.FINISHED && state.winner === GameWinner.PLAYER_1);
+  }
 
   public get topHandCount(): number {
     return this.opponentPlayer?.hand?.cards?.length || 0;
@@ -77,7 +87,7 @@ export class TableComponent implements OnInit, OnDestroy {
     this.bottomPlayer = game.state.players[0];
     this.topPlayer = game.state.players[1];
     const prompts = game.state.prompts.filter(prompt => prompt.result === undefined);
-    this.waiting = !game.turnComplete && !prompts.some(prompt => prompt.playerId === clientId)
+    this.waiting = !game.turnComplete && !game.boardReadOnly && !prompts.some(prompt => prompt.playerId === clientId)
       && (prompts.some(prompt => prompt.playerId !== clientId)
         || game.state.players[game.state.activePlayer]?.id !== clientId);
   }
@@ -92,7 +102,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   public canEndTurn(): boolean {
     const game = this.gameState;
-    return !!game && !game.deleted && !game.turnComplete && !game.promptMinimized && game.state.phase === GamePhase.PLAYER_TURN
+    return !!game && !game.deleted && !game.turnComplete && !game.boardReadOnly && !game.promptMinimized && game.state.phase === GamePhase.PLAYER_TURN
       && game.state.players[game.state.activePlayer]?.id === this.clientId && !this.hasActivePrompt();
   }
 
@@ -118,11 +128,13 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   public undo(): void {
-    if (!this.gameState || !this.canUndoBackend || this.hasActivePrompt()) { return; }
+    if (!this.gameState || this.gameState.boardReadOnly || !this.canUndoBackend || this.hasActivePrompt()) { return; }
     this.canUndoBackend = false;
     this.gameService.undo(this.gameState.gameId);
   }
 
   public toggleHandVisibility(): void { this.isHandHidden = !this.isHandHidden; }
-  public hasActivePrompt(): boolean { return this.gameState?.state.prompts.some(prompt => prompt.result === undefined) || false; }
+  public hasActivePrompt(): boolean {
+    return !this.gameState?.boardReadOnly && (this.gameState?.state.prompts.some(prompt => prompt.result === undefined) || false);
+  }
 }

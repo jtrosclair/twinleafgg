@@ -1,5 +1,5 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
@@ -56,6 +56,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
 
 export class LoveBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
   public regulationMark = 'H';

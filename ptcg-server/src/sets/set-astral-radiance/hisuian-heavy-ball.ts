@@ -1,7 +1,8 @@
-import { CardList, ChooseCardsPrompt, GameError, GameMessage, ShowCardsPrompt, Stage, State, StateUtils, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
+import { CardTag, CardList, ChooseCardsPrompt, GameError, GameMessage, ShowCardsPrompt, Stage, State, StateUtils, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 export class HisuianHeavyBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

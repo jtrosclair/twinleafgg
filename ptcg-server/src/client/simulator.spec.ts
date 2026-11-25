@@ -12,12 +12,14 @@ import { GameLog, GameMessage } from '../game/game-message';
 import { AttackEffect } from '../game/store/effects/game-effects';
 import { DealDamageEffect } from '../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckPokemonTypeEffect } from '../game/store/effects/check-effects';
+import { DrewTopdeckEffect } from '../game/store/effects/game-phase-effects';
 import { SpecialCondition, SuperType, TrainerType } from '../game/store/card/card-types';
 import { Store } from '../game/store/store';
 import { cloneAttacks, openCopyAttackSession } from '../game/store/prefabs/copy-attack-delegation';
 import { CardList } from '../game/store/state/card-list';
 import { Player } from '../game/store/state/player';
 import { PokemonCardList } from '../game/store/state/pokemon-card-list';
+import { Luxio } from '../sets/set-rebel-clash/luxio';
 import { GamePhase, GameWinner, State } from '../game/store/state/state';
 import { Base64 } from '../utils/base64';
 import { ensureClientCards } from './cards';
@@ -54,6 +56,61 @@ describe('ClientSimulator', () => {
     add(state.players[0].active, 'Fire Energy SVE');
     return { state, add, encode: () => new Base64().encode(new StateSerializer().serialize(state)) };
   }
+
+  it('stops the opted-in puzzle after the opponent draws without changing ordinary on-draw processing', () => {
+    const { state, encode, add } = fixture();
+    const opponent = state.players[1];
+    add(opponent.deck, 'Luxio RCL');
+    opponent.deck.cards.unshift(opponent.deck.cards.pop()!);
+    const snapshot = encode();
+    const drawEffects = spyOn(Luxio.prototype, 'reduceEffect').and.callThrough();
+    const simulator = new ClientSimulator();
+    simulator.loadSnapshot({ stateData: snapshot, stopAfterOpponentDraw: true });
+    simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+    expect(simulator.complete).toBe(true);
+    expect(simulator.state.activePlayer).toBe(1);
+    expect(simulator.state.turn).toBe(state.turn + 1);
+    expect(simulator.state.players[1].deck.cards.length).toBe(5);
+    expect(simulator.state.players[1].hand.cards.map(card => card.fullName)).toEqual(['Luxio RCL']);
+    expect(simulator.state.players[1].bench.every(slot => slot.cards.length === 0)).toBe(true);
+    expect(drawEffects.calls.allArgs().some(args => args[2] instanceof DrewTopdeckEffect)).toBe(false);
+
+    const finalBoard = simulator.getStateData();
+    simulator.loadSnapshot({ stateData: finalBoard, readOnly: true });
+    expect(simulator.getStateData()).toBe(finalBoard);
+    expect(() => simulator.dispatch(new PassTurnAction(simulator.humanPlayerId))).toThrow();
+    expect(() => simulator.pushState(snapshot)).toThrow();
+    expect(simulator.undo()).toBe(false);
+
+    simulator.loadSnapshot({ stateData: snapshot });
+    simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+    expect(drawEffects.calls.allArgs().some(args => args[2] instanceof DrewTopdeckEffect)).toBe(true);
+    simulator.cleanup();
+  });
+
+  it('does not resolve an outstanding Slumbering Forest coin flip after the puzzle draw', () => {
+    const { state, encode, add } = fixture();
+    const [human, opponent] = state.players;
+    add(human.stadium, 'Slumbering Forest UNM');
+    opponent.marker.addMarker('SLUMBERING_MARKER', human.stadium.cards[0]);
+    const snapshot = encode();
+    spyOn(Math, 'random').and.returnValue(0.99);
+    const simulator = new ClientSimulator();
+    const resolvedCoinFlip = () => simulator.state.logs.some(log => log.message === GameLog.LOG_PLAYER_FLIPS_TAILS);
+    simulator.loadSnapshot({ stateData: snapshot, stopAfterOpponentDraw: true });
+    simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+    expect(simulator.complete).toBe(true);
+    expect(simulator.state.players[1].hand.cards.length).toBe(1);
+    expect(simulator.state.players[1].active.specialConditions).not.toContain(SpecialCondition.ASLEEP);
+    expect(simulator.state.prompts.length).toBe(0);
+    expect(resolvedCoinFlip()).toBe(false);
+
+    simulator.loadSnapshot({ stateData: snapshot });
+    simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+    expect(simulator.state.players[1].active.specialConditions).toContain(SpecialCondition.ASLEEP);
+    expect(resolvedCoinFlip()).toBe(true);
+    simulator.cleanup();
+  });
 
   it('restores a detached copied Iron Rule through compact checkpoints and local undo', () => {
     const f = fixture();

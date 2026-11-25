@@ -49,6 +49,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 }
 
 export class CherishBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'UNM';

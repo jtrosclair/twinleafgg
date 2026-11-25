@@ -7,7 +7,9 @@ const os = require('node:os');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const vm = require('node:vm');
-const { packageClientBuild, SUPPORTED_SNAPSHOT_FORMATS, SNAPSHOT_FORMATS_META } = require('./package-client-build.cjs');
+const {
+  packageClientBuild, SUPPORTED_SNAPSHOT_FORMATS, SNAPSHOT_FORMATS_META, PUZZLE_BOARD_REVIEW_META, PUZZLE_SESSION_REUSE_META
+} = require('./package-client-build.cjs');
 const { collectResources, bootstrap } = require('./static-resources.cjs');
 const { validateManifest } = require('../../tools/check-simulator-package.cjs');
 const digest = data => crypto.createHash('sha256').update(data).digest('hex');
@@ -40,6 +42,18 @@ test('identical finalized bytes reuse one immutable release across unique builds
   validateManifest(second, 'https://cdn.example/simulator-manifest.json');
 });
 
+test('the tagged puzzle reuse capability is advertised only with a matching HTML marker', t => {
+  const options = fixture(t);
+  const previous = packageClientBuild(options);
+  assert.equal(previous.supportsPuzzleSessionReuse, undefined);
+  fs.appendFileSync(path.join(options.root, 'index.html'), PUZZLE_SESSION_REUSE_META);
+  const next = packageClientBuild(options);
+  const release = path.join(options.destination, 'releases', next.packageHash);
+  assert.notEqual(next.packageHash, previous.packageHash);
+  assert.equal(next.supportsPuzzleSessionReuse, true);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(release, 'package-manifest.json'))).supportsPuzzleSessionReuse, true);
+});
+
 test('final HTML, engine, presentation payload, CSS and card data each invalidate the package', t => {
   const options = fixture(t);
   const first = packageClientBuild(options);
@@ -52,6 +66,17 @@ test('final HTML, engine, presentation payload, CSS and card data each invalidat
   }
   const stillPresent = path.join(options.destination, 'releases', first.packageHash, 'main.js');
   assert.equal(fs.readFileSync(stillPresent, 'utf8'), 'console.log("engine");');
+});
+
+test('advertises board review only when the inventoried HTML declares it', t => {
+  const options = fixture(t), baseline = packageClientBuild(options);
+  assert.equal(baseline.supportsPuzzleBoardReview, undefined);
+  fs.appendFileSync(path.join(options.root, 'index.html'), PUZZLE_BOARD_REVIEW_META);
+  const reviewed = packageClientBuild(options);
+  assert.notEqual(reviewed.packageHash, baseline.packageHash);
+  assert.equal(reviewed.supportsPuzzleBoardReview, true);
+  const manifest = path.join(options.destination, 'releases', reviewed.packageHash, 'package-manifest.json');
+  assert.equal(JSON.parse(fs.readFileSync(manifest)).supportsPuzzleBoardReview, true);
 });
 
 test('inventory and ZIP verify against real bytes; redundant embedded sources/maps are excluded', t => {

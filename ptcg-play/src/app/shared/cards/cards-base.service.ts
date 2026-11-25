@@ -1,4 +1,4 @@
-import { ensureClientCards, applyClientCardMetadata, CardLibraryMetadata } from 'ptcg-server/client';
+import { ensureClientCards, applyClientCardMetadata, clientCardCatalogueOrdinal, CardLibraryMetadata } from 'ptcg-server/client';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Card, StateSerializer, SuperType, PokemonCard, EnergyCard, CardType, TrainerCard } from 'ptcg-server';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,7 +37,8 @@ export class CardsBaseService implements OnDestroy {
     });
     this.japaneseImages.clear();
     if (cardsInfo.japaneseImages) ensureClientCards().forEach((card, index) => {
-      const reference = cardsInfo.japaneseImages[index];
+      const ordinal = clientCardCatalogueOrdinal(card.fullName) ?? index;
+      const reference = cardsInfo.japaneseImages[ordinal];
       if (reference) this.japaneseImages.set(card.fullName, reference.startsWith('/')
         ? 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com' + reference : reference);
     });

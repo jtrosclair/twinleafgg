@@ -10,6 +10,7 @@ import { COIN_FLIP_PROMPT, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND } from
 import { PokemonCard } from '../../game';
 
 export class TeamMagmaBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'MA';
   public name: string = 'Team Magma Ball';

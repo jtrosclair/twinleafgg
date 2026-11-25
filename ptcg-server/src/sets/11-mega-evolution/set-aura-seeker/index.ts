@@ -39,6 +39,46 @@ import { Varoom } from './varoom';
 import { Vibrava } from './vibrava';
 import { Wooper } from './wooper';
 
+import { Bellsprout } from './bellsprout';
+import { Weepinbell } from './weepinbell';
+import { Victreebel } from './victreebel';
+import { Yanma } from './yanma';
+import { Yanmega } from './yanmega';
+import { Treecko } from './treecko';
+import { Grovyle } from './grovyle';
+import { Sceptileex } from './sceptile-ex';
+import { Karrablast } from './karrablast';
+import { Shelmet } from './shelmet';
+import { Accelgor } from './accelgor';
+import { Vulpix } from './vulpix';
+import { Ninetales } from './ninetales';
+import { Squirtle } from './squirtle';
+import { Wartortle } from './wartortle';
+import { Blastoise } from './blastoise';
+import { Cryogonal } from './cryogonal';
+import { Natu } from './natu';
+import { Xatu } from './xatu';
+import { Oranguru } from './oranguru';
+import { Hatenna } from './hatenna';
+import { Hattrem } from './hattrem';
+import { Hatterene } from './hatterene';
+import { Barboach } from './barboach';
+import { Whiscash } from './whiscash';
+import { Falinks } from './falinks';
+import { Inkay } from './inkay';
+import { Malamar } from './malamar';
+import { Glimmet } from './glimmet';
+import { MegaGlimmoraex } from './mega-glimmora-ex';
+import { TingLu } from './ting-lu';
+import { Escavalier } from './escavalier';
+import { Togedemaruex } from './togedemaru-ex';
+import { Orthworm } from './orthworm';
+import { Kecleon } from './kecleon';
+import { Munchlax } from './munchlax';
+import { Regigigas } from './regigigas';
+import { BondingSash } from './bonding-sash';
+import { Reporter } from './reporter';
+
 export const setAuraSeeker: Card[] = [
   new Wooper(),
   new Quagsire(),
@@ -79,4 +119,43 @@ export const setAuraSeeker: Card[] = [
   new CrasherWakesPassion(),
   new KorrinasDetermination(),
   new FightArena(),
+  new Bellsprout(),
+  new Weepinbell(),
+  new Victreebel(),
+  new Yanma(),
+  new Yanmega(),
+  new Treecko(),
+  new Grovyle(),
+  new Sceptileex(),
+  new Karrablast(),
+  new Shelmet(),
+  new Accelgor(),
+  new Vulpix(),
+  new Ninetales(),
+  new Squirtle(),
+  new Wartortle(),
+  new Blastoise(),
+  new Cryogonal(),
+  new Natu(),
+  new Xatu(),
+  new Oranguru(),
+  new Hatenna(),
+  new Hattrem(),
+  new Hatterene(),
+  new Barboach(),
+  new Whiscash(),
+  new Falinks(),
+  new Inkay(),
+  new Malamar(),
+  new Glimmet(),
+  new MegaGlimmoraex(),
+  new TingLu(),
+  new Escavalier(),
+  new Togedemaruex(),
+  new Orthworm(),
+  new Kecleon(),
+  new Munchlax(),
+  new Regigigas(),
+  new BondingSash(),
+  new Reporter(),
 ];

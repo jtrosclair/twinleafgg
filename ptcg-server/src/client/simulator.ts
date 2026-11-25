@@ -34,6 +34,8 @@ export interface SnapshotOptions {
   gameSettings?: Partial<GameSettings>;
   winConditions?: WinConditions;
   opponentUsername?: string;
+  stopAfterOpponentDraw?: boolean;
+  readOnly?: boolean;
 }
 
 /** One in-memory puzzle session. There are no transports, users, or persistence. */
@@ -80,7 +82,7 @@ export class ClientSimulator implements StoreHandler {
   }
 
   private restoreSnapshot(options: SnapshotOptions, history: string[]): State {
-    const state = this.decodeSnapshot(options.stateData);
+    const state = this.decodeSnapshot(options.stateData, options.readOnly);
     const previous = {
       store: this.store,
       history: this.history,
@@ -102,9 +104,17 @@ export class ClientSimulator implements StoreHandler {
         state.winConditions = { ...options.winConditions };
       }
       state.prompts = [];
-      this.complete = state.phase === GamePhase.FINISHED;
+      this.complete = options.readOnly === true || state.phase === GamePhase.FINISHED;
       this.humanTurn = state.activePlayer === 0 ? state.turn : undefined;
-      this.store = new Store(this);
+      this.store = new Store(this, options.stopAfterOpponentDraw
+        ? (current, player) => this.humanTurn !== undefined && player === current.players[1]
+        : undefined);
+      if (options.readOnly) {
+        // This snapshot is for display and has no playable continuation.
+        this.store.state = state;
+        this.notify?.(state);
+        return state;
+      }
       this.store.restoreState(state);
       this.settle();
       return this.publish();
@@ -153,7 +163,7 @@ export class ClientSimulator implements StoreHandler {
 
   /** Native undo supplies a previously emitted, stable snapshot. */
   public pushState(stateData: string): State {
-    if (!this.snapshotOptions) {
+    if (!this.snapshotOptions || this.snapshotOptions.readOnly) {
       throw new GameError(GameMessage.ILLEGAL_ACTION);
     }
     return this.loadSnapshot({ ...this.snapshotOptions, stateData });
@@ -184,7 +194,7 @@ export class ClientSimulator implements StoreHandler {
     this.history = [];
   }
 
-  private decodeSnapshot(stateData: string): State {
+  private decodeSnapshot(stateData: string, readOnly = false): State {
     const parsed = JSON.parse(new Base64().decode(stateData));
     if (!Array.isArray(parsed) || !parsed[1] || !Array.isArray(parsed[1].cardNames)) {
       throw new GameError(GameMessage.ILLEGAL_ACTION);
@@ -227,7 +237,7 @@ export class ClientSimulator implements StoreHandler {
       || !Array.isArray(state.logs) || state.logs.some(log => !log || typeof log !== 'object')
       || ![0, 1].includes(state.activePlayer)
       || !Array.isArray(state.prompts)
-      || state.prompts.some(prompt => prompt.result === undefined)) {
+      || (!readOnly && state.prompts.some(prompt => prompt.result === undefined))) {
       // Serialized prompts cannot contain their continuation closures. PrizeMap stores
       // snapshots only at stable points, so fail clearly instead of stranding a prompt.
       throw new GameError(GameMessage.ILLEGAL_ACTION);
@@ -261,7 +271,7 @@ export class ClientSimulator implements StoreHandler {
     // Resolve engine randomness and default CPU choices locally. Bound bad card loops.
     for (let step = 0; step < 1000; step++) {
       const state = this.state;
-      if (state.phase === GamePhase.FINISHED) {
+      if (this.store.stoppedAfterTurnDraw || state.phase === GamePhase.FINISHED) {
         this.complete = true;
         return;
       }

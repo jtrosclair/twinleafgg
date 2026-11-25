@@ -2,7 +2,7 @@ import { CoinFlipPrompt, ShuffleDeckPrompt } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -14,6 +14,7 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
 export class TimerBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

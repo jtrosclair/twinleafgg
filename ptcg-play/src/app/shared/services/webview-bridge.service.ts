@@ -1,36 +1,84 @@
-import { Injectable, NgZone, Injector } from '@angular/core';
+import { Injectable, NgZone, Injector, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { GameService } from '../../api/services/game.service';
+import { PuzzleCatalogService } from '../../api/services/puzzle-catalog.service';
 import { SessionService } from '../session/session.service';
+import { SimulatorAssetsService } from './simulator-assets.service';
+import { beginPuzzleSetup, markPuzzleSetup } from './puzzle-setup-timing';
 
 export interface WebViewMessage {
   type: string;
   data?: any;
+  sessionId?: string;
+  ok?: boolean;
+  error?: string;
+}
+
+export interface PuzzleLoadRequest {
+  stateData: string;
+  sessionId: string;
 }
 
 export interface PrizeMapSimulatorApi {
-  reset(): void;
+  reset(sessionId?: string): void;
+  loadPuzzle?(request: PuzzleLoadRequest): void;
 }
 
 declare global {
-  interface Window { PrizeMapSimulator?: PrizeMapSimulatorApi; }
+  interface Window {
+    PrizeMapSimulator?: PrizeMapSimulatorApi;
+    ReactNativeWebView?: { postMessage(data: string): void };
+  }
+}
+
+const SESSION_ID = /^[A-Za-z0-9_-]{1,96}$/;
+
+// The persistent native host opts in on a verified loopback document. Keep
+// the published simulator and existing untagged app builds on their old API.
+export function nativePuzzleSessionId(window: Window | null): string | undefined {
+  const location = window?.location;
+  if (!window?.ReactNativeWebView || location?.protocol !== 'http:'
+    || !['127.0.0.1', 'localhost'].includes(location.hostname)
+    || !/^\/releases\/[a-f0-9]{64}\/sandbox-viewer$/.test(location.pathname)) { return undefined; }
+  const params = new URLSearchParams(location.search);
+  const sessionId = params.get('puzzleSessionId');
+  return params.get('puzzleBoardReview') === '1' && sessionId && SESSION_ID.test(sessionId) ? sessionId : undefined;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebViewBridgeService {
+export class WebViewBridgeService implements OnDestroy {
   private _gameService: GameService | undefined;
   private receivedEvents = new WeakSet<Event>();
+  private sessionId = nativePuzzleSessionId(window);
+  private initialPending = this.sessionId !== undefined;
+  private readonly seenSessionIds = new Set<string>();
+  private switching = false;
+  private destroyed = false;
 
   constructor(
     private injector: Injector,
     private sessionService: SessionService,
     private ngZone: NgZone
   ) {
-    this.setupMessageListener();
+    if (this.sessionId) { this.seenSessionIds.add(this.sessionId); }
+    window.addEventListener('message', this.receiveMessage);
+    document.addEventListener('message', this.receiveMessage);
     window.PrizeMapSimulator = Object.assign(window.PrizeMapSimulator || {}, {
-      reset: (): void => this.handleMessage({ type: 'ResetGame' })
+      reset: (sessionId?: string): void => this.handleMessage({ type: 'ResetGame', sessionId }),
+      ...(this.sessionId ? {
+        loadPuzzle: (request: PuzzleLoadRequest): void => {
+          void this.ngZone.run(() => this.loadPuzzle(request));
+        }
+      } : {})
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed = true;
+    window.removeEventListener('message', this.receiveMessage);
+    document.removeEventListener('message', this.receiveMessage);
   }
 
   private get gameService(): GameService {
@@ -40,26 +88,15 @@ export class WebViewBridgeService {
     return this._gameService;
   }
 
-  private setupMessageListener(): void {
-    // Listen for messages from React Native
-    window.addEventListener('message', (event) => {
-      this.receiveMessage(event);
-    });
-
-    // Also listen for messages sent via document (alternative approach for some WebView implementations)
-    document.addEventListener('message', (event: any) => {
-      this.receiveMessage(event);
-    });
-  }
-
-  private receiveMessage(event: MessageEvent): void {
+  private receiveMessage = (event: MessageEvent): void => {
     // A document message may also bubble through the window listener.
     if (this.receivedEvents.has(event)) { return; }
     this.receivedEvents.add(event);
     this.handleMessage(event.data);
-  }
+  };
 
   private handleMessage(messageData: unknown): void {
+    if (this.destroyed) { return; }
     try {
       const value = typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
       if (!value || typeof value !== 'object' || Array.isArray(value) || typeof value.type !== 'string') { return; }
@@ -68,8 +105,10 @@ export class WebViewBridgeService {
       // The iframe fallback may arrive back at this same window. It is an
       // outbound notification, so it must not trigger another Angular update.
       if (message?.type === 'iframeEvent') { return; }
+      if (this.sessionId && (this.switching || message.sessionId !== this.sessionId)) { return; }
       if (message.type === 'ResetGame' && message.data !== undefined
         && (!message.data || typeof message.data !== 'object' || Array.isArray(message.data))) { return; }
+      if (message.type === 'SetBoardReadOnly' && message.data?.readOnly !== true) { return; }
 
       // Run inside Angular zone to ensure change detection works
       this.ngZone.run(() => {
@@ -88,6 +127,11 @@ export class WebViewBridgeService {
       case 'ResetGame':
         this.handleResetGame();
         break;
+      case 'SetBoardReadOnly': {
+        const activeGame = this.sessionService.session.gameStates.find(game => !game.deleted);
+        if (activeGame) { this.gameService.setBoardReadOnly(activeGame.gameId); }
+        break;
+      }
       // Add other message types here as needed
       default:
         console.warn('Unknown message type from WebView:', message.type);
@@ -117,23 +161,80 @@ export class WebViewBridgeService {
     this.gameService.pushStateChange(activeGame.gameId, data.stateData);
   }
 
+  public initialPuzzleActivated(ok: boolean): void {
+    const sessionId = this.sessionId;
+    if (!this.initialPending || !sessionId) { return; }
+    this.initialPending = false;
+    this.postMessage({ type: 'PrizeMapPuzzleLoaded', sessionId, ok,
+      ...(ok ? {} : { error: 'Could not open the puzzle' }) });
+  }
+
+  private async loadPuzzle(request: PuzzleLoadRequest): Promise<void> {
+    const sessionId = request?.sessionId;
+    if (this.destroyed || !this.sessionId || typeof sessionId !== 'string' || !SESSION_ID.test(sessionId)) { return; }
+    const respond = (ok: boolean, error?: string): void => {
+      this.postMessage({ type: 'PrizeMapPuzzleLoaded', sessionId, ok, ...(error ? { error } : {}) });
+    };
+    if (this.seenSessionIds.has(sessionId)) { return; }
+    if (this.initialPending || this.switching || typeof request.stateData !== 'string' || !request.stateData) {
+      respond(false, 'Invalid or overlapping puzzle load');
+      return;
+    }
+    this.seenSessionIds.add(sessionId);
+    this.switching = true;
+    const previous = this.sessionId;
+    try {
+      const setupGeneration = beginPuzzleSetup();
+      const snapshot = await this.injector.get(PuzzleCatalogService).prepareSnapshot(request.stateData, sessionId).toPromise();
+      if (this.destroyed || !snapshot) { throw new Error('Could not prepare the new puzzle'); }
+      markPuzzleSetup('metadataReady', setupGeneration);
+      const router = this.injector.get(Router);
+      // Unmount the previous table before displacing its session. Preserve the
+      // document and its initialized catalog while recreating the Angular UI.
+      if (!await router.navigate(['/sandbox-viewer'], { skipLocationChange: true }) || this.destroyed) {
+        throw new Error('Could not leave the previous puzzle');
+      }
+      this.injector.get(SimulatorAssetsService).beginAttempt();
+      this.sessionId = sessionId; // The new StateUpdate is emitted synchronously during creation.
+      const game = await this.gameService.createGameFromState(snapshot, undefined,
+        { stopAfterOpponentDraw: true, closeDialogs: true }).toPromise().catch(error => {
+        this.sessionId = previous;
+        throw error;
+      });
+      markPuzzleSetup('engineReady', setupGeneration);
+      if (this.destroyed || !game || !await router.navigate(['/table', game.localId], { skipLocationChange: true })) {
+        throw new Error('Could not open the new puzzle');
+      }
+      // The native host replays matching state messages only after this ACK.
+      respond(true);
+      markPuzzleSetup('boardMounted', setupGeneration);
+      window.requestAnimationFrame?.(() => window.requestAnimationFrame(() => markPuzzleSetup('boardPainted', setupGeneration)));
+    } catch {
+      respond(false, 'Could not open the new puzzle');
+    } finally {
+      this.switching = false;
+    }
+  }
+
   /**
    * Send a message to React Native WebView with iframe fallback
    * If ReactNativeWebView is not available (e.g., running in iframe),
    * it will post a window message with type "iframeEvent" instead
    */
   public postMessage(message: WebViewMessage): void {
+    if (this.destroyed) { return; }
+    const outgoing = this.sessionId && !message.sessionId ? { ...message, sessionId: this.sessionId } : message;
     try {
-      if ((window as any).ReactNativeWebView) {
-        (window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify(outgoing));
       } else {
         // Fallback to window.postMessage for iframe environments
-        window.parent.postMessage({ type: 'iframeEvent', data: message }, '*');
+        window.parent.postMessage({ type: 'iframeEvent', data: outgoing }, '*');
       }
     } catch (error) {
       // If ReactNativeWebView.postMessage fails, use iframe fallback
       console.warn('Failed to post to ReactNativeWebView, using iframe fallback:', error);
-      window.parent.postMessage({ type: 'iframeEvent', data: message }, '*');
+      window.parent.postMessage({ type: 'iframeEvent', data: outgoing }, '*');
     }
   }
 }

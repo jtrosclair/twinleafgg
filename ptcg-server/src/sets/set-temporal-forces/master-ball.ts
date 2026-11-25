@@ -58,7 +58,7 @@ export class MasterBall extends TrainerCard {
 
   public regulationMark = 'H';
 
-  public tags = [CardTag.ACE_SPEC];
+  public tags = [CardTag.BALL, CardTag.ACE_SPEC];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

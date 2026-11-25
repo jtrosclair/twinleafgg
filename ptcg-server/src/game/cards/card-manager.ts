@@ -1,4 +1,6 @@
 import { Card } from '../store/card/card';
+import { Stage } from '../store/card/card-types';
+import type { PokemonCard } from '../store/card/pokemon-card';
 import { deepClone } from '../../utils/utils';
 import { CardsInfo } from './cards-info';
 
@@ -7,6 +9,7 @@ export class CardManager {
   private static instance: CardManager;
   private cards: Card[] = [];
   private cardIndex: { [name: string]: number } = {};
+  private stageOneLinks?: ReadonlyMap<string, ReadonlySet<string>>;
 
   public static getInstance(): CardManager {
     if (!CardManager.instance) {
@@ -33,6 +36,33 @@ export class CardManager {
         this.cardIndex[p.legacyFullName] = index;
       }
     }
+  }
+
+  public setStageOneEvolutionLinks(links: readonly (readonly [string, string])[]): void {
+    const index = new Map<string, Set<string>>();
+    for (const [basicName, stageOneName] of links) {
+      let evolutions = index.get(basicName);
+      if (!evolutions) {
+        evolutions = new Set<string>();
+        index.set(basicName, evolutions);
+      }
+      evolutions.add(stageOneName);
+    }
+    this.stageOneLinks = index;
+  }
+
+  public hasStageOneEvolutionLink(basicName: string, stageOneName: string,
+    pokemonCard: abstract new (...args: any[]) => PokemonCard): boolean {
+    if (this.stageOneLinks) return this.stageOneLinks.get(basicName)?.has(stageOneName) ?? false;
+    return this.cards.some(card => card instanceof pokemonCard && card.stage === Stage.STAGE_1
+      && card.name === stageOneName && card.evolvesFrom === basicName);
+  }
+
+  public replaceDefinedCards(cards: Card[]): void {
+    const staged = new CardManager();
+    staged.defineSet(cards);
+    this.cards = staged.cards;
+    this.cardIndex = staged.cardIndex;
   }
 
   public loadCardsInfo(cardsInfo: CardsInfo) {

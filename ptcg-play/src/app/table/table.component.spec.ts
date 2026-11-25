@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { GamePhase, Player, State } from 'ptcg-server';
+import { GamePhase, GameWinner, Player, State } from 'ptcg-server';
 import { TableComponent } from './table.component';
 
 describe('End Turn confirmation', () => {
@@ -25,6 +25,38 @@ describe('End Turn confirmation', () => {
   });
 
   async function answer(value: boolean) { closed.next(value); closed.complete(); await Promise.resolve(); }
+
+  it('keeps opted-in losses visible and locks the board until inspection begins', () => {
+    const { gameState } = table;
+    gameState.turnComplete = true;
+    expect(table.fadeCompletedBoard).toBe(true);
+    expect(table.boardInert).toBe(true);
+
+    gameState.canViewBoard = true;
+    expect(table.fadeCompletedBoard).toBe(false);
+    expect(table.boardInert).toBe(true);
+
+    gameState.state.phase = GamePhase.FINISHED;
+    gameState.state.winner = GameWinner.PLAYER_2;
+    expect(table.fadeCompletedBoard).toBe(false);
+    expect(table.boardInert).toBe(true);
+
+    gameState.boardReadOnly = true;
+    expect(table.fadeCompletedBoard).toBe(false);
+    expect(table.boardInert).toBe(false);
+    expect(table.canEndTurn()).toBe(false);
+  });
+
+  it('still fades completed wins with board review enabled', () => {
+    const { gameState } = table;
+    gameState.canViewBoard = true;
+    gameState.turnComplete = true;
+    gameState.state.phase = GamePhase.FINISHED;
+    gameState.state.winner = GameWinner.PLAYER_1;
+
+    expect(table.fadeCompletedBoard).toBe(true);
+    expect(table.boardInert).toBe(true);
+  });
 
   it('waits for explicit confirmation and submits once even after repeated clicks', async () => {
     const pending = table.endTurn();

@@ -3,7 +3,7 @@ import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, SuperType } from '../../game/store/card/card-types';
+import { CardTag, TrainerType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
@@ -60,6 +60,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 }
 
 export class LevelBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

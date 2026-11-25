@@ -34,9 +34,11 @@
     transition: opacity 500ms ease-out;
   }
 
-  &.is-complete {
+  &.is-locked {
     pointer-events: none;
+  }
 
+  &.is-complete {
     > ptcg-board,
     > ptcg-hand,
     > ptcg-prompt,

@@ -10,7 +10,7 @@ import { zipFiles } from '../ptcg-play/scripts/package-client-build.cjs';
 import { retainPreviousRelease } from './retain-previous-release.mjs';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-function packageData(label, supportedSnapshotFormats) {
+function packageData(label, supportedSnapshotFormats, capabilities = {}) {
   const files = [
     { path: 'index.html', data: Buffer.from('<base href="./"><script src="main.js"></script>') },
     { path: 'main.js', data: Buffer.from(`console.log("${label}");`) },
@@ -19,7 +19,7 @@ function packageData(label, supportedSnapshotFormats) {
   const assets = files.map(file => ({ path: file.path, bytes: file.data.length, sha256: digest(file.data) }));
   const packageHash = inventoryHash(assets);
   const stable = { schemaVersion: 1, packageHash, packageBaseUrl: `releases/${packageHash}/`, entrypoint: 'index.html',
-    ...(supportedSnapshotFormats === undefined ? {} : { supportedSnapshotFormats }), assets };
+    ...(supportedSnapshotFormats === undefined ? {} : { supportedSnapshotFormats }), ...capabilities, assets };
   const inside = { ...stable, packageBaseUrl: `/releases/${packageHash}/` };
   return { files, stable, inside,
     records: [...files, { path: 'package-manifest.json', data: Buffer.from(JSON.stringify(inside, null, 2) + '\n') }] };
@@ -127,6 +127,36 @@ test('rejects snapshot-format capabilities that disagree with the published inve
   const sidePath = '/releases/' + previous.manifest.packageHash + '/package-manifest.json';
   value.routes.get(sidePath).body = JSON.stringify({ ...previous.inside,
     supportedSnapshotFormats: ['base64'], archive: previous.manifest.archive });
+  await assert.rejects(value.run(), /Published side manifest does not match/);
+  assert(!fs.existsSync(path.join(value.publicDirectory, 'releases', previous.manifest.packageHash)));
+});
+
+test('retains board-review and session-reuse declarations with exact immutable manifests', async t => {
+  const value = await fixture(t);
+  const capabilities = { supportsPuzzleBoardReview: true, supportsPuzzleSessionReuse: true };
+  const previous = packed(packageData('native-session', ['base64', 'gz1', 'gz2'], capabilities));
+  value.publish(previous);
+  assert.equal((await value.run()).action, 'previousReleaseRestored');
+  const directory = path.join(value.publicDirectory, 'releases', previous.manifest.packageHash);
+  assert(fs.readFileSync(path.join(directory, 'package-manifest.json')).equals(previous.side));
+  assert(fs.readFileSync(path.join(directory, previous.manifest.archive.path)).equals(previous.zip));
+  assert.equal((await value.run()).action, 'previousReleaseAlreadyRetained');
+});
+
+test('rejects missing or unsupported native session declarations', async t => {
+  const value = await fixture(t);
+  const previous = packed(packageData('native-session-mismatch', ['base64'], {
+    supportsPuzzleBoardReview: true, supportsPuzzleSessionReuse: true
+  }));
+  const { supportsPuzzleBoardReview, ...missingReview } = previous.manifest;
+  value.publish({ ...previous, manifest: missingReview });
+  await assert.rejects(value.run(), /Archived package manifest does not match/);
+  value.publish({ ...previous, manifest: { ...previous.manifest, supportsPuzzleBoardReview: false } });
+  await assert.rejects(value.run(), /supportsPuzzleBoardReview must be true when present/);
+  value.publish(previous);
+  const { supportsPuzzleSessionReuse, ...missingReuse } = previous.inside;
+  const sidePath = '/releases/' + previous.manifest.packageHash + '/package-manifest.json';
+  value.routes.get(sidePath).body = JSON.stringify({ ...missingReuse, archive: previous.manifest.archive });
   await assert.rejects(value.run(), /Published side manifest does not match/);
   assert(!fs.existsSync(path.join(value.publicDirectory, 'releases', previous.manifest.packageHash)));
 });

@@ -62,7 +62,7 @@
         <div class="ptcg-board-drop-target" [dropTarget]="bottomActiveTarget" ptcgDropHighlight="outside"
           [ptcgDropHighlightVisible]="bottomActiveHighlight$ | async">
           <ptcg-board-card
-            [class.draggable]="!gameState.deleted && bottomPlayer?.id === clientId && bottomPlayer?.active.cards.length > 0"
+            [class.draggable]="!gameState.deleted && !gameState.boardReadOnly && bottomPlayer?.id === clientId && bottomPlayer?.active.cards.length > 0"
             [dragSource]="bottomActive.source" [noHTML5Preview]="true" [cardList]="bottomPlayer?.active"
             [owner]="bottomPlayer?.id === clientId" (cardClick)="onActiveClick($event, bottomPlayer?.active)"
             [player]="PlayerType.BOTTOM_PLAYER" [slot]="SlotType.ACTIVE" [index]="0">
@@ -81,7 +81,7 @@
           [class.bench-slot-empty]="!bottomPlayer?.bench[slot.index]?.cards.length"
           ptcgDropHighlight="outside" [ptcgDropHighlightVisible]="bottomBenchHighlight$[slot.index] | async">
           <ptcg-board-card
-            [class.draggable]="!gameState.deleted && bottomPlayer?.id === clientId && bottomPlayer?.bench[slot.index].cards.length > 0"
+            [class.draggable]="!gameState.deleted && !gameState.boardReadOnly && bottomPlayer?.id === clientId && bottomPlayer?.bench[slot.index].cards.length > 0"
             [dragSource]="slot.source" [noHTML5Preview]="true" [cardList]="bottomPlayer?.bench[slot.index]"
             [owner]="bottomPlayer?.id === clientId"
             (cardClick)="onBenchClick($event, bottomPlayer?.bench[slot.index], slot.index)"

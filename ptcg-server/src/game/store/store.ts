@@ -44,6 +44,7 @@ import { State, GamePhase } from './state/state';
 import { StateLog, StateLogParam } from './state/state-log';
 import { StoreHandler } from './store-handler';
 import { StoreLike } from './store-like';
+import { Player } from './state/player';
 import { generateId, deepClone } from '../../utils/utils';
 import { attackReducer, getActiveAttackDamageBonus } from './effect-reducers/attack-effect';
 import { playCardReducer } from './reducers/play-card-reducer';
@@ -85,7 +86,17 @@ export class Store implements StoreLike {
   // Flag to prevent nested playability calculations
   private calculatingPlayability: boolean = false;
 
-  constructor(private handler: StoreHandler) { }
+  private turnDrawCheckpoint?: State;
+
+  constructor(private handler: StoreHandler, private shouldStopAfterTurnDraw?: (state: State, player: Player) => boolean) { }
+
+  public stopAfterTurnDraw(state: State, player: Player): boolean {
+    if (!this.shouldStopAfterTurnDraw?.(state, player)) { return false; }
+    this.turnDrawCheckpoint = state;
+    return true;
+  }
+
+  public get stoppedAfterTurnDraw(): boolean { return this.turnDrawCheckpoint === this.state; }
 
   /** Restore a stable snapshot without retaining callbacks from the previous game. */
   public restoreState(state: State): void {
@@ -94,6 +105,7 @@ export class Store implements StoreLike {
     if (this.state !== state) clearAttackDamageScopes(state);
     this.promptItems = [];
     this.waitItems = [];
+    this.turnDrawCheckpoint = undefined;
     this.logId = state.logs.reduce((max, log) => Math.max(max, log.id || 0), 0);
     this.state = state;
     // Snapshots may carry the default five slots even with a bench-expanding
@@ -157,10 +169,7 @@ export class Store implements StoreLike {
 
     if (action instanceof ResolvePromptAction) {
       state = this.reducePrompt(state, action);
-      if (this.promptItems.length === 0) {
-        state = checkState(this, state);
-      }
-      state = this.calculatePlayability(state);
+      state = this.finishAction(state);
       this.handler.onStateChange(state);
       return state;
     }
@@ -515,7 +524,7 @@ export class Store implements StoreLike {
         if (itemIndex !== -1) this.promptItems.splice(itemIndex, 1);
       }
 
-      this.resolveWaitItems();
+      this.resolveWaitItems(state);
     } catch (storeError) {
       // Illegal action
       prompt.result = undefined;
@@ -525,8 +534,8 @@ export class Store implements StoreLike {
     return state;
   }
 
-  private resolveWaitItems(): void {
-    while (this.promptItems.length === 0 && this.waitItems.length > 0) {
+  private resolveWaitItems(state: State): void {
+    while (this.turnDrawCheckpoint !== state && this.promptItems.length === 0 && this.waitItems.length > 0) {
       const waitItem = this.waitItems.pop();
       if (waitItem !== undefined) {
         waitItem();
@@ -543,6 +552,7 @@ export class Store implements StoreLike {
     clearAttackDamageScopes(this.state);
     this.promptItems = [];
     this.waitItems = [];
+    this.turnDrawCheckpoint = undefined;
     this.logId = 0;
     this.state = new State();
   }
@@ -556,13 +566,8 @@ export class Store implements StoreLike {
       state = playCardReducer(this, state, action);
       state = playerTurnReducer(this, state, action);
 
-      this.resolveWaitItems();
-      if (this.promptItems.length === 0) {
-        state = checkState(this, state);
-      }
-
-      // Calculate playability before state change
-      state = this.calculatePlayability(state);
+      this.resolveWaitItems(state);
+      state = this.finishAction(state);
     } catch (storeError) {
       // Illegal action
       this.state = stateBackup;
@@ -572,6 +577,19 @@ export class Store implements StoreLike {
 
     this.handler.onStateChange(state);
     return state;
+  }
+
+  private finishAction(state: State): State {
+    if (this.turnDrawCheckpoint !== state && this.promptItems.length === 0) {
+      state = checkState(this, state);
+    }
+    if (this.turnDrawCheckpoint === state) {
+      state.prompts = [];
+      this.promptItems = [];
+      this.waitItems = [];
+      return state;
+    }
+    return this.calculatePlayability(state);
   }
 
   private calculatePlayability(state: State): State {

@@ -5,9 +5,10 @@ import { PokemonCard } from '../card/pokemon-card';
 import { Power } from '../card/pokemon-types';
 import { isBeforeWeaknessDamage } from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
-import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT } from './prefabs';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, SHOW_CARDS_TO_PLAYER } from './prefabs';
 import { AddSpecialConditionsPowerEffect } from '../effects/check-effects';
 import { EffectOfAbilityEffect } from '../effects/game-effects';
+import { AttachEnergyPrompt } from '../prompts/attach-energy-prompt';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
@@ -153,4 +154,72 @@ export function CHOOSE_SPECIAL_CONDITION_FROM_ABILITY(
     }
     return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(store, state, abilityOwner, power, card, target, [condition]);
   });
+}
+
+/** Add attack damage supplied by an Ability when target protection allows it. */
+export function ADD_DAMAGE_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  abilityOwner: Player,
+  power: Power,
+  card: PokemonCard,
+  effect: { damage: number; target: PokemonCardList },
+  amount: number,
+): boolean {
+  if (amount === 0) {
+    return false;
+  }
+  if (!CAN_APPLY_ABILITY_TO_TARGET(store, state, abilityOwner, power, card, effect.target)) {
+    return false;
+  }
+  effect.damage += amount;
+  return true;
+}
+
+/** Reveal the opposing hand and optionally attach an Energy to a Pokémon there. */
+export function ATTACH_ENERGY_FROM_OPPONENT_HAND_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  player: Player,
+  power: Power,
+  card: PokemonCard,
+): State {
+  const opponent = StateUtils.getOpponent(state, player);
+
+  if (opponent.hand.cards.length === 0) {
+    return state;
+  }
+
+  SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards, opponent);
+
+  const hasEnergy = opponent.hand.cards.some(c => c.superType === SuperType.ENERGY);
+  if (!hasEnergy) {
+    return state;
+  }
+
+  return store.prompt(
+    state,
+    new AttachEnergyPrompt(
+      player.id,
+      GameMessage.ATTACH_ENERGY_CARDS,
+      opponent.hand,
+      PlayerType.TOP_PLAYER,
+      [SlotType.ACTIVE, SlotType.BENCH],
+      { superType: SuperType.ENERGY },
+      { allowCancel: true, min: 0, max: 1 },
+    ),
+    transfers => {
+      for (const transfer of transfers ?? []) {
+        const target = StateUtils.getTarget(state, player, transfer.to);
+        if (!CAN_APPLY_ABILITY_TO_TARGET(store, state, player, power, card, target)) {
+          continue;
+        }
+        MOVE_CARDS(store, state, opponent.hand, target, {
+          cards: [transfer.card],
+          sourceCard: card,
+          sourceEffect: power,
+        });
+      }
+    },
+  );
 }

@@ -15,13 +15,8 @@ import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { EvolveEffect } from '../../game/store/effects/game-effects';
 
-function isMatchingStage2(stage1: PokemonCard[], basic: PokemonCard, stage2: PokemonCard): boolean {
-  for (const card of stage1) {
-    if (card.name === stage2.evolvesFrom && basic.name === card.evolvesFrom) {
-      return true;
-    }
-  }
-  return false;
+function isMatchingStage2(basic: PokemonCard, stage2: PokemonCard): boolean {
+  return CardManager.getInstance().hasStageOneEvolutionLink(basic.name, stage2.evolvesFrom, PokemonCard);
 }
 
 function* playCardRspk(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
@@ -43,14 +38,8 @@ function* playCardRspk(next: Function, store: StoreLike, state: State, effect: T
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
-  // Look through all known cards to find out if it's a valid Stage 2
-  const cm = CardManager.getInstance();
-  const stage1Ref = cm.getAllCards().filter(c => {
-    return c instanceof PokemonCard && c.stage === Stage.STAGE_1;
-  }) as PokemonCard[];
-
   player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (l, card, target) => {
-    if (card.stage === Stage.BASIC && stage2.some(s => isMatchingStage2(stage1Ref, card, s))) {
+    if (card.stage === Stage.BASIC && stage2.some(s => isMatchingStage2(card, s))) {
       hasBasicPokemon = true;
       return;
     }
@@ -102,7 +91,7 @@ function* playCardRspk(next: Function, store: StoreLike, state: State, effect: T
       }
     } else if (c.stage === Stage.STAGE_2) {
       // Only allow Stage 2 that matches the selected Basic via a Stage 1
-      if (!isMatchingStage2(stage1Ref, pokemonCard, c)) {
+      if (!isMatchingStage2(pokemonCard, c)) {
         blocked2.push(index);
         return;
       }

@@ -3,7 +3,7 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { Stage, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, Stage, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, GameError } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -12,6 +12,7 @@ import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class LureBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'CES';
   public setNumber: string = '138';

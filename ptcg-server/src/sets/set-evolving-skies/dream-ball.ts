@@ -9,6 +9,7 @@ import { GameMessage } from '../../game/game-message';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
 export class DreamBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
 
   public regulationMark = 'E';

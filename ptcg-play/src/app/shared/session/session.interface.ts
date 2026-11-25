@@ -18,6 +18,8 @@ export interface LocalGameState {
   gameOver: boolean;
   promptMinimized: boolean;
   turnComplete: boolean;
+  canViewBoard: boolean;
+  boardReadOnly: boolean;
   logs: StateLog[];
 }
 

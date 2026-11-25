@@ -6,7 +6,7 @@ import { MarkerConstants } from '../markers/marker-constants';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { EnergyCard } from '../card/energy-card';
 import { AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, CardsToHandEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, KnockOutOpponentEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
-import { CheckProvidedEnergyEffect } from '../effects/check-effects';
+import { CheckHpEffect, CheckProvidedEnergyEffect } from '../effects/check-effects';
 import { AttackEffect } from '../effects/game-effects';
 import { AfterAttackEffect } from '../effects/game-phase-effects';
 import { COIN_FLIP_PROMPT, FLIP_UNTIL_TAILS_AND_COUNT_HEADS, MOVE_CARDS } from './prefabs';
@@ -569,6 +569,48 @@ export function PUT_ENERGY_FROM_OPPONENTS_ACTIVE_INTO_THEIR_HAND(
           store.reduceEffect(state, toHandEffect);
         }
       });
+    }
+  });
+}
+
+/** Put attack-sourced damage counters on opponents above the specified remaining HP. */
+export function PUT_DAMAGE_COUNTERS_ON_X_OF_YOUR_OPPONENTS_POKEMON_UNTIL_REMAINING_HP_IS(
+  count: number,
+  remainingHp: number,
+  store: StoreLike,
+  state: State,
+  effect: AttackEffect,
+): State {
+  const player = effect.player;
+  const opponent = effect.opponent;
+  const inPlay = opponent.getPokemonInPlay().length;
+  const maxTargets = Math.min(count, inPlay);
+
+  if (maxTargets === 0) {
+    return state;
+  }
+
+  return store.prompt(state, new ChoosePokemonPrompt(
+    player.id,
+    GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
+    PlayerType.TOP_PLAYER,
+    [SlotType.ACTIVE, SlotType.BENCH],
+    { min: maxTargets, max: maxTargets, allowCancel: false },
+  ), targets => {
+    if (!targets || targets.length === 0) {
+      return;
+    }
+
+    for (const selectedTarget of targets) {
+      const checkHpEffect = new CheckHpEffect(player, selectedTarget);
+      store.reduceEffect(state, checkHpEffect);
+
+      const damageAmount = Math.max(0, checkHpEffect.hp - remainingHp - selectedTarget.damage);
+      if (damageAmount === 0) continue;
+
+      const putCounters = new PutCountersEffect(effect, damageAmount);
+      putCounters.target = selectedTarget;
+      store.reduceEffect(state, putCounters);
     }
   });
 }

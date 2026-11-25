@@ -16,13 +16,8 @@ import { CheckPokemonPlayedTurnEffect } from '../../game/store/effects/check-eff
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { EvolveEffect } from '../../game/store/effects/game-effects';
 
-function isMatchingStage2(stage1: PokemonCard[], basic: PokemonCard, stage2: PokemonCard): boolean {
-  for (const card of stage1) {
-    if (card.name === stage2.evolvesFrom && basic.name === card.evolvesFrom) {
-      return true;
-    }
-  }
-  return false;
+function isMatchingStage2(basic: PokemonCard, stage2: PokemonCard): boolean {
+  return CardManager.getInstance().hasStageOneEvolutionLink(basic.name, stage2.evolvesFrom, PokemonCard);
 }
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
@@ -40,14 +35,8 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
-  // Look through all known cards to find out if it's a valid Stage 2
-  const cm = CardManager.getInstance();
-  const stage1 = cm.getAllCards().filter(c => {
-    return c instanceof PokemonCard && c.stage === Stage.STAGE_1;
-  }) as PokemonCard[];
-
   player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-    if (card.stage === Stage.BASIC && stage2.some(s => isMatchingStage2(stage1, card, s))) {
+    if (card.stage === Stage.BASIC && stage2.some(s => isMatchingStage2(card, s))) {
       const playedTurnEffect = new CheckPokemonPlayedTurnEffect(player, list);
       store.reduceEffect(state, playedTurnEffect);
       if (playedTurnEffect.pokemonPlayedTurn < state.turn) {
@@ -88,7 +77,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   const blocked2: number[] = [];
   player.hand.cards.forEach((c, index) => {
     if (c instanceof PokemonCard && c.stage === Stage.STAGE_2) {
-      if (!isMatchingStage2(stage1, pokemonCard, c)) {
+      if (!isMatchingStage2(pokemonCard, c)) {
         blocked2.push(index);
       }
     }

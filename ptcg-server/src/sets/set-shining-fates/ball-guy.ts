@@ -1,7 +1,7 @@
 import { GameError } from '../../game/game-error';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
@@ -34,8 +34,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
 
   const blocked: number[] = [];
   player.deck.cards.forEach((c, index) => {
-    const regex = /\bBall\b/;
-    if (!c.name.match(regex)) {
+    if (!(c instanceof TrainerCard) || c.trainerType !== TrainerType.ITEM || !c.tags.includes(CardTag.BALL)) {
       blocked.push(index);
     }
   });

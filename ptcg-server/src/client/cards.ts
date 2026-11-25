@@ -76,3 +76,29 @@ export function applyClientCardMetadata(metadata: CardLibraryMetadata, expected:
     knownCards[index].cardImage = expandCardImageReference(metadata.images[index]);
   }
 }
+
+export interface ClientCardPreparation {
+  loadedCardCount: number;
+  newBatches: number;
+  cachedBatches: number;
+  fullFallback: boolean;
+  fallbackReason?: string;
+}
+
+let fullOrdinals: Map<string, number> | undefined;
+
+export function clientCardCatalogueOrdinal(fullName: string): number | undefined {
+  if (!fullOrdinals) fullOrdinals = new Map(ensureClientCards().map((card, ordinal) => [card.fullName, ordinal]));
+  return fullOrdinals.get(fullName);
+}
+
+export async function prepareFullClientCards(): Promise<ClientCardPreparation> {
+  return {
+    loadedCardCount: ensureClientCards().length, newBatches: 0, cachedBatches: 0,
+    fullFallback: true, fallbackReason: 'full-build'
+  };
+}
+
+export function prepareClientCards(_names: readonly string[]): Promise<ClientCardPreparation> {
+  return prepareFullClientCards();
+}

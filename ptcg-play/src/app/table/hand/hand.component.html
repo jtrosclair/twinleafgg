@@ -13,7 +13,7 @@
         <ptcg-card class="hand-card" [dragSource]="render.source" [noHTML5Preview]="true"
           [card]="context.data.card" [showCardName]="false" [artworksContext]="player?.hand"
           [placeholder]="render.isDragging$ | async" [cardback]="isFaceDown"
-          [class.draggable]="!isDeleted && player?.id === clientId && !isFaceDown"
+          [class.draggable]="!isDeleted && !gameState.boardReadOnly && player?.id === clientId && !isFaceDown"
           role="button" tabindex="0" [attr.aria-label]="cardLabel(context.data)"
           (click)="onCardClick(context.data.card, context.data.index)"
           (keydown.enter)="onCardClick(context.data.card, context.data.index)"

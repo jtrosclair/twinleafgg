@@ -1,10 +1,11 @@
-import { GameError, GameMessage, Player, State, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
+import { CardTag, GameError, GameMessage, Player, State, StoreLike, SuperType, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
 
 export class Pokeball extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public regulationMark = 'G';
 

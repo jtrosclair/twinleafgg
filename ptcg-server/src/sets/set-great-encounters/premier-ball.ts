@@ -1,5 +1,5 @@
 import { Card, ChooseCardsPrompt, GameError, GameMessage, SelectOptionPrompt, StateUtils } from '../../game';
-import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -11,6 +11,7 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
 export class PremierBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'GE';
   public cardImage: string = 'assets/cardback.png';

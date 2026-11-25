@@ -1,5 +1,5 @@
 import { ChoosePokemonPrompt, GameMessage, PlayerType, PokemonCard, SlotType } from '../../game';
-import { CardType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, CardType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
@@ -9,6 +9,7 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
 export class FriendBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'SK';
   public setNumber = '126';

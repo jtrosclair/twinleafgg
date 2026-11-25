@@ -49,7 +49,7 @@ export class HandComponent implements OnChanges {
       canDrag: () => {
         const isMinimized = this.gameState && this.gameState.promptMinimized;
         return this.isOwner && !this.isFaceDown && !this.isDeleted && !isMinimized
-          && !this.gameState?.turnComplete;
+          && !this.gameState?.turnComplete && !this.gameState?.boardReadOnly;
       },
       beginDrag: () => { this.dragging = true; },
       endDrag: () => {
@@ -74,7 +74,7 @@ export class HandComponent implements OnChanges {
       this.isFaceDown = hand.isSecret || (!hand.isPublic && !this.isOwner);
       const state = this.gameState?.state;
       const canPlay = this.isOwner && !this.isDeleted && !this.isFaceDown
-        && !this.gameState?.turnComplete && !this.gameState?.promptMinimized
+        && !this.gameState?.turnComplete && !this.gameState?.boardReadOnly && !this.gameState?.promptMinimized
         && state?.phase === GamePhase.PLAYER_TURN
         && state.players[state.activePlayer]?.id === this.clientId
         && !state.prompts.some(prompt => prompt.result === undefined);
@@ -95,7 +95,7 @@ export class HandComponent implements OnChanges {
 
   public onCardClick(card: Card, index: number) {
     if (this.dragging || Date.now() < this.suppressClickUntil) { return; }
-    if (!this.isOwner || this.isDeleted) {
+    if (!this.isOwner || this.isDeleted || this.gameState.boardReadOnly) {
       return this.showCardInfo(card);
     }
 

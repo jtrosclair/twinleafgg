@@ -12,7 +12,7 @@ import { StoreLike } from '../../game/store/store-like';
 export class TeamPlasmaBall extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.ITEM;
-  public tags: string[] = [CardTag.TEAM_PLASMA];
+  public tags: string[] = [CardTag.BALL, CardTag.TEAM_PLASMA];
   public set: string = 'PLF';
   public name: string = 'Team Plasma Ball';
   public fullName: string = 'Team Plasma Ball PLF';

@@ -1,6 +1,6 @@
 <ptcg-content [loading]="waiting">
-  <div class="ptcg-table" *ngIf="gameState" [class.is-complete]="gameState.turnComplete"
-    [attr.inert]="gameState.turnComplete ? '' : null" [attr.aria-hidden]="gameState.turnComplete ? 'true' : null">
+  <div class="ptcg-table" *ngIf="gameState" [class.is-complete]="fadeCompletedBoard" [class.is-locked]="boardInert"
+    [attr.inert]="boardInert ? '' : null" [attr.aria-hidden]="boardInert ? 'true' : null">
     <ptcg-board [clientId]="clientId" [gameState]="gameState" [topPlayer]="topPlayer" [bottomPlayer]="bottomPlayer"
       [isHandHidden]="isHandHidden" (toggleHand)="toggleHandVisibility()"
       [canEndTurn]="canEndTurn()" (endTurn)="endTurn()"></ptcg-board>
@@ -28,7 +28,7 @@
         <span class="board-hand-total">{{bottomHandCount}}</span>
       </div>
     </div>
-    <ptcg-prompt [gameState]="gameState" [clientId]="clientId"></ptcg-prompt>
+    <ptcg-prompt *ngIf="!gameState.boardReadOnly" [gameState]="gameState" [clientId]="clientId"></ptcg-prompt>
   </div>
 </ptcg-content>
 

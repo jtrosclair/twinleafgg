@@ -16,6 +16,12 @@ import { BoardInteractionService } from '../../shared/services/board-interaction
 import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
 import { decodePuzzlePayload } from '../../shared/services/puzzle-payload';
 
+interface PuzzleBoardOptions {
+  stopAfterOpponentDraw?: boolean;
+  viewBoard?: boolean;
+  closeDialogs?: boolean;
+}
+
 /** Owns the single in-memory simulator and its presentation snapshot. */
 @Injectable({ providedIn: 'root' })
 export class GameService {
@@ -46,7 +52,7 @@ export class GameService {
     });
   }
 
-  public createGameFromState(stateData: string, winConditions?: WinConditions): Observable<LocalGameState> {
+  public createGameFromState(stateData: string, winConditions?: WinConditions, options: PuzzleBoardOptions = {}): Observable<LocalGameState> {
     return defer(() => {
       const snapshot = decodePuzzlePayload(stateData);
       const simulator = new ClientSimulator(() => {
@@ -57,7 +63,10 @@ export class GameService {
       this.loadingSnapshot = true;
       let serialized: string, state: State;
       try {
-        simulator.loadSnapshot({ stateData: snapshot, winConditions: winConditions && { ...winConditions } });
+        simulator.loadSnapshot({
+          stateData: snapshot, winConditions: winConditions && { ...winConditions },
+          stopAfterOpponentDraw: options.stopAfterOpponentDraw, readOnly: options.viewBoard
+        });
         serialized = simulator.getStateData();
         state = this.decodeState(serialized);
       } catch (error) {
@@ -72,11 +81,13 @@ export class GameService {
       this.simulatorGameId = Math.max(this.simulatorGameId, this.sessionService.session.lastGameId) + 1;
       const localId = this.sessionService.session.lastGameId + 1;
       this.terminalMessageSent = false;
-      this.initialSnapshot = serialized;
+      this.initialSnapshot = options.viewBoard ? undefined : serialized;
+      if (options.closeDialogs) { this.dialog?.closeAll(); }
       const game: LocalGameState = {
         gameId: this.simulatorGameId, localId, clientSide: true, stateData: serialized, state,
         deleted: false, gameOver: false, promptMinimized: false,
-        turnComplete: simulator.complete, logs: state.logs
+        turnComplete: simulator.complete, logs: state.logs,
+        canViewBoard: !!(options.stopAfterOpponentDraw || options.viewBoard), boardReadOnly: options.viewBoard === true
       };
       this.sessionService.set({ clientId: simulator.humanPlayerId, gameStates: [game], lastGameId: localId });
       this.publishState({ stateData: serialized, state });
@@ -86,7 +97,7 @@ export class GameService {
 
   public setPromptMinimized(localId: number, minimized: boolean): void {
     const game = this.sessionService.session.gameStates[0];
-    if (game?.localId === localId) {
+    if (game?.localId === localId && !game.boardReadOnly) {
       this.sessionService.set({ gameStates: [{ ...game, promptMinimized: minimized }] });
     }
   }
@@ -135,8 +146,19 @@ export class GameService {
     this.run(gameId, sim => sim.resolvePrompt(promptId, result));
   }
 
+  public setBoardReadOnly(gameId: number): void {
+    const game = this.sessionService.session.gameStates[0];
+    if (game?.gameId !== gameId || game.deleted || !game.canViewBoard || game.boardReadOnly) { return; }
+    this.boardInteractionService.endBoardSelection();
+    this.dialog?.closeAll();
+    this.sessionService.set({ gameStates: [{ ...game, boardReadOnly: true, promptMinimized: false }] });
+  }
+
   public canUndo(gameId: number): Observable<boolean> {
-    return defer(() => of(this.requireSimulator(gameId).canUndo()));
+    return defer(() => {
+      const simulator = this.requireSimulator(gameId);
+      return of(!this.sessionService.session.gameStates[0].boardReadOnly && simulator.canUndo());
+    });
   }
 
   public undo(gameId: number): void {
@@ -152,9 +174,9 @@ export class GameService {
   public resetGame(gameId: number): void {
     this.run(gameId, sim => {
       const initialSnapshot = this.initialSnapshot;
-      if (initialSnapshot === undefined) { throw new Error('GAME_INVALID_ID'); }
+      if (initialSnapshot === undefined) { return; }
       this.restore(() => sim.pushState(initialSnapshot), { resetPresentation: true });
-    });
+    }, true);
   }
 
   private restore(operation: () => unknown, options: { resetPresentation?: boolean } = {}): void {
@@ -171,8 +193,11 @@ export class GameService {
     this.run(gameId, simulator => simulator.dispatch(build(simulator)));
   }
 
-  private run(gameId: number, operation: (simulator: ClientSimulator) => unknown): void {
-    try { operation(this.requireSimulator(gameId)); } catch (error) {
+  private run(gameId: number, operation: (simulator: ClientSimulator) => unknown, allowReadOnly = false): void {
+    try {
+      const simulator = this.requireSimulator(gameId);
+      if (allowReadOnly || !this.sessionService.session.gameStates[0].boardReadOnly) { operation(simulator); }
+    } catch (error) {
       const message = String(error.message || error);
       const translations = this.translate.translations[this.translate.currentLang]
         || this.translate.translations[this.translate.defaultLang];
@@ -200,15 +225,19 @@ export class GameService {
     // Minimization belongs to one pending human prompt, never to the next action.
     const promptMinimized = !resetPresentation && previous.promptMinimized && pendingPrompt !== undefined
       && pendingPrompt.id === previousPrompt?.id && pendingPrompt.type === previousPrompt?.type;
+    const boardReadOnly = !resetPresentation && previous.boardReadOnly;
     this.sessionService.set({ gameStates: [{ ...previous, stateData, state, logs: state.logs, turnComplete: simulator.complete,
-      promptMinimized, ...(resetPresentation ? { gameOver: false } : {}) }] });
+      promptMinimized, boardReadOnly, ...(resetPresentation ? { gameOver: false } : {}) }] });
     this.boardInteractionService.updateGameLogs(state.logs);
-    this.webViewBridgeService.postMessage({ type: 'StateUpdate', data: { stateData } });
-    if (simulator.complete && !this.terminalMessageSent) {
+    const capability = previous.canViewBoard ? { canViewBoard: true } : {};
+    this.webViewBridgeService.postMessage({ type: 'StateUpdate', data: { stateData, ...capability } });
+    if (simulator.complete && !this.terminalMessageSent && !boardReadOnly) {
       this.terminalMessageSent = true;
+      const win = state.winner === GameWinner.PLAYER_1;
+      const lossSnapshot = previous.canViewBoard ? { ...capability, stateData } : {};
       this.webViewBridgeService.postMessage(state.phase === GamePhase.FINISHED
-        ? { type: 'GameOver', data: { winner: state.winner === GameWinner.PLAYER_1 ? 'player1' : 'player2' } }
-        : { type: 'TurnEnd', data: {} });
+        ? { type: 'GameOver', data: win ? { winner: 'player1' } : { winner: 'player2', ...lossSnapshot } }
+        : { type: 'TurnEnd', data: lossSnapshot });
     }
   }
 

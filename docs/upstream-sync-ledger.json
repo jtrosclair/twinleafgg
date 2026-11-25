@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "baseUpstream": "2f01a5ff4057f734640a2770cea3c1e7d61eb644",
-  "latestObservedUpstream": "d3d7a00319f7a97ea8f663c55e1687b3cb0870cd",
+  "latestObservedUpstream": "cc58c6f3abc2f153444bd57fb99f5e74a5c2e7fb",
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
@@ -759,6 +759,20 @@
       "subject": "fix(replays): Replay Animations",
       "status": "not-applicable",
       "notes": "Diff verified: only React 3D replay animations and board transitions changed. No simulator engine or Angular puzzle runtime paths are touched."
+    },
+    {
+      "sha": "1921f2c8635be6725b2662e081c34830d9775b56",
+      "date": "2026-11-23",
+      "subject": "add(cards): Aura Seeker",
+      "status": "applied",
+      "notes": "Registered all 39 newly defined Aura Seeker cards using the fork’s Japanese M7 collector numbers and established FLO snapshot identifiers. Ported the three shared effect helpers and adapted card type, evolution, copied-attack, and next-turn attack calls to the existing engine. Refreshed scans for all 78 M7 printings."
+    },
+    {
+      "sha": "cc58c6f3abc2f153444bd57fb99f5e74a5c2e7fb",
+      "date": "2026-11-24",
+      "subject": "fix(cards): Ball Guy/Apricorn Maker no longer fetch Tasty Rice Ball etc.",
+      "status": "applied",
+      "notes": "Ported the Ball tag to all 37 corresponding definitions and retained inherited tags on alternate printings. Ball Guy and Apricorn Maker now accept explicitly tagged Item cards, excluding Tasty Rice Ball."
     }
   ]
 }

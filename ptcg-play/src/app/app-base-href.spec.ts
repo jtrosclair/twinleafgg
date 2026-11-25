@@ -1,6 +1,6 @@
 import { APP_BASE_HREF, DOCUMENT, Location, PathLocationStrategy } from '@angular/common';
 import { Injector } from '@angular/core';
-import { DefaultUrlSerializer } from '@angular/router';
+import { convertToParamMap, DefaultUrlSerializer } from '@angular/router';
 import { of } from 'rxjs';
 import { SIMULATOR_APP_BASE_HREF_PROVIDER, simulatorRoutingBaseHref, isPublicSimulatorFacade } from './app-base-href';
 import { simulatorScanRequestUrl } from './shared/services/simulator-scan-url';
@@ -71,7 +71,7 @@ describe('simulator public and pinned route bases', () => {
 
   it('hides only public-facade board navigation while retaining the local table ID', async () => {
     const cases = [
-      { href: `${origin}/sandbox-viewer#SNAPSHOT`, base: release, facade: true },
+      { href: `${origin}/sandbox-viewer?puzzleBoardReview=1#SNAPSHOT`, base: release, facade: true },
       { href: `${origin}${release}sandbox-viewer#SNAPSHOT`, base: release, facade: false },
       { href: 'http://localhost:4200/sandbox-viewer#SNAPSHOT', base: '/', facade: false },
       { href: 'file:///app/cache/index.html#SNAPSHOT', base: './', facade: false }
@@ -81,10 +81,13 @@ describe('simulator public and pinned route bases', () => {
       const original = value.current().href;
       expect(isPublicSimulatorFacade(value.document)).toBe(entry.facade);
       const router = { navigate: jasmine.createSpy('navigate').and.returnValue(Promise.resolve(false)) };
-      const component = new SandboxViewerComponent({} as any, router as any,
+      const parsed = new DefaultUrlSerializer().parse(value.location.path(true));
+      const route = { snapshot: { queryParamMap: convertToParamMap(parsed.queryParams) } };
+      const game = { createGameFromState: jasmine.createSpy('createGameFromState').and.returnValue(of({ gameId: 3 })) };
+      const component = new SandboxViewerComponent(route as any, router as any,
         { session: { gameStates: [{ gameId: 3, localId: 17 }] } } as any,
-        { instant: (key: string) => key } as any, {} as any,
-        { getRawScanUrl: () => '' } as any, { createGameFromState: () => of({ gameId: 3 }) } as any,
+        { instant: (key: string) => key } as any,
+        { prepareSnapshot: (input: string) => of(input) } as any, game as any,
         { beginAttempt: () => {} } as any,
         value.document);
       component.isReady = true;
@@ -93,6 +96,11 @@ describe('simulator public and pinned route bases', () => {
       component.loadGameState();
       await Promise.resolve();
       await Promise.resolve();
+      if (entry.facade) {
+        expect(game.createGameFromState).toHaveBeenCalledWith('SNAPSHOT', undefined, { stopAfterOpponentDraw: true, viewBoard: false });
+      } else {
+        expect(game.createGameFromState).toHaveBeenCalledWith('SNAPSHOT');
+      }
       expect(router.navigate).toHaveBeenCalledWith(['/table', 17], entry.facade ? { skipLocationChange: true } : undefined);
       expect(value.current().href).toBe(original);
       component.ngOnDestroy();

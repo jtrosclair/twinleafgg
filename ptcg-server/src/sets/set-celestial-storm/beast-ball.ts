@@ -8,6 +8,7 @@ import { CardList, ChooseCardsPrompt, GameError, GameMessage, PokemonCard, ShowC
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 export class BeastBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'CES';
   public setNumber: string = '125';

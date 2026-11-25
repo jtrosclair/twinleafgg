@@ -60,6 +60,7 @@ export enum CardTag {
   PRIMAL = 'Primal',
   ARCEUS = 'Arceus',
   VS = 'VS', // Japanese VS Pack (from movie or theater promos)
+  BALL = 'Ball',
 }
 
 export enum SuperType {

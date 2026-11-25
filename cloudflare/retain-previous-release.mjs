@@ -28,6 +28,10 @@ function json(bytes, description) {
 
 function releaseShape(manifest, manifestURL) {
   const valid = validateManifest(manifest, manifestURL);
+  for (const capability of ['supportsPuzzleBoardReview', 'supportsPuzzleSessionReuse']) {
+    assert(manifest[capability] === undefined || manifest[capability] === true,
+      `Manifest ${capability} must be true when present`);
+  }
   assert(valid.archive, 'The published release must provide a verified archive');
   assert(valid.archive.path !== manifestName && !manifest.assets.some(asset => asset.path === manifestName),
     'The package manifest is reserved and cannot appear in the asset inventory');
@@ -116,6 +120,8 @@ function verifySideManifest(sideBytes, archiveManifest, manifest, manifestURL) {
   const expected = { schemaVersion: manifest.schemaVersion, packageHash: manifest.packageHash,
     packageBaseUrl: `/releases/${manifest.packageHash}/`, entrypoint: manifest.entrypoint,
     ...(manifest.supportedSnapshotFormats === undefined ? {} : { supportedSnapshotFormats: manifest.supportedSnapshotFormats }),
+    ...(manifest.supportsPuzzleBoardReview === true ? { supportsPuzzleBoardReview: true } : {}),
+    ...(manifest.supportsPuzzleSessionReuse === true ? { supportsPuzzleSessionReuse: true } : {}),
     assets: manifest.assets };
   assert.deepEqual(inside, expected, 'Archived package manifest does not match the published inventory');
   assert.deepEqual(side, { ...expected, archive: manifest.archive }, 'Published side manifest does not match its verified archive/inventory');

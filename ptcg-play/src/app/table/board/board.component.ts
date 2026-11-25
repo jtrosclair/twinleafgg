@@ -393,7 +393,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
 
   private firstAvailableBenchIndex(item: HandItem): number {
     const player = this.bottomPlayer;
-    if (!this.gameState || this.gameState.deleted || this.gameState.turnComplete
+    if (!this.gameState || this.gameState.deleted || this.gameState.turnComplete || this.gameState.boardReadOnly
       || this.gameState.promptMinimized || this.hasActivePrompt()
       || player?.id !== this.clientId
       || this.gameState.state.players[this.gameState.state.activePlayer]?.id !== this.clientId
@@ -433,7 +433,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     dropTarget = this.dnd.dropTarget([HandCardType, BoardCardType], {
       canDrop: monitor => {
         const item = monitor.getItem();
-        if (!this.gameState) {
+        if (!this.gameState || this.gameState.boardReadOnly) {
           return false;
         }
         const isFromHand = (item as DraggedItem<HandItem>).type === HandCardType;
@@ -598,7 +598,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
         const isOwner = isBottomOwner || isTopOwner;
         const isDeleted = this.gameState.deleted;
         const isMinimized = this.gameState.promptMinimized;
-        return !isDeleted && isOwner && !isMinimized && this.getScanUrl(boardCardItem) !== undefined;
+        return !isDeleted && isOwner && !isMinimized && !this.gameState.boardReadOnly && this.getScanUrl(boardCardItem) !== undefined;
       },
       beginDrag: () => {
         return { ...boardCardItem, scanUrl: this.getScanUrl(boardCardItem) };
@@ -717,7 +717,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     const isBottomOwner = this.bottomPlayer?.id === this.clientId && cardList === this.bottomPlayer.discard;
     const isDeleted = this.gameState.deleted;
 
-    if (!isBottomOwner || isDeleted) {
+    if (!isBottomOwner || isDeleted || this.gameState.boardReadOnly) {
       return this.onCardListClick(card, cardList);
     }
 
@@ -765,7 +765,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
-    if (!isBottomOwner || isDeleted) {
+    if (!isBottomOwner || isDeleted || this.gameState.boardReadOnly) {
       return this.onCardClick(card, cardList);
     }
 
@@ -809,7 +809,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
-    if (!isBottomOwner || isDeleted) {
+    if (!isBottomOwner || isDeleted || this.gameState.boardReadOnly) {
       return this.onCardClick(card, cardList);
     }
 
@@ -856,7 +856,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
-    if (!isBottomOwner || isDeleted) {
+    if (!isBottomOwner || isDeleted || this.gameState.boardReadOnly) {
       return this.onCardClick(card, this.stadiumCard);
     }
 
@@ -878,7 +878,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
-    if (!isBottomOwner || isDeleted) {
+    if (!isBottomOwner || isDeleted || this.gameState.boardReadOnly) {
       return this.onCardClick(card, cardList);
     }
     const player = PlayerType.BOTTOM_PLAYER;

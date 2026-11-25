@@ -2,7 +2,7 @@ import { EnergyCard, PokemonCard, ShowCardsPrompt, StateUtils } from '../../game
 import { GameError } from '../../game/game-error';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { CardType, EnergyType, Stage, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, CardType, EnergyType, Stage, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
@@ -69,6 +69,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
 }
 export class NetBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

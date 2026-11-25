@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const { Script } = require('vm');
 const ts = require('typescript');
 const { filesIn, collectResources, presentationResources, bootstrap } = require('./static-resources.cjs');
-const { SNAPSHOT_FORMATS_META } = require('./package-client-build.cjs');
+const { SNAPSHOT_FORMATS_META, PUZZLE_BOARD_REVIEW_META, PUZZLE_SESSION_REUSE_META } = require('./package-client-build.cjs');
 
 function prepareImageValues(source, resources, identifiers) {
   // Resource names also occur as dictionary/property keys. Only expression
@@ -135,6 +135,9 @@ function finalizeClientBuild(root = path.resolve(__dirname, '../dist/ptcg-play')
   } else if (/<\/head\s*>/i.test(index)) {
     index = index.replace(/<\/head\s*>/i, `${SNAPSHOT_FORMATS_META}</head>`);
   } else { index = SNAPSHOT_FORMATS_META + index; }
+  for (const capability of [PUZZLE_BOARD_REVIEW_META, PUZZLE_SESSION_REUSE_META]) {
+    if (!index.includes(capability)) { index = index.replace(SNAPSHOT_FORMATS_META, SNAPSHOT_FORMATS_META + capability); }
+  }
   fs.writeFileSync(indexFile, index);
   fs.rmSync(path.join(root, 'simulator-static.js'), { force: true });
   console.log(`Offline simulator UI: ${Object.keys(presentationResources(resources).urls).length} embedded images (${(Buffer.byteLength(payload) / 1048576).toFixed(1)} MB)`);

@@ -1,17 +1,16 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StateSerializer } from 'ptcg-server';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import { SessionService } from '../shared/session/session.service';
-import { CardsService } from '../api/services/cards.service';
-import { CardsBaseService } from '../shared/cards/cards-base.service';
 import { GameService } from '../api/services/game.service';
+import { PuzzleCatalogService } from '../api/services/puzzle-catalog.service';
 import { SimulatorAssetsService } from '../shared/services/simulator-assets.service';
 import { beginPuzzleSetup, markPuzzleSetup, currentSetupGeneration } from '../shared/services/puzzle-setup-timing';
+import { nativePuzzleSessionId, WebViewBridgeService } from '../shared/services/webview-bridge.service';
 import { isPublicSimulatorFacade } from '../app-base-href';
 
 @Component({
@@ -25,7 +24,6 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
   public loading = false;
   public initializingSession = true;
   public error = '';
-  public cardsLoaded = false;
   public isReady = false;
 
   private destroy$ = new Subject<void>();
@@ -38,11 +36,11 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
     private router: Router,
     private sessionService: SessionService,
     private translate: TranslateService,
-    private cardsService: CardsService,
-    private cardsBaseService: CardsBaseService,
+    private puzzleCatalog: PuzzleCatalogService,
     private gameService: GameService,
     private simulatorAssets: SimulatorAssetsService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    @Optional() private webViewBridge?: WebViewBridgeService
   ) { }
 
   ngOnInit(): void {
@@ -85,36 +83,21 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
     this.initializingSession = true;
     this.error = '';
 
-    this.ensureCardsLoaded();
-  }
-
-  private ensureCardsLoaded(): void {
-    // Check if cards are already loaded
-    if (StateSerializer.knownCards && StateSerializer.knownCards.length > 0) {
-      this.cardsLoaded = true;
-      this.initializingSession = false;
-      this.isReady = true;
-      markPuzzleSetup('metadataReady');
-      this.tryAutoStart();
-      return;
-    }
-
-    // Load cards
-    this.cardsService.getCardsInfo()
+    // The manual entry and the transition between native puzzles can render
+    // without loading executable card rules. Prepare them from each snapshot.
+    this.puzzleCatalog.checkMetadata()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (cardsInfo) => {
-          this.cardsBaseService.loadCardsInfo(cardsInfo);
-          this.cardsLoaded = true;
+        next: () => {
           this.initializingSession = false;
           this.isReady = true;
-          markPuzzleSetup('metadataReady');
           this.tryAutoStart();
         },
         error: (err) => {
           console.error('Error loading cards:', err);
           this.error = err.message || this.translate.instant('SANDBOX_VIEWER_CARDS_LOAD_ERROR');
           this.initializingSession = false;
+          if (this.autoStartState) { this.webViewBridge?.initialPuzzleActivated(false); }
         }
       });
   }
@@ -139,22 +122,30 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.error = '';
-    if (!this.autoStartState) { beginPuzzleSetup(); markPuzzleSetup('metadataReady'); }
+    if (!this.autoStartState) { beginPuzzleSetup(); }
     const stateData = this.stateDataInput.trim();
     const setupGeneration = currentSetupGeneration();
 
     const loadFailed = (err: any): void => {
-      console.error('Error creating game from state:', err, 'params:', stateData.slice(0, 100));
+      console.error('Error creating game from state:', err);
       this.error = err?.message || this.translate.instant('SANDBOX_VIEWER_INVALID_DATA');
       this.loading = false;
+      if (this.autoStartState) { this.webViewBridge?.initialPuzzleActivated(false); }
     };
 
     try {
-      // Card faces load only when rendered, independently of game readiness.
-      this.simulatorAssets.beginAttempt();
-
-      this.gameService.createGameFromState(stateData)
-        .pipe(takeUntil(this.destroy$))
+      const query = this.route.snapshot.queryParamMap;
+      const stopAfterOpponentDraw = query?.get('puzzleBoardReview') === '1';
+      const viewBoard = query?.get('viewBoard') === '1';
+      this.puzzleCatalog.prepareSnapshot(stateData, nativePuzzleSessionId(this.document.defaultView))
+        .pipe(switchMap(snapshot => {
+          markPuzzleSetup('metadataReady', setupGeneration);
+          // Card faces load only when rendered, independently of game readiness.
+          this.simulatorAssets.beginAttempt();
+          return stopAfterOpponentDraw || viewBoard
+            ? this.gameService.createGameFromState(snapshot, undefined, { stopAfterOpponentDraw, viewBoard })
+            : this.gameService.createGameFromState(snapshot);
+        }), takeUntil(this.destroy$))
         .subscribe({
           next: (gameState) => {
             markPuzzleSetup('engineReady', setupGeneration);
@@ -164,16 +155,19 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
 
             if (localGameState) {
               // Navigate to the table view using localId
-              const navigationOptions = isPublicSimulatorFacade(this.document) ? { skipLocationChange: true } : undefined;
+              const keepDocumentLocation = isPublicSimulatorFacade(this.document) || nativePuzzleSessionId(this.document.defaultView);
+              const navigationOptions = keepDocumentLocation ? { skipLocationChange: true } : undefined;
               this.router.navigate(['/table', localGameState.localId], navigationOptions).then(navigated => {
+                if (this.autoStartState) { this.webViewBridge?.initialPuzzleActivated(navigated); }
                 if (!navigated) { return; }
                 markPuzzleSetup('boardMounted', setupGeneration);
                 // Measure beyond the route change, after the board has had a paint.
                 requestAnimationFrame(() => requestAnimationFrame(() => markPuzzleSetup('boardPainted', setupGeneration)));
-              });
+              }, loadFailed);
             } else {
               this.error = this.translate.instant('SANDBOX_VIEWER_INVALID_DATA');
               this.loading = false;
+              if (this.autoStartState) { this.webViewBridge?.initialPuzzleActivated(false); }
             }
           },
           error: loadFailed

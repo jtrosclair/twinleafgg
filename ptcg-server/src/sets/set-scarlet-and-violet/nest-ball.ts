@@ -5,7 +5,7 @@ import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
 import { Player, PokemonCardList } from '../../game';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { Stage, TrainerType, SuperType } from '../../game/store/card/card-types';
+import { CardTag, Stage, TrainerType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
@@ -58,6 +58,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   return state;
 }
 export class NestBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public regulationMark = 'G';
   public trainerType: TrainerType = TrainerType.ITEM;

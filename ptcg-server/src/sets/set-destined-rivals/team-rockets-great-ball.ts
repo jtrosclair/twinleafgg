@@ -5,6 +5,7 @@ import { SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs'
 import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
 
 export class TeamRocketsGreatBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

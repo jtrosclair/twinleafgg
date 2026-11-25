@@ -2,7 +2,7 @@ import { ShowCardsPrompt, StateUtils } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
@@ -60,6 +60,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
 }
 export class DiveBall extends TrainerCard {
+  public tags: string[] = [CardTag.BALL];
 
   public trainerType: TrainerType = TrainerType.ITEM;
 

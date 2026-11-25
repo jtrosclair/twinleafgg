@@ -95,6 +95,11 @@ export function initNextTurn(store: StoreLike, state: State): State {
 
   player.deck.moveTo(player.hand, turnDrawCount);
 
+  // Puzzle review stops here, before an opponent can use an on-draw ability.
+  if (store.stopAfterTurnDraw?.(state, player)) {
+    return state;
+  }
+
   // Check the drawn card
   const drawnCard = player.hand.cards[player.hand.cards.length - 1];
   try {

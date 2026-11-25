@@ -57,13 +57,31 @@ deliver it on `document` or `window`. The iframe host sends the same JSON with
 | Simulator → host | `{ "type": "StateUpdate", "data": { "stateData": "..." } }` | Complete serialized state, including the initial loaded board. |
 | Host → simulator | `{ "type": "PushStateChange", "data": { "stateData": "..." } }` | Restore a previous state for undo. |
 | Host → simulator | `{ "type": "ResetGame", "data": {} }` | Restart the active puzzle from its retained initial state. |
+| Host → simulator | `{ "type": "SetBoardReadOnly", "data": { "readOnly": true } }` | Open the current board for card inspection in an opted-in puzzle. |
 | Simulator → host | `{ "type": "UndoDetected", "data": {} }` | Dismiss the previous result so the restored attempt can continue. |
 | Simulator → host | `{ "type": "GameOver", "data": { "winner": "player1" } }` | Puzzle success. `player2` means failure. |
 | Simulator → host | `{ "type": "TurnEnd", "data": {} }` | Human turn ended without success; also treated as failure. |
 
-Completed attempts fade to the board background over 500 ms without showing a
-simulator result modal. PrizeMap displays the outcome. Host history restoration
-clears the fade and re-enables the board; reduced-motion settings skip the animation.
+Wins and completed attempts without board review fade to the board background over
+500 ms. PrizeMap displays the result. Host history restoration clears the fade and
+re-enables the board. Reduced-motion settings skip the animation.
+
+The PrizeMap native app opts into board inspection with `?puzzleBoardReview=1`
+before the snapshot fragment. PrizeMap web uses the standard retry flow.
+A compatible simulator includes `data.canViewBoard: true`
+in its state updates and includes both `canViewBoard` and the exact
+`stateData` in loss events. The opted-in opponent draws for turn and stops
+before any effects that would let it play the card it drew.
+Verified packages advertise `supportsPuzzleBoardReview: true` so the native
+cache can select a compatible simulator before opening the puzzle.
+
+After a loss, an opted-in board stays visible and waits for the host to send
+`SetBoardReadOnly` before allowing card inspection. Gameplay, prompt responses,
+and undo stay locked during inspection.
+`ResetGame` starts a new attempt from the original board. To reopen an
+inspection after a document is lost, load `?viewBoard=1#<stateData>`. This
+loads a static snapshot without playing the opponent's turn or emitting a
+second result. Use the original puzzle URL to start a new attempt from there.
 
 Native outbound messages are JSON strings delivered through
 `window.ReactNativeWebView.postMessage`. Browser iframe outbound messages retain
