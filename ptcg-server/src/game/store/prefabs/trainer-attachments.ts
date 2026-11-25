@@ -3,6 +3,7 @@ import { PlayerType, SlotType, CardTarget } from '../actions/play-card-action';
 import { Card } from '../card/card';
 import { EnergyType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
+import { AttackEffect } from '../effects/game-effects';
 import { TrainerEffect } from '../effects/play-card-effects';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
@@ -62,17 +63,26 @@ export function chooseTrainerAttachment(
   ), ([card]) => resolve(attachments(target).includes(card) ? card : undefined));
 }
 
-/** Reconcile old Tool mirrors only after the chosen cards reach their destination. */
 export function moveTrainerAttachments(
   store: StoreLike, state: State, effect: TrainerEffect, source: PokemonCardList, destination: CardList, cards: Card[],
 ): void {
-  const mirroredTools = cards.filter(card => source.tools.includes(card) && source.cards.includes(card));
-  const countAtDestination = (card: Card): number => destination.cards.filter(existing => existing === card).length;
-  const previous = new Map(mirroredTools.map(card => [card, countAtDestination(card)]));
-  MOVE_CARDS(store, state, source, destination, { cards, sourceCard: effect.trainerCard, sourceEffect: effect });
+  moveAttachedCards(store, state, effect, source, destination, cards);
+}
+
+/** Move physical attachments and clear any legacy Tool mirrors only after a successful move. */
+export function moveAttachedCards(
+  store: StoreLike, state: State, effect: TrainerEffect | AttackEffect, source: PokemonCardList,
+  destination: CardList, cards: Card[],
+): number {
+  const previous = new Map(cards.map(card => [card, destination.cards.filter(existing => existing === card).length]));
+  const sourceCard = effect instanceof TrainerEffect ? effect.trainerCard : effect.source.getPokemonCard();
+  MOVE_CARDS(store, state, source, destination, { cards, sourceCard, sourceEffect: effect });
+  let moved = 0;
   for (const [card, count] of previous) {
-    if (!source.cards.includes(card) && countAtDestination(card) > count) {
-      source.tools = source.tools.filter(tool => tool !== card);
+    if (!source.cards.includes(card) && destination.cards.filter(existing => existing === card).length > count) {
+      if (source.tools.includes(card)) source.tools = source.tools.filter(tool => tool !== card);
+      moved++;
     }
   }
+  return moved;
 }

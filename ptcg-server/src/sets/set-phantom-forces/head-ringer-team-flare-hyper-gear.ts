@@ -12,6 +12,7 @@ import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-pro
 import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class HeadRingerTeamFlareHyperGear extends TrainerCard {
+  public attachesToOpponentsPokemon = true;
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'PHF';
   public setNumber: string = '97';

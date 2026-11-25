@@ -2,11 +2,59 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { Card, PlayerType, PokemonCardList, State, StoreLike, TrainerCard, TrainerType } from '../../game';
+import { Card, CardList, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameMessage, PlayerType, PokemonCardList, SlotType, State, StoreLike, TrainerCard } from '../../game';
+import { AttackEffect } from '../../game/store/effects/game-effects';
+import { moveAttachedCards } from '../../game/store/prefabs/trainer-attachments';
+
+// Ref: set-guardians-rising/field-blower.ts (select the holder, then the individual Tools).
+function* pumpkinBomb(next: () => void, store: StoreLike, state: State, effect: AttackEffect): IterableIterator<State> {
+  const { player } = effect;
+  const holders = player.getPokemonInPlay().filter(slot => slot.tools.length > 0);
+  if (holders.length === 0) return state;
+
+  const blocked: CardTarget[] = [];
+  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _pokemon, target) => {
+    if (!holders.includes(slot)) blocked.push(target);
+  });
+  let selectedHolders: PokemonCardList[] = [];
+  yield store.prompt(state, new ChoosePokemonPrompt(
+    player.id, GameMessage.CHOOSE_POKEMON_TO_DISCARD_TOOLS, PlayerType.BOTTOM_PLAYER,
+    [SlotType.ACTIVE, SlotType.BENCH], { min: 0, max: holders.length, allowCancel: false, blocked }
+  ), selected => {
+    selectedHolders = selected || [];
+    next();
+  });
+
+  const discards = new Map<Card, PokemonCardList>();
+  for (const holder of new Set(selectedHolders)) {
+    if (!holders.includes(holder)) continue;
+    const tools = new CardList();
+    tools.cards = [...new Set(holder.tools)];
+    if (tools.cards.length === 1) {
+      discards.set(tools.cards[0], holder);
+    } else {
+      yield store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_DISCARD, tools, {}, { min: 1, max: tools.cards.length, allowCancel: false }
+      ), selected => {
+        for (const tool of selected || []) {
+          if (tools.cards.includes(tool)) discards.set(tool, holder);
+        }
+        next();
+      });
+    }
+  }
+
+  for (const [tool, holder] of discards) {
+    const owner = tool instanceof TrainerCard && tool.attachesToOpponentsPokemon ? effect.opponent : player;
+    effect.damage += 40 * moveAttachedCards(store, state, effect, holder, owner.discard, [tool]);
+  }
+  return state;
+}
+
 export class Gourgeist extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Pumpkaboo';
@@ -45,35 +93,9 @@ export class Gourgeist extends PokemonCard {
       ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
-    // Attack 2: Pumpkin Bomb
-    // Ref: set-team-up/farfetchd.ts (Tool Buster - tool discard pattern)
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-
-      // Collect all tools from all your Pokemon
-      const allTools: { tool: Card, source: PokemonCardList }[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        cardList.tools.forEach(tool => {
-          if (tool instanceof TrainerCard && tool.trainerType === TrainerType.TOOL) {
-            allTools.push({ tool, source: cardList });
-          }
-        });
-      });
-
-      if (allTools.length === 0) {
-        return state;
-      }
-
-      // Ask player if they want to discard all tools
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          const toolCount = allTools.length;
-          allTools.forEach(({ tool, source }) => {
-            source.moveCardTo(tool, player.discard);
-          });
-          effect.damage += 40 * toolCount;
-        }
-      });
+      const generator = pumpkinBomb(() => generator.next(), store, state, effect);
+      return generator.next().value;
     }
 
     return state;

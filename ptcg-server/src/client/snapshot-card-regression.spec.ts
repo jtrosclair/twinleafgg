@@ -100,6 +100,82 @@ describe('snapshot card identity and copied effects', () => {
     expect(f.simulator.state.players[1].active.damage).toBe(30);
   });
 
+  describe('Pumpkin Bomb', () => {
+    const active = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+    const bench = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index: 0 };
+
+    function setup() {
+      const f = fixture('Gourgeist CIN');
+      f.add(f.state.players[0].active, 'Double Colorless Energy SUM');
+      f.add(f.state.players[0].bench[0], 'Honchkrow V BRS 88');
+      f.state.players[1].active.tools.push(f.register('Leftovers MEW'));
+      return f;
+    }
+
+    function answer(f: ReturnType<typeof fixture>, type: string, result: unknown): void {
+      const prompt = f.simulator.state.prompts.find(p => p.result === undefined)!;
+      expect(prompt.type).toBe(type);
+      f.simulator.resolvePrompt(prompt.id, result);
+    }
+
+    it('does base damage without opening a picker when only the opponent has Tools', () => {
+      const f = setup();
+      f.load();
+      f.simulator.dispatch(new AttackAction(43, 'Pumpkin Bomb'));
+      expect(f.simulator.state.players[1].active.damage).toBe(10);
+      expect(f.simulator.state.players[1].active.tools.length).toBe(1);
+    });
+
+    for (const count of [0, 1, 2]) {
+      it(`discards exactly the chosen ${count} copies from distinct holders`, () => {
+        const f = setup();
+        const player = f.state.players[0];
+        player.active.tools.push(f.register('Leftovers MEW'));
+        player.bench[0].tools.push(f.add(player.bench[0], 'Leftovers MEW'));
+        f.load();
+        f.simulator.dispatch(new AttackAction(43, 'Pumpkin Bomb'));
+        answer(f, 'Choose pokemon', [bench, active].slice(0, count));
+        const [own, opponent] = f.simulator.state.players;
+        expect(opponent.active.damage).toBe(10 + 40 * count);
+        expect(own.discard.cards.filter(c => c.name === 'Leftovers').length).toBe(count);
+        expect(own.active.tools.length).toBe(count === 2 ? 0 : 1);
+        expect(own.bench[0].tools.length).toBe(count === 0 ? 1 : 0);
+        expect(own.bench[0].cards.some(c => c.name === 'Leftovers')).toBe(count === 0);
+        expect(opponent.active.tools.length).toBe(1);
+      });
+    }
+
+    it('chooses individual Tools on a multi-Tool holder, including a Pokémon acting as a Tool', () => {
+      const f = setup();
+      const holder = f.state.players[0].bench[0];
+      holder.tools.push(f.register('Float Stone BKT'), f.add(holder, 'Shedinja LOT'), f.register('Leftovers MEW'));
+      f.load();
+      f.simulator.dispatch(new AttackAction(43, 'Pumpkin Bomb'));
+      answer(f, 'Choose pokemon', [bench]);
+      answer(f, 'Choose cards', [0, 1]);
+      const [own, opponent] = f.simulator.state.players;
+      expect(own.bench[0].tools.map(c => c.name)).toEqual(['Leftovers']);
+      expect(own.bench[0].getPokemonCard()!.name).toBe('Honchkrow V');
+      expect(own.discard.cards.map(c => c.name)).toEqual(['Float Stone', 'Shedinja']);
+      expect(opponent.active.damage).toBe(90);
+    });
+
+    it('returns opposing Team Flare gear to its owner’s discard and counts it once', () => {
+      const f = setup();
+      const slot = f.state.players[0].bench[1];
+      f.add(slot, 'Mewtwo EX NXD');
+      slot.tools.push(f.add(slot, 'Head Ringer Team Flare Hyper Gear PHF'));
+      f.load();
+      f.simulator.dispatch(new AttackAction(43, 'Pumpkin Bomb'));
+      answer(f, 'Choose pokemon', [{ ...bench, index: 1 }]);
+      const [own, opponent] = f.simulator.state.players;
+      expect(own.bench[1].tools.length).toBe(0);
+      expect(own.discard.cards.length).toBe(0);
+      expect(opponent.discard.cards.map(c => c.fullName)).toEqual(['Head Ringer Team Flare Hyper Gear PHF']);
+      expect(opponent.active.damage).toBe(50);
+    });
+  });
+
   it('recomputes attached Bravery Charm HP without accumulating its bonus across snapshots', () => {
     const f = fixture();
     f.add(f.state.players[0].active, 'Fire Energy SVE');

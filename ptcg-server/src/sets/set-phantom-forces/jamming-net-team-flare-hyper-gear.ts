@@ -14,6 +14,7 @@ import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 // Refs: set-phantom-forces/head-ringer-team-flare-hyper-gear.ts (PlayItemEffect attach-to-opponent pattern),
 //       set-temporal-forces/maximum-belt.ts (DealDamageEffect source tool interception)
 export class JammingNetTeamFlareHyperGear extends TrainerCard {
+  public attachesToOpponentsPokemon = true;
   public trainerType: TrainerType = TrainerType.ITEM;
   public set: string = 'PHF';
   public setNumber: string = '98';

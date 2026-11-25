@@ -20,6 +20,9 @@ export abstract class TrainerCard extends Card {
 
   public powers: Power[] = [];
 
+  /** A Team Flare Hyper Gear Tool is played onto the opposing side of the board. */
+  public attachesToOpponentsPokemon?: boolean;
+
   public firstTurn: boolean = false;
 
   public stadiumDirection: 'up' | 'down' = 'up';
