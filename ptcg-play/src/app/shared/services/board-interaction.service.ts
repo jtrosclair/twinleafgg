@@ -74,13 +74,14 @@ export class BoardInteractionService {
   public startBoardSelection(prompt: ChoosePokemonPrompt, onComplete: (targets: CardTarget[]) => void): void {
     this.promptSubject.next(prompt);
     this.selectionModeSubject.next(true);
-    this.selectedTargetsSubject.next([]);
     this.blockedTargetsSubject.next(prompt.options.blocked || []);
     this.eligiblePlayerTypeSubject.next(prompt.playerType);
     this.eligibleSlotsSubject.next(prompt.slots);
     this.minSelectionsSubject.next(prompt.options.min);
     this.maxSelectionsSubject.next(prompt.options.max);
     this.selectionCallback = onComplete;
+    // The overlay checks the new prompt’s limits when it receives the empty selection.
+    this.selectedTargetsSubject.next([]);
   }
 
   /**

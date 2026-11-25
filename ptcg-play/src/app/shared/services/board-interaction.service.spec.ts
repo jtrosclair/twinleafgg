@@ -13,6 +13,25 @@ describe('board selection continuation lifecycle', () => {
 
   beforeEach(() => { service = new BoardInteractionService(); });
 
+  it('reports whether zero targets are valid when each picker opens', () => {
+    const optional = prompt(1);
+    optional.options.min = 0;
+    const complete = jasmine.createSpy('complete');
+    let validAtSelectionChange = false;
+    const subscription = service.selectedTargets$.subscribe(() => {
+      validAtSelectionChange = service.isSelectionValid();
+    });
+
+    service.startBoardSelection(optional, complete);
+    expect(validAtSelectionChange).toBe(true);
+    service.confirmSelection();
+    expect(complete).toHaveBeenCalledWith([]);
+
+    service.startBoardSelection(prompt(2), complete);
+    expect(validAtSelectionChange).toBe(false);
+    subscription.unsubscribe();
+  });
+
   it('ends the confirmed selection before its callback creates the next prompt', () => {
     const nextPrompt = prompt(2);
     const nextCallback = jasmine.createSpy('next callback');
