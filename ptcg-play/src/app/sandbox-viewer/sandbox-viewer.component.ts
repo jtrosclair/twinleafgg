@@ -137,13 +137,14 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
       const query = this.route.snapshot.queryParamMap;
       const stopAfterOpponentDraw = query?.get('puzzleBoardReview') === '1';
       const viewBoard = query?.get('viewBoard') === '1';
+      const capturePuzzleDecisions = query?.get('puzzleHints') === '1';
       this.puzzleCatalog.prepareSnapshot(stateData, nativePuzzleSessionId(this.document.defaultView))
         .pipe(switchMap(snapshot => {
           markPuzzleSetup('metadataReady', setupGeneration);
           // Card faces load only when rendered, independently of game readiness.
           this.simulatorAssets.beginAttempt();
-          return stopAfterOpponentDraw || viewBoard
-            ? this.gameService.createGameFromState(snapshot, undefined, { stopAfterOpponentDraw, viewBoard })
+          return stopAfterOpponentDraw || viewBoard || capturePuzzleDecisions
+            ? this.gameService.createGameFromState(snapshot, undefined, { stopAfterOpponentDraw, viewBoard, ...(capturePuzzleDecisions ? { capturePuzzleDecisions } : {}) })
             : this.gameService.createGameFromState(snapshot);
         }), takeUntil(this.destroy$))
         .subscribe({

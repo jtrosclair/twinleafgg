@@ -28,6 +28,7 @@ import { allPromptResolvers, defaultArbiterOptions, defaultStateScores } from '.
 import { SimpleBotOptions } from '../simple-bot/simple-bot-options';
 import { Base64 } from '../utils/base64';
 import { ensureClientCards } from './cards';
+import { describePuzzleCardRules, describePuzzleDecision, PuzzleDecision } from './puzzle-decisions';
 
 export interface SnapshotOptions {
   stateData: string;
@@ -36,6 +37,19 @@ export interface SnapshotOptions {
   opponentUsername?: string;
   stopAfterOpponentDraw?: boolean;
   readOnly?: boolean;
+  capturePuzzleDecisions?: boolean;
+}
+
+interface Checkpoint {
+  stateData: string;
+  decisionNumber: number;
+}
+
+export interface PuzzleHintContext {
+  version: 1;
+  decisions: PuzzleDecision[];
+  cardRules: ReturnType<typeof describePuzzleCardRules>;
+  undoStateData: string | null;
 }
 
 /** One in-memory puzzle session. There are no transports, users, or persistence. */
@@ -49,7 +63,9 @@ export class ClientSimulator implements StoreHandler {
   private resolvers: PromptResolver[];
   private humanTurn: number | undefined;
   private snapshotOptions: SnapshotOptions | undefined;
-  private history: string[] = [];
+  private history: Checkpoint[] = [];
+  private decisions: { number: number; value: PuzzleDecision }[] = [];
+  private decisionNumber = 0;
 
   constructor(private notify?: (state: State) => void) {
     ensureClientCards();
@@ -81,11 +97,13 @@ export class ClientSimulator implements StoreHandler {
     return this.restoreSnapshot(options, []);
   }
 
-  private restoreSnapshot(options: SnapshotOptions, history: string[]): State {
+  private restoreSnapshot(options: SnapshotOptions, history: Checkpoint[], decisionNumber = 0): State {
     const state = this.decodeSnapshot(options.stateData, options.readOnly);
     const previous = {
       store: this.store,
       history: this.history,
+      decisions: this.decisions,
+      decisionNumber: this.decisionNumber,
       snapshotOptions: this.snapshotOptions,
       gameSettings: this.gameSettings,
       complete: this.complete,
@@ -93,6 +111,8 @@ export class ClientSimulator implements StoreHandler {
     };
     try {
       this.history = history;
+      this.decisions = this.decisions.filter(decision => decision.number < decisionNumber);
+      this.decisionNumber = decisionNumber;
       this.snapshotOptions = options;
       this.gameSettings = Object.assign(new GameSettings(), state.gameSettings, options.gameSettings, {
         sandboxMode: true,
@@ -138,9 +158,15 @@ export class ClientSimulator implements StoreHandler {
     }
     const previous = this.state.prompts.some(prompt => prompt.result === undefined)
       ? undefined : this.getStateData();
+    const decision = this.snapshotOptions.capturePuzzleDecisions ? describePuzzleDecision(this.state, action) : undefined;
+    const decisionNumber = this.decisionNumber;
     this.store.state = this.store.dispatch(action, 4);
+    if (decision) {
+      this.decisions.push({ number: this.decisionNumber++, value: decision });
+      if (this.decisions.length > 120) { this.decisions.shift(); }
+    }
     if (previous !== undefined) {
-      this.history.push(previous);
+      this.history.push({ stateData: previous, decisionNumber });
       if (this.history.length > 30) {
         this.history.shift();
       }
@@ -173,15 +199,25 @@ export class ClientSimulator implements StoreHandler {
     return new Base64().encode(compactSerializedState(this.serializer.serialize(this.state)));
   }
 
+  public getPuzzleHintContext(): PuzzleHintContext | undefined {
+    if (!this.snapshotOptions?.capturePuzzleDecisions || this.snapshotOptions.readOnly) return undefined;
+    return {
+      version: 1,
+      decisions: this.decisions.map(decision => decision.value),
+      cardRules: describePuzzleCardRules(this.state),
+      undoStateData: this.history[this.history.length - 1]?.stateData || null,
+    };
+  }
+
   public canUndo(): boolean { return this.history.length > 0; }
 
   public undo(): boolean {
-    const stateData = this.history[this.history.length - 1];
-    if (stateData === undefined || !this.snapshotOptions) {
+    const checkpoint = this.history[this.history.length - 1];
+    if (checkpoint === undefined || !this.snapshotOptions) {
       return false;
     }
     const remaining = this.history.slice(0, -1);
-    this.restoreSnapshot({ ...this.snapshotOptions, stateData }, remaining);
+    this.restoreSnapshot({ ...this.snapshotOptions, stateData: checkpoint.stateData }, remaining, checkpoint.decisionNumber);
     return true;
   }
 
@@ -192,6 +228,8 @@ export class ClientSimulator implements StoreHandler {
     this.complete = false;
     this.humanTurn = undefined;
     this.history = [];
+    this.decisions = [];
+    this.decisionNumber = 0;
   }
 
   private decodeSnapshot(stateData: string, readOnly = false): State {

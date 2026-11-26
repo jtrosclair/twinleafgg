@@ -1,6 +1,16 @@
 // Read-only compatibility API for the PrizeMap editor. The deck parser is
 // extracted from the former simulator server; no server or database is needed.
 import { ensureClientCards } from '../ptcg-server/src/client/cards';
+import { ClientSimulator } from '../ptcg-server/src/client/simulator';
+import { CardManager } from '../ptcg-server/src/game/cards/card-manager';
+import { AttackAction } from '../ptcg-server/src/game/store/actions/game-actions';
+import { CardType } from '../ptcg-server/src/game/store/card/card-types';
+import { PokemonCard } from '../ptcg-server/src/game/store/card/pokemon-card';
+import { CheckAttackCostEffect, CheckHpEffect, CheckPokemonAttacksEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from '../ptcg-server/src/game/store/effects/check-effects';
+import { PokemonCardList } from '../ptcg-server/src/game/store/state/pokemon-card-list';
+import { Player } from '../ptcg-server/src/game/store/state/player';
+import { Store } from '../ptcg-server/src/game/store/store';
+import { StateUtils } from '../ptcg-server/src/game/store/state-utils';
 import { StateSerializer } from '../ptcg-server/src/game/serializer/state-serializer';
 import { Base64 } from '../ptcg-server/src/utils/base64';
 import { DeckImportParser } from './deck-import';
@@ -81,6 +91,101 @@ function validateState(stateData: unknown): Response {
   } catch (error) {
     const message = (error as Error).message || 'Failed to deserialize game state';
     return json({ ok: false, valid: false, error: message.includes('Unknown card') ? 'UNKNOWN_CARD' : 'INVALID_STATE', message }, 400);
+  }
+}
+
+/** Use the same printed card definitions as Twinleaf, including exact print variants. */
+export function lookupPuzzleCards(names: string[]) {
+  ensureClientCards();
+  const cards = CardManager.getInstance();
+  return names.map(name => {
+    const normalized = StateSerializer.hasKnownCard(name) ? name : StateSerializer.normalizeCardName(name);
+    const card = normalized ? cards.getCardByName(normalized) : undefined;
+    if (!card) return { requestedName: name, found: false as const };
+    return {
+      requestedName: name, found: true as const, fullName: card.fullName, printedName: card.name,
+      text: 'text' in card && typeof card.text === 'string' ? card.text : undefined,
+      hp: card instanceof PokemonCard ? card.hp : undefined,
+      abilities: card.powers.map(({ name, text }) => ({ name, text })),
+      attacks: card.attacks.map(({ name, cost, damage, damageCalculation, text }) => ({
+        name, printedCost: cost.map(type => CardType[type]), damage, damageCalculation, text,
+      })),
+    };
+  });
+}
+
+/** An isolated, read-only reconstruction with live effect calculations. */
+export function inspectPuzzlePosition(stateData: string) {
+  const simulator = new ClientSimulator();
+  try {
+    const state = simulator.loadSnapshot({ stateData, readOnly: true });
+    const store = new Store({ onStateChange() {} });
+    store.state = state;
+    const checkPokemon = (owner: Player, slot: PokemonCardList) => {
+      const card = slot.getPokemonCard();
+      if (!card) return null;
+      const hp = new CheckHpEffect(owner, slot);
+      const energy = new CheckProvidedEnergyEffect(owner, slot);
+      store.reduceEffect(state, hp);
+      store.reduceEffect(state, energy);
+      const granted = new CheckPokemonAttacksEffect(owner);
+      if (slot === owner.active) store.reduceEffect(state, granted);
+      const attacks = slot === owner.active ? [...card.attacks, ...granted.attacks] : card.attacks;
+      const retreat = slot === owner.active ? new CheckRetreatCostEffect(owner) : null;
+      if (retreat) store.reduceEffect(state, retreat);
+      return {
+        card: card.fullName, damage: slot.damage, maxHp: hp.hp, hpLeft: hp.hp - slot.damage,
+        tools: slot.tools.map(tool => tool.fullName),
+        providedEnergy: energy.energyMap.map(row => ({ card: row.card.fullName, types: row.provides.map(type => CardType[type]) })),
+        retreatCost: retreat?.cost.map(type => CardType[type]),
+        attacks: attacks.map(attack => {
+          const cost = new CheckAttackCostEffect(owner, attack, slot);
+          store.reduceEffect(state, cost);
+          const types = cost.fixedCost ?? cost.cost;
+          return {
+            name: attack.name, effectiveCost: types.map(type => CardType[type]),
+            enoughEnergy: StateUtils.checkEnoughEnergy(energy.energyMap, types),
+          };
+        }),
+      };
+    };
+    const side = (owner: Player) => {
+      const prizesRemaining = owner.getPrizeLeft();
+      return {
+        active: checkPokemon(owner, owner.active),
+        bench: owner.bench.map(slot => checkPokemon(owner, slot)).filter(Boolean),
+        prizesRemaining,
+        stadium: owner.stadium.cards.map(card => card.fullName),
+      };
+    };
+    return { turn: state.turn, activePlayer: state.activePlayer, winner: state.winner,
+      player: side(state.players[0]), opponent: side(state.players[1]) };
+  } finally {
+    simulator.cleanup();
+  }
+}
+
+/** Try declaring an attack on a disposable copy. No player session or saved board is written. */
+export function probePuzzleAttack(stateData: string, attack: string) {
+  const simulator = new ClientSimulator();
+  try {
+    simulator.loadSnapshot({ stateData });
+    const hasPendingChoice = () => simulator.state.prompts.some(prompt => prompt.result === undefined);
+    if (simulator.complete || simulator.state.activePlayer !== 0 || hasPendingChoice()) return { checked: false as const };
+    try {
+      simulator.dispatch(new AttackAction(simulator.humanPlayerId, attack));
+      return { checked: true as const, legal: true as const, needsChoice: hasPendingChoice() };
+    } catch (error) {
+      const message = (error as Error).message;
+      if (/^[A-Z0-9_]{1,70}$/.test(message)) {
+        return { checked: true as const, legal: false as const, reason: message };
+      }
+      return { checked: false as const };
+    }
+  } catch {
+    return { checked: false as const };
+  } finally {
+    simulator.cleanup();
   }
 }
 

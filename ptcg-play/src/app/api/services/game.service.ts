@@ -20,6 +20,7 @@ interface PuzzleBoardOptions {
   stopAfterOpponentDraw?: boolean;
   viewBoard?: boolean;
   closeDialogs?: boolean;
+  capturePuzzleDecisions?: boolean;
 }
 
 /** Owns the single in-memory simulator and its presentation snapshot. */
@@ -65,7 +66,8 @@ export class GameService {
       try {
         simulator.loadSnapshot({
           stateData: snapshot, winConditions: winConditions && { ...winConditions },
-          stopAfterOpponentDraw: options.stopAfterOpponentDraw, readOnly: options.viewBoard
+          stopAfterOpponentDraw: options.stopAfterOpponentDraw, readOnly: options.viewBoard,
+          capturePuzzleDecisions: options.capturePuzzleDecisions
         });
         serialized = simulator.getStateData();
         state = this.decodeState(serialized);
@@ -167,6 +169,18 @@ export class GameService {
     });
   }
 
+  public requestPuzzleHintState(gameId: number): void {
+    this.run(gameId, simulator => {
+      if (simulator.getPuzzleHintContext()) this.publishState();
+    });
+  }
+
+  public undoPuzzleHint(gameId: number): void {
+    this.run(gameId, simulator => {
+      if (simulator.getPuzzleHintContext()?.undoStateData) this.restore(() => simulator.undo());
+    });
+  }
+
   public pushStateChange(gameId: number, stateData: string): void {
     this.run(gameId, sim => this.restore(() => sim.pushState(stateData)));
   }
@@ -230,7 +244,11 @@ export class GameService {
       promptMinimized, boardReadOnly, ...(resetPresentation ? { gameOver: false } : {}) }] });
     this.boardInteractionService.updateGameLogs(state.logs);
     const capability = previous.canViewBoard ? { canViewBoard: true } : {};
-    this.webViewBridgeService.postMessage({ type: 'StateUpdate', data: { stateData, ...capability } });
+    const hintContext = simulator.getPuzzleHintContext();
+    this.webViewBridgeService.postMessage({
+      type: 'StateUpdate',
+      data: { stateData, ...capability, ...(hintContext ? { hintContext } : {}) },
+    });
     if (simulator.complete && !this.terminalMessageSent && !boardReadOnly) {
       this.terminalMessageSent = true;
       const win = state.winner === GameWinner.PLAYER_1;

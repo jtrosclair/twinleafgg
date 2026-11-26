@@ -9,6 +9,7 @@ import { ConcedeAction } from '../game/store/actions/concede-action';
 import { ReorderBenchAction, ReorderHandAction } from '../game/store/actions/reorder-actions';
 import { SandboxModifyPokemonAction } from '../game/store/actions/sandbox-modify-pokemon-action';
 import { GameLog, GameMessage } from '../game/game-message';
+import { ChooseCardsPrompt } from '../game/store/prompts/choose-cards-prompt';
 import { AttackEffect } from '../game/store/effects/game-effects';
 import { DealDamageEffect } from '../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckPokemonTypeEffect } from '../game/store/effects/check-effects';
@@ -56,6 +57,41 @@ describe('ClientSimulator', () => {
     add(state.players[0].active, 'Fire Energy SVE');
     return { state, add, encode: () => new Base64().encode(new StateSerializer().serialize(state)) };
   }
+
+  it('captures accepted puzzle decisions and returns the exact pre-move board on undo', () => {
+    const f = fixture();
+    const player = f.state.players[0];
+    f.add(player.hand, 'Ultra Ball MEG');
+    f.add(player.hand, 'Fire Energy SVE');
+    f.add(player.hand, 'Fire Energy SVE');
+    f.add(player.deck, 'Squirtle BS');
+    const simulator = new ClientSimulator();
+    simulator.loadSnapshot({ stateData: f.encode() });
+    expect(simulator.getPuzzleHintContext()).toBeUndefined();
+    simulator.loadSnapshot({ stateData: f.encode(), capturePuzzleDecisions: true });
+    const startingBoard = simulator.getStateData();
+
+    simulator.dispatch(new PlayCardAction(simulator.humanPlayerId, 0, {
+      player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BOARD, index: 0,
+    }));
+    const pending = () => simulator.state.prompts.find(prompt => prompt.result === undefined)!;
+    simulator.resolvePrompt(pending().id, [0, 1]);
+    const search = pending();
+    if (!(search instanceof ChooseCardsPrompt)) throw new Error('Expected Ultra Ball search prompt');
+    simulator.resolvePrompt(search.id, [search.cards.cards.findIndex(card => card.fullName === 'Squirtle BS')]);
+    const context = simulator.getPuzzleHintContext()!;
+    expect(context.version).toBe(1);
+    expect(context.undoStateData).toBe(startingBoard);
+    expect(context.decisions[0].details.card).toBe('Ultra Ball MEG');
+    expect(context.decisions[1].details.choice).toEqual(['Fire Energy SVE', 'Fire Energy SVE']);
+    expect(context.decisions[2].details.choice).toEqual(['Squirtle BS']);
+    expect(context.cardRules.find(card => card.name === 'Squirtle BS')?.hp).toBeGreaterThan(0);
+    expect(simulator.undo()).toBe(true);
+    expect(simulator.getPuzzleHintContext()!.decisions).toEqual([]);
+    expect(simulator.getPuzzleHintContext()!.undoStateData).toBeNull();
+    expect(simulator.state.players[0].hand.cards[0].fullName).toBe('Ultra Ball MEG');
+    simulator.cleanup();
+  });
 
   it('stops the opted-in puzzle after the opponent draws without changing ordinary on-draw processing', () => {
     const { state, encode, add } = fixture();

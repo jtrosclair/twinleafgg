@@ -10,7 +10,8 @@ import { SimulatorAssetsService } from './simulator-assets.service';
 describe('PrizeMap reset bridge', () => {
   let service: WebViewBridgeService;
   let session: SessionService;
-  let game: { resetGame: jasmine.Spy; pushStateChange: jasmine.Spy; setBoardReadOnly: jasmine.Spy; createGameFromState: jasmine.Spy };
+  let game: { resetGame: jasmine.Spy; pushStateChange: jasmine.Spy; setBoardReadOnly: jasmine.Spy;
+    createGameFromState: jasmine.Spy; requestPuzzleHintState: jasmine.Spy; undoPuzzleHint: jasmine.Spy };
   let injector: { get: jasmine.Spy };
   let zone: { run: jasmine.Spy };
   let inZone: boolean;
@@ -41,7 +42,9 @@ describe('PrizeMap reset bridge', () => {
       resetGame: jasmine.createSpy('resetGame').and.callFake(() => resetZones.push(inZone)),
       pushStateChange: jasmine.createSpy('pushStateChange'),
       setBoardReadOnly: jasmine.createSpy('setBoardReadOnly'),
-      createGameFromState: jasmine.createSpy('createGameFromState')
+      createGameFromState: jasmine.createSpy('createGameFromState'),
+      requestPuzzleHintState: jasmine.createSpy('requestPuzzleHintState'),
+      undoPuzzleHint: jasmine.createSpy('undoPuzzleHint')
     };
     injector = { get: jasmine.createSpy('get').and.returnValue(game) };
     zone = { run: jasmine.createSpy('run').and.callFake((run: () => any) => {
@@ -168,9 +171,10 @@ describe('PrizeMap reset bridge', () => {
     expectNoResponse();
   });
 
-  function enableTaggedSession(activate = true) {
+  function enableTaggedSession(activate = true, hints = false) {
     service.ngOnDestroy();
     windowValue.location = new URL(`http://127.0.0.1:45000/releases/${'a'.repeat(64)}/sandbox-viewer?puzzleBoardReview=1&puzzleSessionId=first`);
+    if (hints) { windowValue.location.searchParams.set('puzzleHints', '1'); }
     const router = { navigate: jasmine.createSpy('navigate').and.returnValue(Promise.resolve(true)) };
     const assets = { beginAttempt: jasmine.createSpy('beginAttempt') };
     const catalog = { prepareSnapshot: jasmine.createSpy('prepareSnapshot').and.callFake((stateData: string) => of(stateData)) };
@@ -186,6 +190,49 @@ describe('PrizeMap reset bridge', () => {
 
   const flush = () => new Promise(resolve => setTimeout(resolve, 0));
   const sent = () => windowValue.ReactNativeWebView.postMessage.calls.allArgs().map(([value]) => JSON.parse(value));
+
+  it('keeps hint commands restricted to the parent on web iframe documents', () => {
+    for (const type of ['RequestPuzzleHintState', 'UndoPuzzleHint']) {
+      windowValue.dispatchEvent(message({ type, sessionId: 'spoofed' }));
+    }
+    expect(game.requestPuzzleHintState).not.toHaveBeenCalled();
+    expect(game.undoPuzzleHint).not.toHaveBeenCalled();
+
+    for (const type of ['RequestPuzzleHintState', 'UndoPuzzleHint']) {
+      const event = message({ type });
+      Object.defineProperty(event, 'source', { value: windowValue.parent });
+      windowValue.dispatchEvent(event);
+    }
+    expect(game.requestPuzzleHintState).toHaveBeenCalledOnceWith(7);
+    expect(game.undoPuzzleHint).toHaveBeenCalledOnceWith(7);
+  });
+
+  it('keeps hint capture and requires the active native session across a reused puzzle load', async () => {
+    const { api } = enableTaggedSession(true, true);
+    windowValue.parent = windowValue;
+    windowValue.dispatchEvent(message({ type: 'RequestPuzzleHintState', sessionId: 'first' }));
+    documentValue.dispatchEvent(message(JSON.stringify({ type: 'UndoPuzzleHint', sessionId: 'first' })));
+    windowValue.dispatchEvent(message({ type: 'UndoPuzzleHint' }));
+    expect(game.requestPuzzleHintState).toHaveBeenCalledOnceWith(7);
+    expect(game.undoPuzzleHint).toHaveBeenCalledOnceWith(7);
+
+    game.createGameFromState.and.callFake(() => {
+      session.set({ gameStates: [activeGame(8)] });
+      return of(activeGame(8));
+    });
+    api.loadPuzzle!({ stateData: 'new puzzle', sessionId: 'second' });
+    windowValue.dispatchEvent(message({ type: 'RequestPuzzleHintState', sessionId: 'first' }));
+    await flush();
+    expect(game.createGameFromState).toHaveBeenCalledOnceWith('new puzzle', undefined,
+      { stopAfterOpponentDraw: true, closeDialogs: true, capturePuzzleDecisions: true });
+
+    for (const sessionId of ['first', 'second']) {
+      windowValue.dispatchEvent(message({ type: 'RequestPuzzleHintState', sessionId }));
+      documentValue.dispatchEvent(message({ type: 'UndoPuzzleHint', sessionId }));
+    }
+    expect(game.requestPuzzleHintState.calls.allArgs()).toEqual([[7], [8]]);
+    expect(game.undoPuzzleHint.calls.allArgs()).toEqual([[7], [8]]);
+  });
 
   it('acknowledges cold activation once and tags its initial state before the ACK', () => {
     enableTaggedSession(false);

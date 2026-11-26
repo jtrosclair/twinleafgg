@@ -264,6 +264,26 @@ describe('client-side snapshot GameService', () => {
     expect(messages('TurnEnd')).toEqual([]);
   });
 
+  it('preserves hint capture on reset and publishes an empty trace with the reset board', () => {
+    service.createGameFromState(snapshot, undefined, { capturePuzzleDecisions: true }).subscribe();
+    const { gameId, stateData } = session.session.gameStates[0];
+    service.ability(gameId, 'Reset prompt', { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 });
+    expect(messages('StateUpdate').slice(-1)[0].data.hintContext.decisions.length).toBeGreaterThan(0);
+    expect(messages('StateUpdate').slice(-1)[0].data.hintContext.undoStateData).toBe(stateData);
+
+    bridge.postMessage.calls.reset();
+    service.resetGame(gameId);
+    expect(messages('UndoDetected').length).toBe(1);
+    const [update] = messages('StateUpdate');
+    expect(update.data.stateData).toBe(stateData);
+    expect(update.data.hintContext).toEqual(jasmine.objectContaining({
+      version: 1, decisions: [], undoStateData: null,
+    }));
+
+    service.requestPuzzleHintState(gameId);
+    expect(messages('StateUpdate').length).toBe(2);
+  });
+
   it('publishes the initial isolated snapshot without repeating its state roundtrip', () => {
     const serialize = spyOn(StateSerializer.prototype, 'serialize').and.callThrough();
     const deserialize = spyOn(StateSerializer.prototype, 'deserialize').and.callThrough();

@@ -92,10 +92,13 @@ export class WebViewBridgeService implements OnDestroy {
     // A document message may also bubble through the window listener.
     if (this.receivedEvents.has(event)) { return; }
     this.receivedEvents.add(event);
-    this.handleMessage(event.data);
+    const fromParent = event.source === window.parent && window.parent !== window;
+    // The native WebView dispatches messages on window or document in the verified loopback session.
+    const fromNative = this.sessionId !== undefined && (event.source === null || event.source === window);
+    this.handleMessage(event.data, fromParent || fromNative);
   };
 
-  private handleMessage(messageData: unknown): void {
+  private handleMessage(messageData: unknown, allowHintCommand = false): void {
     if (this.destroyed) { return; }
     try {
       const value = typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
@@ -104,7 +107,9 @@ export class WebViewBridgeService implements OnDestroy {
 
       // The iframe fallback may arrive back at this same window. It is an
       // outbound notification, so it must not trigger another Angular update.
-      if (message?.type === 'iframeEvent') { return; }
+      if (message.type === 'iframeEvent') { return; }
+      const hintCommand = message.type === 'UndoPuzzleHint' || message.type === 'RequestPuzzleHintState';
+      if (hintCommand && !allowHintCommand) { return; }
       if (this.sessionId && (this.switching || message.sessionId !== this.sessionId)) { return; }
       if (message.type === 'ResetGame' && message.data !== undefined
         && (!message.data || typeof message.data !== 'object' || Array.isArray(message.data))) { return; }
@@ -124,6 +129,16 @@ export class WebViewBridgeService implements OnDestroy {
       case 'PushStateChange':
         this.handlePushStateChange(message.data);
         break;
+      case 'RequestPuzzleHintState': {
+        const activeGame = this.sessionService.session.gameStates.find(game => !game.deleted);
+        if (activeGame) { this.gameService.requestPuzzleHintState(activeGame.gameId); }
+        break;
+      }
+      case 'UndoPuzzleHint': {
+        const activeGame = this.sessionService.session.gameStates.find(game => !game.deleted);
+        if (activeGame) { this.gameService.undoPuzzleHint(activeGame.gameId); }
+        break;
+      }
       case 'ResetGame':
         this.handleResetGame();
         break;
@@ -196,8 +211,9 @@ export class WebViewBridgeService implements OnDestroy {
       }
       this.injector.get(SimulatorAssetsService).beginAttempt();
       this.sessionId = sessionId; // The new StateUpdate is emitted synchronously during creation.
+      const capturePuzzleDecisions = new URLSearchParams(window.location.search).get('puzzleHints') === '1';
       const game = await this.gameService.createGameFromState(snapshot, undefined,
-        { stopAfterOpponentDraw: true, closeDialogs: true }).toPromise().catch(error => {
+        { stopAfterOpponentDraw: true, closeDialogs: true, ...(capturePuzzleDecisions ? { capturePuzzleDecisions } : {}) }).toPromise().catch(error => {
         this.sessionId = previous;
         throw error;
       });
