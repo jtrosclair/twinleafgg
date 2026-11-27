@@ -59,6 +59,25 @@ test('deck parse and card lookup match the historical controller with real curre
   assert.deepEqual(actualLookup, clean(historicalResponse));
 });
 
+test('both Telepath Energy spellings resolve to the same print in deck import and card lookup', async () => {
+  const engine = await mod;
+  const cards = [
+    'Telepath Psychic Energy POR 88',
+    'Telepathic Psychic Energy POR 88',
+    'Telepathic Psychic Energy M3 79',
+    'Telepath [P] Energy M3 79',
+  ];
+  const deckList = cards.map(card => `1 ${card}`).join('\n');
+  const parse = await (await engine.handle(post('/v1/deck-import/parse', { deckList }))).json();
+  const lookup = await (await engine.handle(post('/v1/deck-import/get-cards', { cards }))).json();
+  const expected = cards.map(() => 'Telepath [P] Energy M3');
+  assert.deepEqual(parse.parseErrors, []);
+  assert.deepEqual(parse.unknownCards, []);
+  assert.deepEqual(parse.knownCards.map(card => card.fullName), expected);
+  assert.deepEqual(lookup.cards.map(card => card.fullName), expected);
+  assert.ok(lookup.cards.every(card => card.cardImage === lookup.cards[0].cardImage));
+});
+
 test('actual puzzle snapshots deserialize and preserve normalized transport', async () => {
   const engine = await mod;
   const fixtures = [

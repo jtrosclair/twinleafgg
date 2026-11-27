@@ -53,6 +53,7 @@ export class PrintCompatibility {
   private readonly numberedAliases = new Map<string, PrintContract>();
   private readonly identifierPattern: RegExp;
   private readonly antiqueArmorFossil?: Card;
+  private readonly telepathPsychicEnergy?: Card;
   constructor(cards: readonly Card[], private readonly contracts: readonly PrintContract[] = printContracts,
     internal?: InternalIndex) {
     if (internal && internal.token !== internalToken) throw new Error('Untrusted print catalogue index');
@@ -63,7 +64,7 @@ export class PrintCompatibility {
       this.identifierPattern = /$a/;
       return;
     }
-    const sets = [...new Set(['PBL', ...contracts.flatMap(c => [c.set, ...(c.setAliases || [])])])]
+    const sets = [...new Set(['PBL', 'POR', 'M3', ...contracts.flatMap(c => [c.set, ...(c.setAliases || [])])])]
       .sort((a, b) => b.length - a.length).map(set => set.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
     this.identifierPattern = new RegExp(`^(.*?)\\s+(${sets})(?:\\s+(\\w+))?$`, 'i');
     for (const c of contracts) {
@@ -88,6 +89,7 @@ export class PrintCompatibility {
     if (shieldFossil?.set === 'PBL' && shieldFossil.setNumber === '72') {
       this.antiqueArmorFossil = shieldFossil;
     }
+    this.telepathPsychicEnergy = candidates.get('Telepath [P] Energy M3');
     for (const c of contracts) {
       const match = candidates.get(c.fullName);
       if (match && (match as any).printCompatibilityIdentity === c.fullName) this.excludedCards.add(match);
@@ -112,6 +114,11 @@ export class PrintCompatibility {
       // Accept the English name for the existing card without changing saved
       // identities or Shieldon's evolution chain.
       return { recognized: true, card: number === undefined || num(number) === '72' ? this.antiqueArmorFossil : undefined };
+    }
+    if ((normalizedSet === 'por' || normalizedSet === 'm3')
+      && ['telepath psychic energy', 'telepathic psychic energy', 'telepath [p] energy'].includes(normalizedName)
+      && (number === undefined || num(number) === (normalizedSet === 'por' ? '88' : '79'))) {
+      return { recognized: true, card: this.telepathPsychicEnergy };
     }
     const prefix = `${normalizedName}\0${normalizedSet}`;
     const contract = number === undefined ? this.canonicalAliases.get(prefix)

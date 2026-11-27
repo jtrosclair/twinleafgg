@@ -3,6 +3,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard, StoreLike, State } from '../../game';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
+import { BookOfTransformation } from './book-of-transformation';
 
 export class SudowoodoBatch172 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -36,13 +37,14 @@ export class SudowoodoBatch172 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
+      const blocked = player.deck.cards.flatMap((card, index) => card instanceof BookOfTransformation ? [] : [index]);
       SEARCH_DECK_FOR_CARDS_TO_HAND(
         store,
         state,
         player,
         this,
-        { superType: SuperType.TRAINER, name: 'Book of Transformation' },
-        { min: 0, max: 2, allowCancel: false },
+        { superType: SuperType.TRAINER },
+        { min: 0, max: 2, allowCancel: false, blocked },
         this.attacks[0],
       );
     }

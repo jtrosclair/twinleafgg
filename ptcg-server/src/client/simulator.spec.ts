@@ -846,6 +846,34 @@ describe('ClientSimulator', () => {
     expect(simulator.state.players[1].active.damage).toBe(10);
   });
 
+  for (const name of ['Telepath Psychic Energy POR 88', 'Telepathic Psychic Energy POR 88']) {
+    it(`loads and plays ${name} from a saved puzzle`, () => {
+      const f = fixture();
+      const player = f.state.players[0];
+      const fullName = 'Telepath [P] Energy M3';
+      f.add(player.bench[0], 'Abra BS');
+      f.add(player.hand, fullName);
+      f.add(player.deck, 'Abra MEW');
+      const base64 = new Base64();
+      const parsed = JSON.parse(base64.decode(f.encode()));
+      parsed[1].cardNames[player.hand.cards[0].id] = name;
+
+      const simulator = new ClientSimulator();
+      simulator.loadSnapshot({ stateData: base64.encode(JSON.stringify(parsed)) });
+      const restored = simulator.state.players[0];
+      expect(restored.hand.cards[0].fullName).toBe(fullName);
+      simulator.dispatch(new PlayCardAction(simulator.humanPlayerId, 0, {
+        player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index: 0,
+      }));
+      expect(restored.bench[0].energies.cards.map(card => card.fullName)).toEqual([fullName]);
+      const search = simulator.state.prompts.find(prompt => prompt.result === undefined);
+      if (!(search instanceof ChooseCardsPrompt)) throw new Error('Expected Telepath Energy search prompt');
+      simulator.resolvePrompt(search.id, [search.cards.cards.findIndex(card => card.fullName === 'Abra MEW')]);
+      expect(restored.bench[1].getPokemonCard()?.fullName).toBe('Abra MEW');
+      simulator.cleanup();
+    });
+  }
+
   it('repairs exact legacy Unicode names without changing canonical state, physical references, or a reset', () => {
     const f = fixture();
     f.add(f.state.players[0].hand, 'Poké Pad MC');
